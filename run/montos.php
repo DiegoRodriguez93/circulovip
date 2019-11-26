@@ -16,8 +16,12 @@ $fecha_carga = substr($fecha_mañana,8);
 if($fecha_carga = '01'){
 
 $update_dinero = mysqli_query($mysqli,"UPDATE estado_de_cuenta_usuarios
-SET monto = 1000
+SET monto = 500
 WHERE tipo_user = 1 ");
+
+$update_dinero = mysqli_query($mysqli,"UPDATE estado_de_cuenta_usuarios
+SET monto = 0
+WHERE tipo_user = 2 ");
 
 }
 
