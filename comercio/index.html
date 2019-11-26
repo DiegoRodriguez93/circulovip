@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Vida Pesos</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <link rel="stylesheet" href="css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/colreorder/1.5.2/css/colReorder.dataTables.min.css">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/mdb.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <link href="../css/estilosmenu.css" rel="stylesheet">
+</head>
+
+<body class="grey lighten-3">
+
+  <!--Main Navigation-->
+  <header>
+
+    <!-- Navbar -->
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
+      <div class="container-fluid">
+
+        <!-- Brand -->
+        <a class="navbar-brand waves-effect" href="index.html">
+          <i class="fas fa-wallet mr-1"></i><strong>Billetera</strong>
+        </a>
+
+        <div id="menuToggle" >
+
+          <input type="checkbox">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+      </div>
+    </nav>
+    <!-- Navbar -->
+
+<!-- SIDEBAR AQUI -->
+
+<div id="sidebar_aqui"></div>
+
+  </header>
+  <!--Main Navigation-->
+
+  <!--Main layout-->
+  <main class="pt-5 mx-lg-5">
+    <div class="container-fluid mt-5" style="min-height: 480px">
+
+
+      <!--Grid row-->
+      <div class="row wow fadeIn">
+
+        <!--Grid column-->
+        <div class="col-md-5 mb-4">
+
+          <!--Card-->
+          <div class="card">
+
+            <!--Card content-->
+            <div class="card-body">
+            <div class="mb-4 mt-3">
+            <h4>Ingresar nueva transacción</h4>
+            </div>
+
+              <div class="d-flex justify-content-center my-3">
+                <!-- Default input -->
+
+                <input type="search" id="cedula" maxlength="8" placeholder="Cedula" aria-label="Search" class="form-control solo_numeros">
+                <input type="search" id="monto" placeholder="Monto" aria-label="Search" class="form-control">
+                <button onclick="iniciarTransaccion()" class="btn btn-primary btn-sm mb-3 p" >
+                  <i class="fas fa-check"></i>
+                </button>
+    
+                </div>
+
+            </div>
+
+          </div>
+          <!--/.Card-->
+
+        </div>
+        <!--Grid column-->
+
+                <!--Grid column-->
+                <div class="col-md-4 mb-4">
+
+                    <!--Card-->
+                    <div class="card">
+
+                      <!--Card content-->
+                      <div class="card-body my-4 text-center" style="padding-top:30px;">
+
+                        <h4>Saldo</h4>
+                        <div class="text-success">
+                        <h1 id="dinero"></h1>
+                        </div>
+
+
+                      </div>
+
+                    </div>
+                    <!--/.Card-->
+
+                    </div>
+                    <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-md-3 mb-4">
+
+          <!--Card-->
+          <div class="card mb-4">
+
+            <!--Card content-->
+            <div class="card-body">
+
+              <!-- List group links -->
+              <div class="list-group list-group-flush">
+                <a class="list-group-item list-group-item-action waves-effect">Descuentos
+                  <span class="badge badge-success badge-pill pull-right" id="descuentosSpan">0
+                    <i class="fas fa-arrow-up ml-1"></i>
+                  </span>
+                </a>
+                <a class="list-group-item list-group-item-action waves-effect">Ordenes
+                  <span class="badge badge-primary badge-pill pull-right" id="ordenesSpan">0</span>
+                </a>
+                <a class="list-group-item list-group-item-action waves-effect">Cedulas asociadas
+                  <span class="badge badge-primary badge-pill pull-right" id="cedulasSpan">0</span>
+                </a>
+              </div>
+              <!-- List group links -->
+
+            </div>
+
+          </div>
+          <!--/.Card-->
+
+        </div>
+        <!--Grid column-->
+
+      </div>
+      <!--Grid row-->
+
+      <!--Grid row-->
+      <div class="row wow fadeIn">
+
+        <!--Grid column-->
+        <div class="col-md-12 mb-4">
+
+          <!--Card-->
+          <div class="card">
+
+            <div class="card-title text-center mt-3">
+              <h4 style="color: #26448c;font-weight:bold;" >Transacciones Completadas</h4>
+            </div>
+
+            <!--Card content-->
+            <div class="card-body">
+
+              <!-- Table  -->
+              <table id="TablaT" class="table table-hover" style="width:100%" >
+              <thead>
+            <tr class="text-center">
+                <th>Id</th>
+                <th>Fecha</th>
+                <th>Cedula comprador</th>
+                <th>Codigo de cupón</th>
+                <th>Monto</th>
+            </tr>
+        </thead>
+        <tbody class="text-center" >
+        </tbody>
+        </table>
+              <!-- Table  -->
+
+            </div>
+
+          </div>
+          <!--/.Card-->
+
+        </div>
+        <!--Grid column-->
+
+      </div>
+      <!--Grid row-->
+
+
+    </div>
+  </main>
+  <!--Main layout-->
+
+  <!--Footer-->
+  <footer class="page-footer text-center font-small primary-color-dark darken-2 mt-4 wow fadeIn" style="
+bottom: 0;
+">
+
+    <!--Copyright-->
+    <div class="footer-copyright py-3">
+      © 2019 Copyright
+      <a href="https://vida.com.uy" target="_blank"> Vida.com.uy </a>
+    </div>
+    <!--/.Copyright-->
+
+  </footer>
+  <!--/.Footer-->
+          
+  <div id="modal_aqui"></div>
+
+
+  <!-- SCRIPTS -->
+  <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+  <script type="text/javascript" src="js/popper.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/mdb.min.js"></script>
+  <script src="js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+  <script src="https://cdn.datatables.net/colreorder/1.5.2/js/dataTables.colReorder.min.js"></script>
+  <script src="../lib/helper.js"></script>
+  <script src="../lib/jquerysession.js"></script>
+  <script src="js/cerrar_session.js"></script>
+  <script src="include/modal.js"></script>
+  <script src="include/sidebar.js"></script>
+
+  <!-- Initializations -->
+  <script type="text/javascript">
+    // Animations initialization
+    new WOW().init();
+//*
+    function confirmacionDeDescuentoComercio() {  
+
+setInterval(function(){
+
+  $id_comercio = $.session.get('id_comercio');
+
+$.ajax({
+  type: "POST",
+  url: "https://vida-apps.com/vidapesos/ajax/chequear_transaccion_comercio.php",
+  data: { id_comercio: $id_comercio },
+  dataType: "JSON",
+  success: function (res) {
+    if(res.result){
+      //Enviar alert
+    alert('Se ha completado una nueva transacción, un nuevo monto ya se ha acreditado en su cuenta');
+    location.reload();
+    }else{
+
+      console.log(res.message);
+
+    }
+  }
+});
+
+}, 10000  ); //cada 10 segundos
+
+}
+
+    //* FUNCION INICIAR TRANSACCIÓN
+
+      function iniciarTransaccion(){
+
+      $cedula    = $('#cedula').val();
+      $monto     = $('#monto').val();
+      $id_comercio = $.session.get('id_comercio');
+
+      if(!comprobarCI($cedula) || $cedula.length != 8 ){
+        alert('Cedula Inválida!');
+        return false;
+      }
+
+      if($monto < 10){
+        alert('Monto mínimo 10 Vida pesos');
+        return false;
+      }
+      
+      if($monto > 100){
+        alert('Monto máximo 100 Vida pesos');
+        return false;
+      }
+
+      $.ajax({
+        type: "POST",
+        
+        url: "https://vida-apps.com/vidapesos/ajax/iniciar_transaccion_fn.php",
+        data: {cedula:$cedula,
+        id_comercio:$id_comercio,
+        monto:$monto},
+        dataType: "JSON",
+        success: function (res) {
+          if(res.result){
+            alert(res.message);
+            $cedula    = $('#cedula').val('');
+            $monto     = $('#monto').val('');
+
+          }else{
+            alert(res.message);
+          }
+        }
+      });
+
+      }
+
+    //*  FUNCION LOGIN
+
+    function loginComercio(){
+
+      $email    = $('#email').val();
+      $password = $('#password').val();
+
+      if(!validateEmail($email)){
+        alert('Email inválido!');
+        return false;
+      }
+
+      if($password.length < 6){
+        alert('Contraseña inválida');
+        return false;
+      }
+
+      $.ajax({
+        type: "POST",
+        url: "https://vida-apps.com/vidapesos/ajax/login_comercio.php",
+        data: {email: $email, pass: $password},
+        dataType: "JSON",
+        success: function (res) {
+          if(res.result){
+            $.session.set('id_comercio', res.id_comercio);
+            location.replace('index.html');
+          }else{
+            alert(res.message);
+          }
+        }
+      });
+    }
+
+    $(document).ready(function(){
+
+      /* INCLUDES */
+
+      $('#sidebar_aqui').html(sidebar);
+      $('#modal_aqui').html(modal);
+
+      
+              /* NAVBUTTON */
+
+              $('#menuToggle').on('click',function(){
+
+              $( "#sidebar" ).toggle("normal"); 
+
+
+              } );
+
+       //* CONTROLAMOS LA SESSION
+
+      $id_comercio = $.session.get('id_comercio');
+
+      if($id_comercio != null ){
+        console.log('Comercio logeado!');
+      }else{
+
+         $('#modalLogin').modal('show');
+         $("#sidebar").css({"opacity": "0.6"});
+      }
+
+      //* RELLENAMOS BADGES
+
+      $.ajax({
+        type: "POST",
+        url: "https://vida-apps.com/vidapesos/ajax/rellenar_badges.php?id_comercio="+$id_comercio,
+        data: {id_comercio : $id_comercio},
+        dataType: "JSON",
+        success: function (res) {
+
+          $('#descuentosSpan').html(res.descuentos);
+          $('#ordenesSpan').html(res.ordenes);
+          $('#cedulasSpan').html(res.cedulas);
+
+
+        }
+      });
+
+      confirmacionDeDescuentoComercio(); //disparamos la comprobacion de nuevos descuentos
+      
+      //* RELLENAMOS ESTADO DE CUENTA
+
+      $.ajax({
+        type: "POST",
+        url: "https://vida-apps.com/vidapesos/ajax/rellenar_estado_de_cuenta_comercios.php?id_comercio="+$id_comercio,
+        data: {id_comercio : $id_comercio},
+        dataType: "JSON",
+        success: function (res) {
+          if(res.result){
+            $('#dinero').html('$'+res.monto);
+          }else{
+            $('#dinero').html('No se pudo cargar');
+          }
+
+
+        }
+      });
+
+      //* DATATABLE CON TRANSACCIONES
+
+      $('#indexSidebar').addClass('active');
+
+      $url = 'https://vida-apps.com/vidapesos/ajax/listar_transacciones.php?id_comercio='+$id_comercio;
+
+      $('#TablaT').DataTable({lengthMenu: [10],
+            ajax: $url ,
+            lengthChange: false,
+            order: [1,'desc'],
+            oLanguage: {
+                "sUrl": "../json/traducciontabla.json"
+            },responsive: true,
+                  colReorder: true,
+                  info: false });
+
+            $('#TablaT_next').css('color','#79153a!important');
+
+
+        
+
+    });
+
+  </script>
+
+</body>
+
+</html>

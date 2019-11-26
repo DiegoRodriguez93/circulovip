@@ -1,0 +1,90 @@
+.sidebar-fixed {
+  height: 100vh;
+  width: 270px;
+  -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  z-index: 1050;
+  background-color: #fff;
+  padding: 1.5rem;
+  padding-top: 0; }
+.sidebar-fixed .list-group .active {
+  -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  -webkit-border-radius: 5px;
+  border-radius: 5px; }
+.sidebar-fixed .logo-wrapper {
+  padding: 2.5rem; }
+.sidebar-fixed .logo-wrapper img {
+  max-height: 50px; }
+.inputtransferir {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #999;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+.btntransferir {
+  background: green;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  width: 100%;
+}
+.btntransferir:hover {
+  background: rgb(0, 170, 0);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  width: 100%;
+}
+.paginate_button {
+  background: rgb(240, 240, 240);
+  border: 1px solid rgb(206, 206, 206);
+  padding: 10px;
+}
+.paginate_button:hover {
+  background: rgb(255, 255, 255);
+  border: 1px solid rgb(172, 172, 172);
+  padding: 10px;
+}
+  
+
+@media (min-width: 1200px) {
+  .navbar,
+  .page-footer,
+  main {
+    padding-left: 270px; }
+  /* COSAS QUE AGREGUE  */
+  .sidebar-fixed {
+    display: block!important; } 
+/* COSAS QUE AGREGUE  */
+    #menuToggle{
+      display: none!important;
+    }
+   }
+
+   @media (max-width: 1199.98px) {
+    /* COSAS QUE AGREGUE  */
+      .sidebar-fixed {
+        display: none; } 
+    /* COSAS QUE AGREGUE  */
+        #menuToggle{
+          display: block;
+        }
+
+    @media (max-height: 1042px){
+      .page-footer{
+        position: fixed;
+        Width: 100%;
+        bottom: 0;
+        margin-top:5%;
+      }
+    }
+    .page-footer{
+      position: fixed;
+      Width: 100%;
+      bottom: 0;
+      margin-top:5%;
+    }

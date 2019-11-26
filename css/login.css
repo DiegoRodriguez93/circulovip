@@ -1,0 +1,107 @@
+html,
+body,
+header,
+.view {
+  height: 100%;
+}
+
+.hr-gris {
+  color: #9c9c9c;
+}
+
+@media (max-width: 740px) {
+  html,
+  body,
+  header,
+  .view {
+    height: 1080px;
+  }.bottoned{
+    margin-bottom: 6%;
+}
+
+
+}
+@media (min-width: 800px) and (max-width: 850px) {
+  html,
+  body,
+  header,
+  .view {
+    height: 720px;
+  }.bottoned{
+    margin-bottom: 6%;
+}
+}
+
+.btn .fa {
+  margin-left: 3px;
+}
+
+.top-nav-collapse {
+  background-color: #424f95 !important;
+}
+
+.navbar:not(.top-nav-collapse) {
+  background: transparent !important;
+}
+
+@media (max-width: 991px) {
+  .navbar:not(.top-nav-collapse) {
+    background: #424f95 !important;
+  }
+}
+
+.btn-white {
+  color: black !important;
+}
+
+.violet {color:#3a5194!important;}
+
+h6 {
+  line-height: 1.7;
+}
+
+.rgba-gradient {
+    background: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.4) 100%);
+    background: linear-gradient(to 45deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.4) 100%);
+  }
+  
+  .card {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #26448c;
+  }
+
+  
+  .md-form label {
+    color:#26448c ;
+  }
+  
+  h6 {
+    line-height: 1.7;
+  }
+
+  
+@media (min-width: 1024px) {
+    .margined{
+        margin-top: 12%;
+    }.image-cellphone{
+        margin-top: -2%;
+
+}}
+
+@media (max-width: 1024px) {
+    .margined{
+        margin-top: 6%;
+    }
+
+
+  @media screen and (max-width: 1200px){
+    .margin22{
+    margin-top:8%;
+    }
+    }
+
+}
+
+.iconitos {
+  float: left!important;left:0;
+}

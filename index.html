@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.9/css/mdb.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/login.css">
+  <title>Login</title>
+</head>
+
+<body>
+  <!-- Main navigation -->
+  <header>
+    <!-- Full Page Intro -->
+    <div class="view" style="background-image: url('images/back.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center center;">
+      <!-- Mask & flexbox options-->
+      <div class="mask rgba-gradient align-items-center">
+        <!-- Content -->
+        <div class="container">
+          <!--Grid row-->
+          <div class="row margined">
+            <!--Grid column-->
+            <div class="col-md-6 white-text text-center text-md-left mt-xl-5 mb-5 wow fadeInLeft" data-wow-delay="0.3s">
+              <!--Form-->
+
+                <div class="card wow fadeInRight" data-wow-delay="0.3s">
+                  <div class="card-body">
+                    <!--Header-->
+                    <div class="text-center">
+                      <h4>
+                        <i class="fas fa-user white-text"></i> Iniciar sesión:</h4>
+                      <hr class="hr-gris">
+                    </div>
+                    <!--Body-->
+                    <div class="md-form">
+                      <i class="fas fa-address-card prefix violet-text active" style="float: left!important;left:0;"></i>
+                      <input type="search" maxlength="8" id="cedula" class="violet-text form-control">
+                      <label for="cedula" class="active">Tú cédula</label>
+                    </div>
+                    <div class="md-form">
+                      <i class="fas fa-lock prefix violet-text active" style="float: left!important;left:0;"></i>
+                      <input type="password" autocomplete="new-password" id="pass" class="violet-text form-control">
+                      <label for="pass">Tú contraseña</label>
+                    </div>
+                    <div class="text-center mt-4">
+                      <button onclick="iniciarSesion()" class="btn btn-indigo">Iniciar sesión</button>
+                
+                      <hr class="hr-gris mb-3 mt-4">
+                      <div class="inline-ul text-center">
+                        <a href="register.html" class="indigo-text">
+                          <i class="fas fa-sign-in-alt mr-3"></i>
+                          Registrarse</a><br><br>
+                        <a class="p-2 m-2 tw-ic indigo-text" href="comercio/index.html">
+                          <i class="fas fa-store indigo-text mr-3"></i>Comercios
+                        </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--/.Form-->
+      </div>
+      <!--Grid column-->
+      <!--Grid column-->
+      <div class="col-md-6 col-xl-5 mt-xl-5 wow fadeInRight bottoned" data-wow-delay="0.3s">
+        <img src="images/mockup-vida.png" alt="" class="img-fluid image-cellphone">
+      </div>
+      <!--Grid column-->
+    </div>
+    <!--Grid row-->
+    </div>
+    <!-- Content -->
+    </div>
+    <!-- Mask & flexbox options-->
+    </div>
+    <!-- Full Page Intro -->
+  </header>
+  <!-- Main navigation -->
+  <!--Main Layout-->
+  <main>
+  </main>
+  <!--Main Layout-->
+
+</body>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.9/js/mdb.min.js"></script>
+<script src="lib/jquerysession.js"></script>
+<script src="lib/helper.js"></script>
+<script>
+  // Animations init
+  new WOW().init();
+
+  
+ async function iniciarSesion() {
+      
+      $cedula = $('#cedula').val();
+      $pass = $('#pass').val();
+
+      $cedulaOk = false;
+
+      if($cedula.length < 8){
+        alert('Cédula inválida');
+        return false;
+      }
+
+      if(!comprobarCI($cedula)){
+        alert('Cédula incorrecta');
+        return false;
+      }
+
+      if($pass.length < 6){
+        alert('Contraseña inválida');
+        return false;
+      }
+
+     await $.ajax({
+        type: "POST",
+        url: "https://vida-apps.com/vidapesos/ajax/chequearUsuario.php",
+        data: {usuario:$cedula},
+        dataType: "JSON",
+        success: await function (res) {
+          if(res.result){
+            $cedulaOk = true;
+          }else{
+            alert(res.message);
+            $cedulaOk = false;
+          }
+        }
+      });
+
+      if($cedulaOk){
+
+        $.ajax({
+        type: "POST",
+        url: "https://vida-apps.com/vidapesos/ajax/login_user.php",
+        data: {usuario:$cedula, pass:$pass},
+        dataType: "JSON",
+        success: function (res) {
+
+          if(res.result){
+            alert(res.message);
+            $.session.set('id_user', res.id_user);
+            location.replace('socio/index.html')
+          }else{
+            alert(res.message);
+          }
+
+        }
+        
+      });
+      
+      }
+
+
+
+    }
+
+
+
+</script>
+</body>
+
+</html>

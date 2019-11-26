@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>Registrarse</title>
+</head>
+<body>
+  <div class="container">
+  <div class="row m-1 my-5">
+  <div class="col-lg-2 md-6 sm-12"></div>
+  <div class="col-lg-8 md-6 sm-12 white"><div class="text-center"> 
+  <h5>Registro de nuevo comercio</h5>  
+  </div>
+
+      <label for="">Nombre del comercio:</label>
+    <input name="name" class="form-control" id="name" type="text">
+
+    <label for="">Dirección:</label>
+    <input name="address" class="form-control" id="address" type="text">
+
+    <label for="">Teléfono:</label>
+    <input name="phone" class="form-control" id="phone" type="phone">
+
+    <label for="">Correo electrónico:</label>
+    <input name="email" class="form-control" id="email" type="email">
+
+    <label for="">Repetir correo electrónico:</label>
+    <input name="email2" class="form-control" id="email2" type="email">
+
+    <label for="">Contraseña:</label>
+    <input class="form-control" name="pass" id="pass" type="password">
+
+    <label for="">Repetir contraseña:</label>
+    <input class="form-control" name="pass2" id="pass2" type="password">
+
+    <div class="text-center mt-4">
+
+    <button class="btn btn-primary" onclick="registrarcomercio()">Registrarse</button>
+
+    </div>
+
+    <a  href="index.php"><h6>Iniciar sesión</h6></a>
+    </div><div class="col-lg-2 md-6 sm-12"></div>
+    </div>
+    </div>
+    <br>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="../lib/jquerysession.js"></script> 
+    <script>
+
+
+        function registrarcomercio(){ 
+
+            $name       = $('#name').val();
+            $address    = $('#address').val();
+            $phone      = $('#phone').val();
+
+            $email      = $('#email').val();
+            $email2     = $('#email2').val();
+
+            $pass       = $('#pass').val();
+            $pass2      = $('#pass2').val();
+            
+            if($name.length < 3){
+                alert('Nombre inválido');
+                return false;
+            }
+
+            if($address.length < 6){
+                alert('Dirección inválida');
+                return false;
+            }
+
+            if($phone.length < 8){
+                alert('Teléfono inválido');
+                return false;
+            }
+            
+            if($email.length < 8){
+                alert('Correo electrónico inválido');
+                return false;
+            }
+
+            if($email != $email2){
+                alert('Los correos electrónicos no son iguales');
+                return false;
+            }
+
+            if($pass.length < 6){
+                alert('La contraseña debe tener al menos 6 caracteres');
+                return false;
+            }
+
+            if($pass != $pass2){
+                alert('Las contraseñas no son iguales');
+                return false;
+            }
+
+
+            $.ajax({
+                type: "POST",
+                url: "https://vida-apps.com/vidapesos/ajax/register_comercio.php",
+                data: {name: $name, address: $address, phone: $phone, email: $email, pass: $pass },
+                dataType: "JSON",
+                success: function (response) {
+                    if(response.result){
+                    alert(response.message);
+
+                    $.ajax({
+                        type: "POST",
+                        url: "https://vida-apps.com/vidapesos/ajax/login_comercio.php",
+                        data: {email: $email, pass: $pass},
+                        dataType: "JSON",
+                        success: function (reso) {
+                            $.session.set("id_comercio", reso.id);
+                            $.session.set("activo", reso.activo);
+                            location.replace("comercio/index.php");
+                        }
+                    });
+
+                    }else{
+                    alert(response.message);  
+                    }
+                   
+                    
+                },error: function(error){
+                    alert('Ha ocurrido un error, intenté más tarde!');
+                }
+            });
+            
+        
+        } 
+    
+    </script>
+</body>
+</html>

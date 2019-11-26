@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Vida Pesos</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/colreorder/1.5.2/css/colReorder.dataTables.min.css">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/mdb.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <link href="../css/estilosmenu.css" rel="stylesheet">
+
+<!-- MODAL CONFIRM TRANSACCIÓN-->
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" data-backdrop="static" data-keyboard="false">
+
+  <!-- Change class .modal-sm to change the size of the modal -->
+  <div class="modal-dialog  modal-top" role="document">
+
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title w-100" id="modalTitle"></h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="hidden_id_cupon">
+        <h3>Datos del comercio:</h3>
+        <h4 id="commerce_name"></h4>
+        <h4 id="commerce_address"></h4>
+        <h4 id="commerce_phone"></h4>
+        <hr>
+        <h4 id="descuento"></h4>
+        <h4 id="fecha_vencimiento"></h4>
+      </div>
+      <div class="modal-footer text-center">
+        <button type="button" id="confirmarTransaccionBtn" class="btn btn-success">Confirmar Transacción</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar y Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MODAL CONFIRM TRANSACCIÓN-->
+
+<body class="grey lighten-3">
+
+  <!--Main Navigation-->
+  <header>
+
+    <!-- Navbar -->
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
+      <div class="container-fluid">
+
+        <!-- Brand -->
+        <a class="navbar-brand waves-effect" href="index.html">
+          <i class="fas fa-wallet mr-1"></i><strong>Billetera</strong>
+        </a>
+
+        <div id="menuToggle" >
+
+          <input type="checkbox">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+      </div>
+    </nav>
+    <!-- Navbar -->
+
+    <!-- SIDEBAR AQUI -->
+
+<div id="sidebar_aqui"></div>
+
+
+  </header>
+  <!--Main Navigation-->
+
+  <!--Main layout-->
+  <main class="pt-5 mx-lg-5">
+    <div class="container-fluid mt-5" style="min-height: 480px">
+
+
+      <!--Grid row-->
+      <div class="row wow fadeIn">
+
+        <!--Grid column-->
+        <div class="col-md-4 mb-4">
+
+          <!--Card-->
+          <div class="card view view-cascade gradient-card-header purple-gradient">
+
+            <!--Card content-->
+            <div class="card-body my-4 text-center" style="padding-top:30px;">
+
+              <h4 style="color:white;">Saldo</h5>
+              <div class=" text-white">
+                <h1 id="dinero"></h1>
+              </div>
+
+
+
+
+            </div>
+
+          </div>
+          <!--/.Card-->
+
+          
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-md-8 mb-4">
+
+          <div class="card">
+            <h4 class="card-header">
+                <a class="collapsed d-block" data-toggle="collapse" href="#collapse-collapsed" aria-expanded="true" aria-controls="collapse-collapsed" id="heading-collapsed">
+                    <i style="float: right;" class="fa fa-chevron-down pull-right"></i>
+                    Transferir a otro usuario
+                </a>
+            </h4>
+            <div id="collapse-collapsed" class="collapse" aria-labelledby="heading-collapsed">
+                <div class="card-body">
+                  <label>Cedula:</label>
+                  <input type="text" class="solo_numeros inputtransferir" maxlength="8" id="cedula">
+                  <label>Monto:</label> 
+                  <input type="text" class="solo_numeros inputtransferir"  id="monto">
+                  <button onclick="enviarDinero()" class="btntransferir">Transferir</button>
+      
+                </div>
+            </div>
+        </div>
+
+        </div>
+        <!--Grid column-->
+
+
+
+
+      </div>
+      <!--Grid row-->
+
+      <!--Grid row-->
+      <div class="row wow fadeIn">
+
+        <!--Grid column-->
+        <div class="col-md-12 mb-4">
+
+          <!--Card-->
+          <div class="card">
+
+              <h4 class="card-header">
+                  <a class="collapsed d-block" data-toggle="collapse" href="#collapse2" aria-expanded="true" aria-controls="collapse2" id="heading-collapsed">
+                      <i style="float: right;" class="fa fa-chevron-down pull-right"></i>
+                     Descuentos realizados
+                  </a>
+              </h4>
+
+     <!--        <div class="card-title text-center mt-3">
+              <h4 style="color: #26448c;font-weight:bold;">Descuentos realizados</h4>
+            </div> -->
+
+            <!--Card content-->
+            <div id="collapse2" class="collapse" aria-labelledby="heading-collapsed">
+            <div class="card-body">
+
+              <!-- Table  -->
+              <table id="TablaT" class="table responsive table-hover display nowrap" style="width:100%">
+                <thead>
+                  <tr class="text-center">
+                    <th>Fecha</th>
+                    <th>Comercio</th>
+                    <th>Codigo de cupón</th>
+                    <th>Monto</th>
+                  </tr>
+                </thead>
+                <tbody class="text-center">
+                </tbody>
+              </table>
+              <!-- Table  -->
+            <div class="mb-5"></div>
+            </div>
+          </div>
+          </div>
+          <!--/.Card-->
+
+        </div>
+        <!--Grid column-->
+
+      </div>
+      <!--Grid row-->
+
+
+    </div>
+  </main>
+  <!--Main layout-->
+
+  <!--Footer-->
+  <footer class="page-footer text-center font-small primary-color-dark darken-2 mt-4 wow fadeIn" style="
+bottom: 0;
+">
+
+    <!--Copyright-->
+    <div class="footer-copyright py-3">
+      © 2019 Copyright
+      <a href="https://vida.com.uy" target="_blank"> Vida.com.uy </a>
+    </div>
+    <!--/.Copyright-->
+
+  </footer>
+  <!--/.Footer-->
+
+  <div id="modal_aqui"></div>
+
+  <!-- SCRIPTS -->
+  <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+  <script type="text/javascript" src="js/popper.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/mdb.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+  <script src="https://cdn.datatables.net/colreorder/1.5.2/js/dataTables.colReorder.min.js"></script>
+  <script src="../lib/helper.js"></script>
+  <script src="../lib/jquerysession.js"></script>
+  <script src="js/cerrar_session.js"></script>
+  <script src="include/sidebar.js"></script>
+
+  <!-- Initializations -->
+  <script type="text/javascript">
+    // Animations initialization
+    new WOW().init();
+
+        //* FUNCIÓN PARA TREAR LA CONFIRMACIÓN DEL DESCUENTO
+
+function confirmacionDeDescuento() {  
+
+setInterval(function(){
+
+$id_user = $.session.get('id_user');
+
+$.ajax({
+  type: "POST",
+  url: "https://vida-apps.com/vidapesos/ajax/chequear_transaccion_socio.php",
+  data: { id_user: $id_user },
+  dataType: "JSON",
+  success: function (res) {
+    if(res.result){
+      //abrir modal
+      displayConfirm(res.id_cupon);
+    }else{
+
+      console.log(res.message);
+
+    }
+  }
+});
+
+}, 10000  ); //cada 10 segundos
+
+}
+
+function displayConfirm($id_cupon){
+// primero armo el modal con los datos del cupón a confirmar
+$.ajax({
+  type: "POST",
+  url: "https://vida-apps.com/vidapesos/ajax/rellenar_confirm_modal_socio.php",
+  data: {id_cupon:$id_cupon},
+  dataType: "JSON",
+  success: function (res) {
+    $('#modalTitle').html('Cupón '+res.codigo);
+    $('#hidden_id_cupon').val(res.id_cupon);
+    $('#commerce_name').html(res.commerce_name);
+    $('#commerce_address').html(res.commerce_address);
+    $('#commerce_phone').html(res.commerce_phone);
+    $('#descuento').html('Monto: '+res.descuento);
+    $('#fecha_vencimiento').html(res.fecha_vencimiento);
+    // abro el modal
+    $('#confirmModal').modal('show');
+  }
+});
+}
+
+  //* EVIAMOS DINERO A OTRO USUARIO
+  function enviarDinero(){
+
+$id_user = $.session.get('id_user');
+$cedula = $('#cedula').val();
+$monto  = $('#monto').val();
+
+if(!comprobarCI($cedula)){
+alert('Cédula inválida');
+return false;
+}
+
+$.ajax({
+type: "POST",
+url: "https://vida-apps.com/vidapesos/ajax/enviar_dinero_a_otro_usuario.php",
+data: {id_user: $id_user, cedula : $cedula, monto: $monto},
+dataType: "JSON",
+success: function (res) {
+  if(res.result){
+    alert(res.message);
+    $('#cedula').val('');
+    $('#monto').val('');
+    location.reload();
+  }else{
+    alert(res.message);
+  }
+}
+});
+
+}
+
+
+    $(document).ready(function() {
+
+            /* INCLUDES */
+
+            $('#sidebar_aqui').html(sidebar);
+
+        /* NAVBUTTON */
+
+        $('#menuToggle').on('click',function(){
+
+$( "#sidebar" ).toggle("normal"); 
+
+
+} );
+
+      //* función para confirmar transacción
+      $('#confirmarTransaccionBtn').on('click',function(){
+
+        $id_cupon = $('#hidden_id_cupon').val();
+        
+         $.ajax({
+           type: "POST",
+           url: "https://vida-apps.com/vidapesos/ajax/confirmar_transaccion_socio.php",
+           data: {id_cupon : $id_cupon},
+           dataType: "JSON",
+           success: function (res) {
+            $('#confirmModal').modal('hide');
+    
+            alert(res.message);
+            location.reload();
+           }
+         });
+      });
+
+      $id_user = $.session.get('id_user');
+
+      if ($id_user != null) {
+        console.log('Usuario logeado!');
+      } else {
+
+        location.replace('../index.html');
+
+      }
+/*       //* RELLENAMOS DESCUENTOS
+
+      var url = "../ajax/listar_descuentos_socio.php";
+
+      $.getJSON(url, function(descuentos) {
+        $.each(descuentos, function(i, descuentos) {
+          var lista_de_descuentos = `
+        <img src="` + descuentos.url_image + `" />
+        <p>` + descuentos.descuento + `</p>
+        `;
+
+
+
+          $(lista_de_descuentos).appendTo("#descuentos");
+        });
+      }); */
+
+             //* RELLENAMOS COMERCIOS
+
+      var url = "https://vida-apps.com/vidapesos/ajax/listar_comercios_socio.php";
+
+      $.getJSON(url, function(comercios) {
+        $.each(comercios, function(i, comercios) {
+          var lista_de_comercios = `
+        <p>` + comercios.name + `
+      ` + comercios.address + `
+      ` + comercios.phone + `</p>
+      <hr>
+        `;
+
+          $(lista_de_comercios).appendTo("#comercios");
+        });
+      }); 
+
+
+      //* RELLENAMOS ESTADO DE CUENTA
+
+      $.ajax({
+        type: "POST",
+        url: "https://vida-apps.com/vidapesos/ajax/rellenar_estado_de_cuenta_usuarios.php?id_user=" + $id_user,
+        data: {
+          id_user: $id_user
+        },
+        dataType: "JSON",
+        success: function(res) {
+          if (res.result) {
+            $('#dinero').html('$' + res.monto);
+          } else {
+            $('#dinero').html('No se pudo cargar');
+          }
+
+
+        }
+      });
+
+      confirmacionDeDescuento();//disparar función
+
+      $('#indexSidebar').addClass('active');
+       
+            $url = 'https://vida-apps.com/vidapesos/ajax/listar_transacciones_socio.php?id_user='+$id_user;
+       
+             $('#TablaT').DataTable({lengthMenu: [10],
+                  ajax: $url ,
+                  lengthChange: false,
+                  order: [0,'desc'],
+                  oLanguage: {
+                      "sUrl": "../json/traducciontabla.json"
+                  },responsive: true,
+                  colReorder: true,
+                  info: false });
+
+                  $('#TablaT_next').css('color','#79153a!important');
+       
+    });
+  </script>
+
+</body>
+
+</html>
