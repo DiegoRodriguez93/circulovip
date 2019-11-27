@@ -4,11 +4,13 @@ require '_conexion.php';
 
 $id_user = $_GET['id_user'];
 
-$query = mysqli_query($mysqli,"SELECT t.fecha, t.id_user, t.id_comercio, t.id_cupon, t.monto, c.name, cg.codigo
+$query = mysqli_query($mysqli,"SELECT t.fecha, t.id_user, t.id_comercio, t.id_cupon, t.monto, c.name, cg.codigo, u.`name` as name_persona, t.id_user_2, us.name as name_2
 FROM transacciones AS t
-INNER JOIN comercios AS c ON t.id_comercio = c.id_comercio
-INNER JOIN cupones_generados AS cg ON t.id_cupon = cg.id_cupon
-WHERE t.id_user = '$id_user'
+LEFT JOIN comercios AS c ON t.id_comercio = c.id_comercio
+LEFT JOIN cupones_generados AS cg ON t.id_cupon = cg.id_cupon
+LEFT JOIN usuarios AS u ON u.id_user = t.id_user_2
+LEFT JOIN usuarios AS us ON us.id_user = t.id_user
+WHERE t.id_user = '$id_user' OR t.id_user_2 = '$id_user'
 ");
 
 $contar = mysqli_num_rows($query);
@@ -17,12 +19,34 @@ if($contar > 0){
 
     while ($row = mysqli_fetch_array($query)){
 
-        $fecha          = $row['fecha'];
-        $name_comercio  = $row['name'];
+        $id    = $row['id_user'];
+        $id_2    = $row['id_user_2'];
+        $fecha = $row['fecha'];
+        $name  = $row['name'];
+
+        if($name == null && $id == $id_user){
+            $name = $row['name_persona'];
+        }
+        
+        if($name == null && $id_2 == $id_user){
+
+            $name = $row['name_2'];
+
+        }
+
+
+
         $codigo         = $row['codigo'];
-        $monto          = $row['monto'];
+
+        if($id == $id_user){
+            $monto          = '-'.$row['monto'];  
+        }else{
+            $monto          = $row['monto'];
+        }
+
+        
     
-        $response[] = array($fecha, $name_comercio, $codigo, $monto);
+        $response[] = array($fecha, $name, $codigo, $monto);
     
     }
     echo '{ "data" : ' . json_encode($response) . '}' ;

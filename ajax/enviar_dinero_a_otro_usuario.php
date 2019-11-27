@@ -30,10 +30,12 @@ if($contar1 > 0){
             $id_user_a_recibir = $row2['id_user'];
             $tipo_user_a_recibir = $row2['tipo'];
 
-            /* VEMOS SI EL USUARIO TIENE ESTADO DE CUENTA CREADO */
+            /* VEMOS SI EL USUARIO TIENE ESTADO DE CUENTA CREADO con mismo vencimiento */
+
+            $hoy = date('Y-m-d');
 
             $query3 = mysqli_query($mysqli,"SELECT id_user FROM estado_de_cuenta_usuarios
-            WHERE id_user = '$id_user_a_recibir'");
+            WHERE id_user = '$id_user_a_recibir' and fecha_vencimiento = '$hoy' ");
 
             $contar3 = mysqli_num_rows($query3);
 
@@ -63,23 +65,40 @@ if($contar1 > 0){
 
             }else{
 
-            $insert1 = mysqli_query($mysqli,"INSERT INTO estado_de_cuenta_usuarios (id_user, tipo_user, monto)
-            VALUES ('$id_user_a_recibir', '$tipo_user_a_recibir', '$monto');");    
+                // insertamos la plata
 
-             /* DESCONTAMOS LA PLATA */
-             if($insert1) {
-                $update2 = mysqli_query($mysqli,"UPDATE estado_de_cuenta_usuarios
-                 SET monto = monto - '$monto'
-                 WHERE id_user = '$id_user' ;");
+            $hoy_mas_30_dias = date("Y-m-d", strtotime($hoy . "+ 30 day"));
 
-            $res = array('result'=>true,'message'=>'Transacción realizada correctamente'); 
+            $insert1 = mysqli_query($mysqli,"INSERT INTO estado_de_cuenta_usuarios (id_user, tipo_user, monto, fecha_vencimiento)
+            VALUES ('$id_user_a_recibir', '$tipo_user_a_recibir', '$monto', '$hoy_mas_30_dias');");    
+            //* debitamos el monto del estado de cuenta
 
+            $query_debito_socio = mysqli_query($mysqli,"SELECT id_estado_de_cuenta_usuarios, monto FROM estado_de_cuenta_usuarios
+            WHERE id_user = '$id_user' and fecha_vencimiento >= '$hoy' ORDER BY fecha_vencimiento ASC ");
+
+            $monto_a_debitar = $descuento;
+
+            while($rowDebito = mysqli_fetch_array($query_debito_socio)){
+
+            $id_estado_de_cuenta_usuarios = $rowDebito['id_estado_de_cuenta_usuarios'];
+            $monto = $rowDebito['monto'];
+
+            if($monto >= $monto_a_debitar){
+
+                $debito = mysqli_query($mysqli,"UPDATE estado_de_cuenta_usuarios
+                SET monto = monto - '$monto_a_debitar'
+                WHERE id_estado_de_cuenta_usuarios = '$id_estado_de_cuenta_usuarios' ");
+                $monto_a_debitar = 0;
+                break;
             }else{
+                $monto_a_debitar = $monto_a_debitar - $monto;
+                $debito = mysqli_query($mysqli,"UPDATE estado_de_cuenta_usuarios
+                SET monto = 0
+                WHERE id_estado_de_cuenta_usuarios = '$id_estado_de_cuenta_usuarios'
+                ");
 
-            $res = array('result'=>false,'message'=>'Ha ocurrido un error, intenté más tarde');        
-
-            }
-        }
+            } } }
+        
 
         }else{
 

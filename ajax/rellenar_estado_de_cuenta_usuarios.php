@@ -6,7 +6,7 @@ $id_user = $_GET['id_user'];
 
 $hoy = date('Y-m-d');
 
-$query = mysqli_query($mysqli,"SELECT sum(monto) as monto FROM estado_de_cuenta_usuarios WHERE id_user = '$id_user' and fecha_vencimiento < '$hoy' ");
+$query = mysqli_query($mysqli,"SELECT sum(monto) as monto FROM estado_de_cuenta_usuarios WHERE id_user = '$id_user' and fecha_vencimiento >= '$hoy' ");
 
 $contar_resultados= mysqli_num_rows($query);
 
@@ -16,7 +16,11 @@ if($contar_resultados > 0){
 
     $monto = $row['monto'];
 
-    $response = array('result'=>true,'monto'=>$monto );
+    if($monto == null){
+        $response = array('result'=>true,'monto'=>0 );
+    }else{
+        $response = array('result'=>true,'monto'=>$monto );
+    }
 
 }else{
 

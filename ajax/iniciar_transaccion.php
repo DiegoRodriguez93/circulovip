@@ -19,9 +19,6 @@ $query_cedula_socio = mysqli_query($mysqli,"SELECT id_user ,usuario FROM usuario
 
 $contar1 = mysqli_num_rows($query_cedula_socio);
 
-$row2 = mysqli_fetch_assoc($query_cedula_socio);
-
-$id_user = $row2['id_user'];
 
 if($contar1 == 0){
 
@@ -35,7 +32,7 @@ $user = $query_cedula_socio->fetch_assoc();
 
 $id_user = $user['id_user'];
 
-$query_monto_socio = mysqli_query($mysqli,"SELECT sum(monto) as monto FROM estado_de_cuenta_usuarios WHERE id_user = '$id_user' and fecha_vencimiento > '$hoy' ");
+$query_monto_socio = mysqli_query($mysqli,"SELECT sum(monto) as monto FROM estado_de_cuenta_usuarios WHERE id_user = '$id_user' and fecha_vencimiento >= '$hoy' ");
 
 $contar2 = mysqli_num_rows($query_monto_socio);
 
@@ -50,9 +47,9 @@ $row1 = mysqli_fetch_assoc($query_monto_socio);
 
 $monto_socio = $row1['monto'];
 
-if($monto_socio < $monto){
+if($monto_socio < $monto || $monto_socio == null ){
 
-    $response = array('result'=>false,'message'=>'La persona no tiene vidapesos suficientes');
+    $response = json_encode(array('result'=>false,'message'=>'La persona no tiene vidapesos suficientes'));
     exit($response);
 
 }

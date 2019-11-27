@@ -3,6 +3,8 @@ header("Access-Control-Allow-Origin: *");
 
 $id_cupon = $_POST['id_cupon'];
 
+confirmarTransaccion($id_cupon); //disparo
+
 function confirmarTransaccion($id_cupon){
 
 require '_conexion.php';
@@ -31,7 +33,7 @@ $id_comercio = $row['id_comercio'];
 
 $hoy = date('Y-m-d');
 
-$query_monto_socio = mysqli_query($mysqli,"SELECT sum(monto) as monto FROM estado_de_cuenta_usuarios WHERE id_user = '$id_user' and fecha_vencimiento > '$hoy' ");
+$query_monto_socio = mysqli_query($mysqli,"SELECT sum(monto) as monto FROM estado_de_cuenta_usuarios WHERE id_user = '$id_user' and fecha_vencimiento >= '$hoy' ");
 
 $contar2 = mysqli_num_rows($query_monto_socio);
 
@@ -46,7 +48,7 @@ $row1 = mysqli_fetch_assoc($query_monto_socio);
 
 $monto_socio = $row1['monto'];
 
-if($monto_socio < $descuento){
+if(($monto_socio < $descuento || $monto_socio == null )){
 
     $response = array('result'=>false,'message'=>'La persona no tiene vidapesos suficientes');
     exit($response);
@@ -56,7 +58,7 @@ if($monto_socio < $descuento){
 //* debitamos el monto del estado de cuenta
 
 $query_debito_socio = mysqli_query($mysqli,"SELECT id_estado_de_cuenta_usuarios, monto FROM estado_de_cuenta_usuarios
-WHERE id_user = '$id_user' and fecha_vencimiento > '$hoy' ORDER BY fecha_vencimiento DESC ");
+WHERE id_user = '$id_user' and fecha_vencimiento >= '$hoy' ORDER BY fecha_vencimiento ASC ");
 
 $monto_a_debitar = $descuento;
 
@@ -121,6 +123,17 @@ $ultimo_dia_mes_siguiente = date("Y-m-d", strtotime($ultimo_dia_mes . "+ $dias_d
     VALUES ('$id_comercio', '$descuento', '$ultimo_dia_mes_siguiente' )");
 
     }
+
+    //* ACTUALIZAMOS EL CUPÓN A NO DISPONIBLE
+
+    $update_cupon_to_nodisponible = mysqli_query($mysqli,"UPDATE cupones_generados
+    SET disponible = 0
+    WHERE id_cupon = '$id_cupon'");
+
+    //* GENERAMOS LA ALERTA PARA EL COMERCIO
+
+    $alerta_comercio = mysqli_query($mysqli,"INSERT INTO alerta_comercio (id_comercio, alertado)
+    VALUES ('$id_comercio', '0') ");
 
 
 

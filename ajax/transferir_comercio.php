@@ -4,11 +4,18 @@ $monto = $_POST['monto'];
 $id_comercio = $_POST['id_comercio'];
 $cedula = $_POST['cedula']; 
 
-require '_conexion.php';
+transferir_comercio_usuario($monto, $id_comercio, $cedula);//disparamos
+
+function transferir_comercio_usuario($monto, $id_comercio, $cedula){
+
+    require '_conexion.php';
+
+    $hoy = date('Y-m-d');
 
 //* CHEQUEAMOS SI EL COMERCIO TIENE EL MONTO PARA HACER ESTO
 
-$query_monto_comercio = mysqli_query($mysqli,"SELECT id_comercio, monto FROM estado_de_cuenta_comercios WHERE id_comercio = '$id_comercio' ");
+$query_monto_comercio = mysqli_query($mysqli,"SELECT sum(monto) as monto FROM estado_de_cuenta_comercios 
+WHERE id_comercio = '$id_comercio' and fecha_vencimiento >= '$hoy' ");
 
 $row = mysqli_fetch_assoc($query_monto_comercio);
 
@@ -19,7 +26,7 @@ if($monto > $monto_comercio){
     $response = json_encode(array('result'=>false,
     'message'=>'No tiene monto suficiente para realizar esta transferencia, su monto actual son '.$monto_comercio));
 
-    die($response);
+    exit($response);
 
 }
 
@@ -35,9 +42,11 @@ if($contar == 1){
     //* EXTRAEMOS EL ID DE USARIO
     $id_user = $row_user['id_user'];
 
-    //* COMPROBAMOS SI TIENE ESTADO DE CUENTA YA GENERADO
+    //* COMPROBAMOS SI TIENE ESTADO DE CUENTA YA GENERADO CON ESA FECHA
 
-    $query_estado_socio = mysqli_query($mysqli,"SELECT id_user FROM estado_de_cuenta_usuarios WHERE id_user = '$id_user' ");
+    $hoy_mas_30_dias = date("Y-m-d", strtotime($hoy . "+ 30 day"));
+
+    $query_estado_socio = mysqli_query($mysqli,"SELECT id_user FROM estado_de_cuenta_usuarios WHERE id_user = '$id_user' AND fecha_vencimiento = '$hoy_mas_30_dias' ");
 
     $contar2 = mysqli_num_rows($query_estado_socio);
 
@@ -47,30 +56,75 @@ if($contar == 1){
         SET monto = monto + '$monto'
         WHERE id_user = '$id_user' ");
 
-        //* DESCONTAMOS EL DINERO AL COMERCIO
-        $update_monto_comercio = mysqli_query($mysqli,"UPDATE estado_de_cuenta_comercios
-        SET monto = monto - '$monto'
-        WHERE id_comercio = '$id_comercio' ");
+         //* DESCONTAMOS EL DINERO AL COMERCIO
+
+            $query_debito_comercio = mysqli_query($mysqli,"SELECT id_estado_de_cuenta_comercios, monto FROM estado_de_cuenta_comercios
+            WHERE id_comercio = '$id_comercio' and fecha_vencimiento >= '$hoy' ORDER BY fecha_vencimiento ASC ");
+
+            $monto_a_debitar = $monto;
+
+            while($rowDebito = mysqli_fetch_array($query_debito_comercio)){
+
+            $id_estado_de_cuenta_comercios = $rowDebito['id_estado_de_cuenta_comercios'];
+            $monto_2 = $rowDebito['monto'];
+
+            if($monto_2 >= $monto_a_debitar){
+
+                $debito = mysqli_query($mysqli,"UPDATE estado_de_cuenta_comercios
+                SET monto = monto - '$monto_a_debitar'
+                WHERE id_estado_de_cuenta_comercios = '$id_estado_de_cuenta_comercios' ");
+                $monto_a_debitar = 0;
+                break;
+            }else{
+                $monto_a_debitar = $monto_a_debitar - $monto_2;
+                $debito = mysqli_query($mysqli,"UPDATE estado_de_cuenta_comercios
+                SET monto = 0
+                WHERE id_estado_de_cuenta_comercios = '$id_estado_de_cuenta_comercios'
+                ");
+
+            }   }
 
         $response = json_encode(array('result'=>true,
         'message'=>'Transacción realizada correctamente'));
 
-        die($response); 
+        exit($response); 
 
     }else{
         //* CREAMOS EL ESTADO DE CUENTA Y ACREDITAMOS AL SOCIO
-        $insert_estado_de_cuenta_socio = mysqli_query($mysqli,"INSERT INTO estado_de_cuenta_usuarios (id_user, tipo_user, monto)
-        VALUES ('$id_user', '2', '$monto') ");
+        $insert_estado_de_cuenta_socio = mysqli_query($mysqli,"INSERT INTO estado_de_cuenta_usuarios (id_user, tipo_user, monto, fecha_vencimiento)
+        VALUES ('$id_user', '2', '$monto', '$hoy_mas_30_dias') ");
 
                 //* DESCONTAMOS EL DINERO AL COMERCIO
-                $update_monto_comercio = mysqli_query($mysqli,"UPDATE estado_de_cuenta_comercios
-                SET monto = monto - '$monto'
-                WHERE id_comercio = '$id_comercio' ");
+                $query_debito_comercio = mysqli_query($mysqli,"SELECT id_estado_de_cuenta_comercios, monto FROM estado_de_cuenta_comercios
+                WHERE id_comercio = '$id_comercio' and fecha_vencimiento >= '$hoy' ORDER BY fecha_vencimiento ASC ");
+    
+                $monto_a_debitar = $monto;
+    
+                while($rowDebito = mysqli_fetch_array($query_debito_comercio)){
+    
+                $id_estado_de_cuenta_comercios = $rowDebito['id_estado_de_cuenta_comercios'];
+                $monto_2 = $rowDebito['monto'];
+    
+                if($monto_2 >= $monto_a_debitar){
+    
+                    $debito = mysqli_query($mysqli,"UPDATE estado_de_cuenta_comercios
+                    SET monto = monto - '$monto_a_debitar'
+                    WHERE id_estado_de_cuenta_comercios = '$id_estado_de_cuenta_comercios' ");
+                    $monto_a_debitar = 0;
+                    break;
+                }else{
+                    $monto_a_debitar = $monto_a_debitar - $monto_2;
+                    $debito = mysqli_query($mysqli,"UPDATE estado_de_cuenta_comercios
+                    SET monto = 0
+                    WHERE id_estado_de_cuenta_comercios = '$id_estado_de_cuenta_comercios'
+                    ");
+    
+                }   }
 
                 $response = json_encode(array('result'=>true,
                 'message'=>'Transacción realizada correctamente'));
 
-                die($response); 
+                exit($response); 
         
 
     }
@@ -82,10 +136,12 @@ if($contar == 1){
     $response = json_encode(array('result'=>false,
     'message'=>'La persona con esa cedula no tiene cuenta asociada en el sistema'));
 
-    die($response); 
+    exit($response); 
 
 }
 
 mysqli_close($mysqli);
+
+}
 
 ?>

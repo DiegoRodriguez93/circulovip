@@ -161,7 +161,7 @@
               <h4 class="card-header">
                   <a class="collapsed d-block" data-toggle="collapse" href="#collapse2" aria-expanded="true" aria-controls="collapse2" id="heading-collapsed">
                       <i style="float: right;" class="fa fa-chevron-down pull-right"></i>
-                     Descuentos realizados
+                     Movimientos
                   </a>
               </h4>
 
@@ -301,9 +301,14 @@ alert('Cédula inválida');
 return false;
 }
 
+if($monto < 1){
+  alert('Transferencia mínima 1 vida peso');
+return false;
+}
+
 $.ajax({
 type: "POST",
-url: "https://vida-apps.com/vidapesos/ajax/enviar_dinero_a_otro_usuario.php",
+url: "https://vida-apps.com/vidapesos/ajax/enviar_dinero_a_otro_usuario_fn.php",
 data: {id_user: $id_user, cedula : $cedula, monto: $monto},
 dataType: "JSON",
 success: function (res) {
@@ -343,7 +348,7 @@ $( "#sidebar" ).toggle("normal");
         
          $.ajax({
            type: "POST",
-           url: "https://vida-apps.com/vidapesos/ajax/confirmar_transaccion_socio.php",
+           url: "https://vida-apps.com/vidapesos/ajax/confirmar_transaccion_socio_fn.php",
            data: {id_cupon : $id_cupon},
            dataType: "JSON",
            success: function (res) {

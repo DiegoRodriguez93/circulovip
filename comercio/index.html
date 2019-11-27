@@ -273,20 +273,15 @@ $.ajax({
         return false;
       }
 
-      if($monto < 10){
-        alert('Monto mínimo 10 Vida pesos');
-        return false;
-      }
-      
-      if($monto > 100){
-        alert('Monto máximo 100 Vida pesos');
+      if($monto < 1){
+        alert('Monto mínimo 1 Vida peso');
         return false;
       }
 
       $.ajax({
         type: "POST",
         
-        url: "https://vida-apps.com/vidapesos/ajax/iniciar_transaccion_fn.php",
+        url: "https://vida-apps.com/vidapesos/ajax/iniciar_transaccion.php",
         data: {cedula:$cedula,
         id_comercio:$id_comercio,
         monto:$monto},
