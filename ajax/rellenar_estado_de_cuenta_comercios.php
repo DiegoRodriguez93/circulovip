@@ -4,7 +4,9 @@ require '_conexion.php';
 
 $id_comercio = $_GET['id_comercio'];
 
-$query = mysqli_query($mysqli,"SELECT monto, id_comercio FROM estado_de_cuenta_comercios WHERE id_comercio = '$id_comercio' ");
+$hoy = date('Y-m-d');
+
+$query = mysqli_query($mysqli,"SELECT sum(monto) as monto FROM estado_de_cuenta_comercios WHERE id_comercio = '$id_comercio' and fecha_vencimiento < '$hoy' ");
 
 $contar_resultados= mysqli_num_rows($query);
 

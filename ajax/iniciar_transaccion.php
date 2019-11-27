@@ -35,7 +35,7 @@ $user = $query_cedula_socio->fetch_assoc();
 
 $id_user = $user['id_user'];
 
-$query_monto_socio = mysqli_query($mysqli,"SELECT sum(monto) FROM estado_de_cuenta_usuarios WHERE id_user = '$id_user' and fecha_vencimiento > '$hoy' ");
+$query_monto_socio = mysqli_query($mysqli,"SELECT sum(monto) as monto FROM estado_de_cuenta_usuarios WHERE id_user = '$id_user' and fecha_vencimiento > '$hoy' ");
 
 $contar2 = mysqli_num_rows($query_monto_socio);
 

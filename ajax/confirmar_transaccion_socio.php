@@ -20,7 +20,7 @@ if($contar > 0){
 
 
    //* Creamos la fecha
-   date_default_timezone_set('America/Montevideo');
+
    $fecha = new DateTime('now');
    $fecha_hoy = $fecha->format('Y-m-d H:i:s');
 
