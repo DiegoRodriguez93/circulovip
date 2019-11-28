@@ -23,13 +23,15 @@ if($contar > 0){
         $id_2    = $row['id_user_2'];
         $fecha = $row['fecha'];
         $name  = $row['name'];
+        $tipo  = 'Descuento en comercio';
 
         if($name == null && $id == $id_user){
             $name = $row['name_persona'];
+            $tipo = 'Transferencia a otra persona';
         }
         
         if($name == null && $id_2 == $id_user){
-
+            $tipo = 'Transferencia recibida';
             $name = $row['name_2'];
 
         }
@@ -44,9 +46,13 @@ if($contar > 0){
             $monto          = $row['monto'];
         }
 
+        if($name != null && $monto >= 0){
+            $tipo = 'Transferencia de un comercio';
+        }
+
         
     
-        $response[] = array($fecha, $name, $codigo, $monto);
+        $response[] = array($fecha, $name, $tipo, $codigo, $monto);
     
     }
     echo '{ "data" : ' . json_encode($response) . '}' ;
