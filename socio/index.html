@@ -158,9 +158,9 @@
           <!--Card-->
           <div class="card">
 
-              <h4 class="card-header">
+              <h4 class="card-header text-center">
                   <a class="collapsed d-block" data-toggle="collapse" href="#collapse2" aria-expanded="true" aria-controls="collapse2" id="heading-collapsed">
-                      <i style="float: right;" class="fa fa-chevron-down pull-right"></i>
+                     <!--  <i style="float: right;" class="fa fa-chevron-down pull-right"></i> -->
                      Movimientos
                   </a>
               </h4>
@@ -170,18 +170,18 @@
             </div> -->
 
             <!--Card content-->
-            <div id="collapse2" class="collapse" aria-labelledby="heading-collapsed">
-            <div class="card-body">
+      <!--       <div id="collapse2" class="collapse" aria-labelledby="heading-collapsed">
+            <div class="card-body"> -->
 
               <!-- Table  -->
-              <table id="TablaT" class="table responsive table-hover display nowrap" style="width:100%">
+              <table id="TablaT" class="table table-hover" style="width:100%" >
                 <thead>
                   <tr class="text-center">
                     <th>Fecha</th>
                     <th>Persona/Comercio</th>
-                    <th>Tipo</th>
+                    <th data-priority="1">Tipo</th>
                     <th>Codigo de cupón</th>
-                    <th>Monto</th>
+                    <th data-priority="2">Monto</th>
                   </tr>
                 </thead>
                 <tbody class="text-center">
@@ -189,8 +189,9 @@
               </table>
               <!-- Table  -->
             <div class="mb-5"></div>
-            </div>
-          </div>
+            <div class="mb-2"></div>
+        <!--     </div>
+          </div> -->
           </div>
           <!--/.Card-->
 
@@ -246,7 +247,7 @@ function confirmacionDeDescuento() {
 
 setInterval(function(){
 
-$id_user = $.session.get('id_user');
+$id_user = localStorage.getItem("id_user");
 
 $.ajax({
   type: "POST",
@@ -293,7 +294,7 @@ $.ajax({
   //* EVIAMOS DINERO A OTRO USUARIO
   function enviarDinero(){
 
-$id_user = $.session.get('id_user');
+$id_user = localStorage.getItem("id_user");
 $cedula = $('#cedula').val();
 $monto  = $('#monto').val();
 
@@ -380,7 +381,7 @@ $( "#sidebar" ).toggle("normal");
             });
             });
 
-      $id_user = $.session.get('id_user');
+      $id_user = localStorage.getItem("id_user");
 
       if ($id_user != null) {
         console.log('Usuario logeado!');
@@ -444,7 +445,7 @@ $( "#sidebar" ).toggle("normal");
         }
       });
 
-      $id_user = $.session.get('id_user');
+      $id_user = localStorage.getItem("id_user");
 
       $.ajax({
         type: "POST",
@@ -475,7 +476,10 @@ $( "#sidebar" ).toggle("normal");
                   order: [0,'desc'],
                   oLanguage: {
                       "sUrl": "../json/traducciontabla.json"
-                  },responsive: true,
+                  },responsive: true,    
+                  columnDefs: [
+                  { responsivePriority: 1, targets: 0 },
+                  { responsivePriority: 2, targets: -1 }],
                   colReorder: true,
                   info: false });
 

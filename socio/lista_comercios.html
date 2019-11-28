@@ -193,7 +193,7 @@
 
         } );
 
-      $id_user = $.session.get('id_user');
+      $id_user = localStorage.getItem("id_user");
 
       if ($id_user != null) {
         console.log('Usuario logeado!');
