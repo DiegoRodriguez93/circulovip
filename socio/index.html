@@ -37,12 +37,12 @@
         <h4 id="commerce_address"></h4>
         <h4 id="commerce_phone"></h4>
         <hr>
-        <h4 id="descuento"></h4>
         <h4 id="fecha_vencimiento"></h4>
+        <h4 id="descuento"></h4>
       </div>
       <div class="modal-footer text-center">
-        <button type="button" id="confirmarTransaccionBtn" class="btn btn-success">Confirmar Transacción</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar y Cerrar</button>
+        <button type="button" id="confirmarTransaccionBtn" class="btn btn-indigo">Confirmar Transacción</button>
+        <button type="button" id="cancelarTransaccionBtn" class="btn btn-blue-grey" data-dismiss="modal">Cancelar y Cerrar</button>
       </div>
     </div>
   </div>
@@ -278,11 +278,11 @@ $.ajax({
   success: function (res) {
     $('#modalTitle').html('Cupón '+res.codigo);
     $('#hidden_id_cupon').val(res.id_cupon);
-    $('#commerce_name').html(res.commerce_name);
-    $('#commerce_address').html(res.commerce_address);
-    $('#commerce_phone').html(res.commerce_phone);
-    $('#descuento').html('Monto: '+res.descuento);
-    $('#fecha_vencimiento').html(res.fecha_vencimiento);
+    $('#commerce_name').html('<i class="fas fa-store"></i> '+res.commerce_name);
+    $('#commerce_address').html('<i class="fas fa-map-marker-alt"></i> '+res.commerce_address);
+    $('#commerce_phone').html('<i class="fas fa-phone"></i> '+res.commerce_phone);
+    $('#fecha_vencimiento').html('<i class="fas fa-clock"></i> '+res.fecha_vencimiento);
+    $('#descuento').html('<i class="fas fa-money-bill-wave"></i> Total a pagar = $'+res.descuento);
     // abro el modal
     $('#confirmModal').modal('show');
   }
@@ -360,6 +360,25 @@ $( "#sidebar" ).toggle("normal");
          });
       });
 
+          //* función para confirmar transacción
+          $('#cancelarTransaccionBtn').on('click',function(){
+
+            $id_cupon = $('#hidden_id_cupon').val();
+
+            $.ajax({
+              type: "POST",
+              url: "https://vida-apps.com/vidapesos/ajax/cancelar_transaccion_socio_fn.php",
+              data: {id_cupon : $id_cupon},
+              dataType: "JSON",
+              success: function (res) {
+                $('#confirmModal').modal('hide');
+
+                alert(res.message);
+                location.reload();
+              }
+            });
+            });
+
       $id_user = $.session.get('id_user');
 
       if ($id_user != null) {
@@ -421,6 +440,25 @@ $( "#sidebar" ).toggle("normal");
           }
 
 
+        }
+      });
+
+      $id_user = $.session.get('id_user');
+
+      $.ajax({
+        type: "POST",
+        url: "https://vida-apps.com/vidapesos/ajax/chequear_transaccion_socio.php",
+        data: { id_user: $id_user },
+        dataType: "JSON",
+        success: function (res) {
+          if(res.result){
+            //abrir modal
+            displayConfirm(res.id_cupon);
+          }else{
+
+            console.log(res.message);
+
+          }
         }
       });
 

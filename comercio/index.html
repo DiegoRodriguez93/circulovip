@@ -246,8 +246,13 @@ $.ajax({
   success: function (res) {
     if(res.result){
       //Enviar alert
+      if(res.tipo == 1){
     alert('Se ha completado una nueva transacción, un nuevo monto ya se ha acreditado en su cuenta');
     location.reload();
+      }else{
+        alert('Un cliente ha cancelado la transacción');
+      }
+    
     }else{
 
       console.log(res.message);

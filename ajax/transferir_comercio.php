@@ -121,6 +121,32 @@ if($contar == 1){
     
                 }   }
 
+                                // fecha
+                                $fecha = new DateTime('now');
+                                $fecha_format = $fecha->format('Y-m-d H:i:s');
+            
+                                    
+                                // STRING RANDOM DE 8 CARACTERES
+                                $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
+                                $charactersLength = strlen($characters);
+                                $randomString = '';
+                                for ($i = 0; $i < 8 ; $i++) {
+                                    $randomString .= $characters[rand(0, $charactersLength - 1)];
+                                }
+            
+                        //* Registrar Transferencia de envio
+                        $crear_cupon = mysqli_query($mysqli,"INSERT INTO cupones_generados (fecha_vencimiento, descuento, id_user, id_comercio, codigo, disponible, id_user_2)
+                        VALUES ('$fecha_format', '$monto', '$id_user', '$id_comercio', '$randomString', '0', '0' );");
+            
+                        $select_cupon = mysqli_query($mysqli,"SELECT MAX(id_cupon) as id_cupon FROM cupones_generados");
+            
+                        $cupon = mysqli_fetch_assoc($select_cupon);
+            
+                        $id_cupon = $cupon['id_cupon'];
+            
+                        $insert1 = mysqli_query($mysqli,"INSERT INTO transacciones (fecha, id_user, id_comercio, id_cupon, monto, id_user_2)
+                        VALUES ('$fecha_format', '0', '$id_comercio', '$id_cupon', '$monto', '$id_user' );");  
+
                 $response = json_encode(array('result'=>true,
                 'message'=>'Transacción realizada correctamente'));
 

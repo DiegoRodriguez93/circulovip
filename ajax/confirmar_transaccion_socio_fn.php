@@ -132,15 +132,18 @@ $ultimo_dia_mes_siguiente = date("Y-m-d", strtotime($ultimo_dia_mes . "+ $dias_d
 
     //* GENERAMOS LA ALERTA PARA EL COMERCIO
 
-    $alerta_comercio = mysqli_query($mysqli,"INSERT INTO alerta_comercio (id_comercio, alertado)
-    VALUES ('$id_comercio', '0') ");
+    $alerta_comercio = mysqli_query($mysqli,"INSERT INTO alerta_comercio (id_comercio, alertado, tipo_alerta)
+    VALUES ('$id_comercio', '0', '1') ");
 
 
 
 //* Registramos la transacción
 
+$fecha_transaccion = new DateTime('now');
+$fecha_transaccion = $fecha_transaccion->format('Y-m-d H:i:s');
+
 $insert_transaccion = mysqli_query($mysqli,"INSERT INTO transacciones (fecha, monto, id_user, id_comercio, id_cupon)
-VALUES ('$fecha_hoy', '$descuento', '$id_user', '$id_comercio', '$id_cupon'  )");
+VALUES ('$fecha_transaccion', '$descuento', '$id_user', '$id_comercio', '$id_cupon'  )");
 
 if(!$insert_transaccion){
     $response = json_encode(array('result'=>false,'message'=>'Ha ocurrido un error, intenté más tarde')) ;

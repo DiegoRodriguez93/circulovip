@@ -20,12 +20,13 @@ if($contar > 0 ){
 $row = mysqli_fetch_assoc($query);
 
 $id     = $row['id'];
+$tipo   = $row['tipo_alerta'];
 
 $update = mysqli_query($mysqli,"UPDATE alerta_comercio
 SET alertado = 1
 WHERE id = '$id' ");
 
-$response = array('result'=>true);
+$response = array('result'=>true,'tipo'=>$tipo);
 
 }else{
 

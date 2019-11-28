@@ -13,7 +13,7 @@ AND fecha_vencimiento >= '$fecha_formateada' AND disponible = 1  ");
 
 $contar = mysqli_num_rows($query);
 
-if($contar == 1 ){
+if($contar >= 1 ){
 
 while($row = mysqli_fetch_array($query) ){
 
