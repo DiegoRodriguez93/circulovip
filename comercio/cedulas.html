@@ -5,6 +5,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta http-equiv="Cache-Control" content="no-cache" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>Billetera</title>
   <!-- CSS -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
@@ -116,6 +119,7 @@
                 <th>Cedula</th>
                 <th>Name</th>
                 <th>Transferir</th>
+                <th>Eliminar</th>
             </tr>
                 </thead>
                 <tbody class="text-center">
@@ -176,6 +180,35 @@ bottom: 0;">
       $('#cedula_transferido').html('Cédula: '+$cedula);
       $('#cedula_hidden').val($cedula);
      $('#mdlTransferir').modal('show');
+    }
+
+    function eliminar($id){
+
+      var r = confirm("¿Esta seguro que desea eliminar el acceso directo a la transferencia?");
+      if (r == true) {
+
+        $.ajax({
+        type: "POST",
+        url: "https://vida-apps.com/vidapesos/ajax/eliminar_cedula.php",
+        data: {id_cedula: $id},
+        dataType: "JSON",
+        success: function (res) {
+          if(res.result){
+              alert(res.message);
+              location.reload();
+          }else{
+              alert(res.message);
+          }
+        },error: function () {
+          alert('Ha ocurrido un error, intenté más tarde');
+          }
+      });
+
+
+      }else{
+        return false;
+      } 
+
     }
 
 

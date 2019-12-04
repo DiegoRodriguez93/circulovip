@@ -11,7 +11,7 @@
             <i class="fas fa-chart-pie mr-3"></i>Inicio
           </a>
           <a href="cedulas.html" id="cedulaSidebar" class="list-group-item list-group-item-action waves-effect">
-            <i class="fas fa-address-card mr-3"></i>Cedulas</a>
+            <i class="fas fa-address-card mr-3"></i>Transferir a persona</a>
   
 <!--           <a href="preferencias.php" id="preferenciasSidebar" class="list-group-item list-group-item-action waves-effect">
             <i class="fas fa-cogs mr-3"></i>Preferencias</a> -->

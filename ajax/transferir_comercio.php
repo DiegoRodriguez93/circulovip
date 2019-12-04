@@ -41,6 +41,7 @@ if($contar == 1){
     $row_user = mysqli_fetch_assoc($query);
     //* EXTRAEMOS EL ID DE USARIO
     $id_user = $row_user['id_user'];
+    $tipo    = $row_user['tipo'];
 
     //* COMPROBAMOS SI TIENE ESTADO DE CUENTA YA GENERADO CON ESA FECHA
 
@@ -92,7 +93,7 @@ if($contar == 1){
     }else{
         //* CREAMOS EL ESTADO DE CUENTA Y ACREDITAMOS AL SOCIO
         $insert_estado_de_cuenta_socio = mysqli_query($mysqli,"INSERT INTO estado_de_cuenta_usuarios (id_user, tipo_user, monto, fecha_vencimiento)
-        VALUES ('$id_user', '2', '$monto', '$hoy_mas_30_dias') ");
+        VALUES ('$id_user', '$tipo', '$monto', '$hoy_mas_30_dias') ");
 
                 //* DESCONTAMOS EL DINERO AL COMERCIO
                 $query_debito_comercio = mysqli_query($mysqli,"SELECT id_estado_de_cuenta_comercios, monto FROM estado_de_cuenta_comercios

@@ -5,7 +5,7 @@ require '_conexion.php';
 $id_comercio = $_GET['id_comercio'];
 
 $query = mysqli_query($mysqli,"SELECT monto, fecha_vencimiento from estado_de_cuenta_comercios 
-WHERE id_comercio = '$id_comercio' order by fecha_vencimiento asc ");
+WHERE id_comercio = '$id_comercio' AND monto > 0 order by fecha_vencimiento asc ");
 
 while($row = mysqli_fetch_array($query) ){
 
