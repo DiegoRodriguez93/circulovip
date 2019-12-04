@@ -69,12 +69,15 @@ else {
         $userid = $user['id_user'];
 
         // si el usuario es tipo uno ya crear el estado de cuenta con los mil pesos
-        if($tipo == 1){
+/*         if($tipo == 1){
 
-        $query3 = mysqli_query($mysqli,"INSERT INTO estado_de_cuenta_usuarios (id_user, tipo_user, monto)
-        VALUES ('$userid', '$tipo', '1000'); ");    
+            $hoy = date('Y-m-d');
+            $hoy_mas_30_dias = date("Y-m-d", strtotime($hoy . "+ 30 day"));
 
-        }
+        $query3 = mysqli_query($mysqli,"INSERT INTO estado_de_cuenta_usuarios (id_user, tipo_user, monto, fecha_vencimiento)
+        VALUES ('$userid', '$tipo', '500'); ");    
+
+        } */
 
         $res = array('result'=>true,'message'=>'El usuario se ha creado satifactoriamente','id_user'=>$userid);
 

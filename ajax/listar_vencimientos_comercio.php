@@ -2,10 +2,10 @@
 header("Access-Control-Allow-Origin: *");
 require '_conexion.php';
 
-$id_user = $_GET['id_user'];
+$id_comercio = $_GET['id_comercio'];
 
-$query = mysqli_query($mysqli,"SELECT monto, fecha_vencimiento from estado_de_cuenta_usuarios 
-WHERE id_user = '$id_user' order by fecha_vencimiento asc ");
+$query = mysqli_query($mysqli,"SELECT monto, fecha_vencimiento from estado_de_cuenta_comercios 
+WHERE id_comercio = '$id_comercio' order by fecha_vencimiento asc ");
 
 while($row = mysqli_fetch_array($query) ){
 
