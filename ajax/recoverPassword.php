@@ -18,7 +18,7 @@ require '_conexion.php';
         $hash = $user['hash'];
         $name = $user['name'];
 
-        $url =  "<a style='color:blue;' href='http://localhost/login/reset.php?email=".$email."&hash=".$hash."'>ENLACE AQUÍ</a>";  
+        $url =  "<a style='color:blue;' href='https://vida-apps.com/vidapesos/reset.php?email=".$email."&hash=".$hash."'>ENLACE AQUÍ</a>";  
 
         include('../lib/PHPMailerAutoload.php');
         include('enviarMail.php');

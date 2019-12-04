@@ -9,11 +9,7 @@ $usuario = $mysqli->escape_string($_POST['usuario']);
 
 $query250 = mysqli_query($mysqli250,"SELECT cedula FROM abmmod.padron_datos_socio WHERE cedula = '$usuario' ");
 
-if ( $query250->num_rows == 0 ){ // NO ES SOCIO DE VIDA, TAL VEZ LO AGREGO EL COMERCIO
-    
-    $consulta = mysqli_query($mysqli,"SELECT cedula from cedulas_agregadas WHERE cedula = '$usuario' ");
-
-    if ( $consulta->num_rows == 1 ){
+if ( $query250->num_rows == 0 ){ // NO ES SOCIO DE VIDA
 
      // Chequeamos que la cuenta este creada
 
@@ -35,16 +31,11 @@ if ( $query250->num_rows == 0 ){ // NO ES SOCIO DE VIDA, TAL VEZ LO AGREGO EL CO
         
                         $res = array('result'=>true,'message'=>'Bienvenido '. $nombre ,'id_user'=>$userid);
                      
-            }
-            else {
+            }else {
                 $res = array('result'=>false,'message'=>'La contraseña es incorrecta, intenté de nuevo');
             }
         }
-        }else{
 
-        $res = array('result'=>false,'message'=>'Usuario o contraseña incorrectos');
-
-    }
         
     }else{
 
