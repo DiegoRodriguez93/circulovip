@@ -50,6 +50,13 @@
                       </div>
                     </div>
 
+                    
+                    <div class="md-form">
+                      <i class="fas fa-user prefix white-text violet active  iconitos"></i>
+                      <input type="text" id="name" class="indigo-text form-control">
+                      <label for="">Nombre completo</label>
+                    </div>
+
                     <div class="md-form">
                       <i class="fas fa-envelope prefix white-text violet active  iconitos"></i>
                       <input type="email" id="email" class="indigo-text form-control">
@@ -218,6 +225,12 @@
           return false;
         }
 
+        
+        if($name.length < 5){
+          alert('Nombre Inválido, introduzca su nombre completo');
+            return false;
+        }
+
         $todoOk = false;
 
         await $.ajax({
@@ -240,12 +253,12 @@
           $.ajax({
         type: "POST",
         url: "https://vida-apps.com/vidapesos/ajax/register_user.php",
-        data: {usuario:$cedula,email:$email,phone:$phone,pass:$password},
+        data: {usuario:$cedula,name:$name,email:$email,phone:$phone,pass:$password},
         dataType: "JSON",
         success: function(res) {
           if(res.result){
             alert(res.message);
-            $.session.set('id_user', res.id_user);
+            localStorage.setItem('id_user', res.id_user);
             location.replace('socio/index.html');
           }else{
             alert(res.message);
