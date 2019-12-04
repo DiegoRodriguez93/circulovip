@@ -1,8 +1,7 @@
 <?php
 header("Access-Control-Allow-Origin: *");
-require '_conexion.php';
 
-// TRAIGO EL NOMBRE DE LA PERSONA --------------------------------------------------------------------------------
+require '_conexion.php';
 require '_conexion250.php';
 
 $usuario = $mysqli->escape_string($_POST['usuario']);
@@ -13,37 +12,26 @@ $contar = mysqli_num_rows($query);
 
 if($contar > 0){
 
-    while($row = mysqli_fetch_array($query)){
-        $namewithoutformat = strtolower($row['nombre']);
-        $name = ucwords($namewithoutformat);
-    }
-    $tipo = 1; // 1 es socio de vida recibe 1000 pesos por mes
+    $tipo = 1; // 1 es socio de vida recibe 500 pesos por mes
+
 }else{
 
-    $consulta = mysqli_query($mysqli,"SELECT cedula , name FROM cedulas_agregadas WHERE cedula = '$usuario' ");
-
-    while($row = mysqli_fetch_array($consulta)){
-        $namewithoutformat = strtolower($row['name']);
-        $name = ucwords($namewithoutformat);
-    }
-    $tipo = 2; // 2 agregado por el comercio, no recibe la mensualidad de mil pesos, el comercio que lo creo le puede hacer transaferencias
+    $tipo = 2; //  no es socio de vida
 }
-
-
-
-// TRAIGO EL NOMBRE DE LA PERSONA FIN -----------------------------------------------------------------------------
 
 // Escape all $_POST variables to protect SQL injections
 
 $email = $mysqli->escape_string($_POST['email']);
 $phone = $mysqli->escape_string($_POST['phone']);
 $hash = $mysqli->escape_string( md5( rand(0,1000) ) );
-////$name = $mysqli->escape_string($_POST['name']); 
+$name_post = $mysqli->escape_string($_POST['name']); 
+$namewithoutformat = strtolower($name_post);
+$name = ucwords($namewithoutformat);
 $pass = $mysqli->escape_string(password_hash($_POST['pass'], PASSWORD_BCRYPT));
       
 // Check if user with that email or ci already exists
-$result = $mysqli->query("SELECT * FROM usuarios WHERE email='$email'") or die($mysqli->error());
-$result2 = $mysqli->query("SELECT * FROM usuarios WHERE usuario='$usuario'") or die($mysqli->error());
+$result = $mysqli->query("SELECT * FROM usuarios WHERE email='$email'") or die(mysqli_error($mysqli));
+$result2 = $mysqli->query("SELECT * FROM usuarios WHERE usuario='$usuario'") or die(mysqli_error($mysqli));
 
 // We know user email or user ci exists if the rows returned are more than 0
 if ( $result->num_rows > 0 ) {
@@ -68,16 +56,26 @@ else {
 
         $userid = $user['id_user'];
 
-        // si el usuario es tipo uno ya crear el estado de cuenta con los mil pesos
-/*         if($tipo == 1){
+        // si el usuario es tipo uno ya crear el estado de cuenta con los 500 pe
+        if($tipo == 1){
 
-            $hoy = date('Y-m-d');
-            $hoy_mas_30_dias = date("Y-m-d", strtotime($hoy . "+ 30 day"));
+        $fecha = new DateTime('now');
+        $fecha_hoy = $fecha->format('Y-m-d');
+
+        $dia_de_hoy = $fecha->format('d');
+        $dias_de_este_mes = date("t", strtotime($fecha_hoy ));
+
+        $dias_restantes_para_fin_de_mes = $dias_de_este_mes - $dia_de_hoy  ;
+
+        $ultimo_dia_mes = date("Y-m-d", strtotime($fecha_hoy . "+ $dias_restantes_para_fin_de_mes day"));
+
+        $query3 = mysqli_query($mysqli,"INSERT INTO estado_de_cuenta_usuarios (id_user, tipo_user, monto, fecha_vencimiento)
+        VALUES ('$userid', '$tipo', '500', '$ultimo_dia_mes'); ");    
 
         $query3 = mysqli_query($mysqli,"INSERT INTO estado_de_cuenta_usuarios (id_user, tipo_user, monto, fecha_vencimiento)
         VALUES ('$userid', '$tipo', '500'); ");    
 
-        } */
+        } 
 
         $res = array('result'=>true,'message'=>'El usuario se ha creado satifactoriamente','id_user'=>$userid);
 

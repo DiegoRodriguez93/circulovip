@@ -46,7 +46,7 @@ if($contar > 0){
             $monto          = $row['monto'];
         }
 
-        if($name != null && $monto >= 0){
+        if($name != null && $row['name_2'] == null && $monto >= 0){
             $tipo = 'Transferencia de un comercio';
         }
 
