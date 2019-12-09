@@ -120,6 +120,9 @@ function enviarDinero($cedula, $monto, $id_user){
 
             $insert1 = mysqli_query($mysqli,"INSERT INTO transacciones (fecha, id_user, id_comercio, id_cupon, monto, id_user_2)
             VALUES ('$fecha_format', '$id_user', '0', '$id_cupon', '$monto', '$id_user_a_recibir' );");  
+
+            $crear_alerta = mysqli_query($mysqli,"INSERT INTO alerta_usuario ( id_usuario, alertado, tipo_alerta )
+            VALUES ('$id_user_a_recibir', '0', '2' );");
                         
             $response = json_encode(array('result'=>true,'message'=>'Envio correcto!'));
             exit($response);

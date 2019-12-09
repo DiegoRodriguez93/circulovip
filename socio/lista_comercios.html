@@ -115,7 +115,9 @@
 
     </div>
   </main>
-  <!--Main layout-->
+  <!--Main layout--> 
+
+  <div class="mb-5"></div>
 
   <!--Footer-->
   <footer class="page-footer text-center font-small primary-color-dark darken-2 mt-4 wow fadeIn" style="bottom: 0;">
@@ -193,7 +195,6 @@
 
         $( "#sidebar" ).toggle("normal"); 
 
-
         } );
 
       $id_user = localStorage.getItem("id_user");
@@ -205,22 +206,6 @@
         location.replace('../index.html');
 
       }
-       //* RELLENAMOS COMERCIOS
-
-      
-
-/*       $('#tablaC').dataTable({
-        ajax : url,
-        "columns":[
-          {"data": "name" },
-          {"data": "address" },
-          {"data": "phone" }
-        ],info: false,
-        oLanguage: {
-            "sUrl": "../json/traducciontabla.json"
-        },lengthChange: false
-
-      }); */
 
       $("#buscador").on(' keyup change paste', function(){
 
@@ -228,22 +213,8 @@
 
       });
 
-
-
-
       $('#listaSidebar').addClass('active');
-   /*     
-            $url = '../ajax/listar_transacciones_socio.php?id_user='+$id_user;
-       
-             $('#TablaT').DataTable({lengthMenu: [10],
-                  ajax: $url ,
-                  lengthChange: false,
-                  order: [0,'desc'],
-                  oLanguage: {
-                      "sUrl": "../json/traducciontabla.json"
-                  } });
 
-                  $('#TablaT_next').css('color','#79153a!important'); */
        
     });
   </script>

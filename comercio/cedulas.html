@@ -31,10 +31,27 @@
         </button>
       </div>
       <div class="modal-body">
-        <div id="nombre_transferido"></div>
-        <div id="cedula_transferido"></div>
-        <input type="text" id="monto" class="solo_numeros" placeholder="Monto">
-        <input type="hidden" id="cedula_hidden">
+        <div class="row">
+          <div class="col-6"><div id="nombre_transferido"></div>
+          <div id="cedula_transferido"></div>
+          <input type="text" id="monto" class="solo_numeros" placeholder="Monto">
+          <input type="hidden" id="cedula_hidden"></div>
+          <div class="col-6">
+
+              <div class="view view-cascade gradient-card-header rounded  indigo text-center">
+
+                  <!-- Title -->
+                  <h2 id="estado_de_cuenta" class="card-header-title my-1  text-white" ></h2>
+                  <!-- Subtitle -->
+                  <p class="card-header-subtitle mb-1 text-white">Saldo disponible</p>
+              
+              </div>
+
+
+
+          </div>
+        </div>
+
       </div>
       <div class="modal-footer">
         <button type="button" id="transferirBtn" class="btn btn-primary btn-sm">Transferir</button>
@@ -169,168 +186,8 @@ bottom: 0;">
   <script src="js/cerrar_session.js"></script>
   <script src="include/modal.js"></script>
   <script src="include/sidebar.js"></script>
-  
-  <!-- Initializations -->
-  <script type="text/javascript">
-    // Animations initialization
-    new WOW().init();
-
-    function transferir($cedula,$nombre){
-      $('#nombre_transferido').html('Nombre: '+$nombre);
-      $('#cedula_transferido').html('Cédula: '+$cedula);
-      $('#cedula_hidden').val($cedula);
-     $('#mdlTransferir').modal('show');
-    }
-
-    function eliminar($id){
-
-      var r = confirm("¿Esta seguro que desea eliminar el acceso directo a la transferencia?");
-      if (r == true) {
-
-        $.ajax({
-        type: "POST",
-        url: "https://vida-apps.com/vidapesos/ajax/eliminar_cedula.php",
-        data: {id_cedula: $id},
-        dataType: "JSON",
-        success: function (res) {
-          if(res.result){
-              alert(res.message);
-              location.reload();
-          }else{
-              alert(res.message);
-          }
-        },error: function () {
-          alert('Ha ocurrido un error, intenté más tarde');
-          }
-      });
-
-
-      }else{
-        return false;
-      } 
-
-    }
-
-
-
-  function ingresarCedula(){
-
-   $cedula = $('#cedula').val();
-   $name = $('#name').val();
-
-   if(!comprobarCI($cedula)){
-     alert('Cedula inválida');
-     return false;
-   }
-
-   $.ajax({
-     type: "POST",
-     url: "https://vida-apps.com/vidapesos/ajax/ingresar_cedula.php",
-     data: {id_comercio: $id_comercio, name: $name, cedula:$cedula},
-     dataType: "JSON",
-     success: function (res) {
-       if(res.result){
-          alert(res.message);
-          location.reload();
-       }else{
-          alert(res.message);
-       }
-     },error: function () {
-       alert('Ha ocurrido un error, intenté más tarde');
-       }
-   });
-
-
-
-  }
-
-    $(document).ready(function(){
-
-        /* INCLUDES */
-
-        $('#sidebar_aqui').html(sidebar);      
-        $('#modal_aqui').html(modal);      
-
-                /* NAVBUTTON */
-
-                $('#menuToggle').on('click',function(){
-
-                $( "#sidebar" ).toggle("normal"); 
-
-
-                } );
-
-      $('#cedulaSidebar').addClass('active');
-
-      $id_comercio = $.session.get('id_comercio');
-
-      if($id_comercio != null ){
-        console.log('Comercio logeado!');
-      }else{
-
-        $('#modalLogin').modal('show');
-        $("#sidebar").css({"opacity": "0.6"});
-      }
-
-      //* TRANSFERIR BUTTON
-    $('#transferirBtn').on('click',function () {  
-
-      $id_comercio = $.session.get('id_comercio');
-      $monto  = $('#monto').val();
-      $cedula = $('#cedula_hidden').val();
-
-      if($cedula == '' ){
-        alert('Ha ocurrido un error, intenté más tarde!');
-        return false;
-      }
-
-      if($monto == '' ){
-        alert('Debes ingresar un monto a transferir');
-        return false;
-      }
-
-      if($monto < 1 ){
-        alert('El monto debe ser de un mínimo de 1 peso');
-        return false;
-      }
-
-
-      $.ajax({
-        type: "POST",
-        url: "https://vida-apps.com/vidapesos/ajax/transferir_comercio.php",
-        data: {cedula:$cedula,
-        monto:$monto,
-        id_comercio:$id_comercio},
-        dataType: "JSON",
-        success: function (res) {
-          if(res.result){
-            alert(res.message);
-            $('#monto').val('');
-            $('#mdlTransferir').modal('hide');
-
-          }else{
-            alert(res.message);
-          }
-        }
-      });
-
-
-    });
-
+  <script src="js/cedulas.js"></script>
  
-            $('#TablaC').DataTable({lengthMenu: [10],
-            ajax: 'https://vida-apps.com/vidapesos/ajax/listar_cedulas.php?id_comercio='+$id_comercio,
-            lengthChange: false,
-            order: [1,'desc'],
-            oLanguage: {
-                "sUrl": "../json/traducciontabla.json"
-            },responsive: true, colReorder: true, info: false }); 
-
-            $('#TablaT_next').css('color','#79153a!important');
- 
-    });
-
-  </script>
 
 </body>
 

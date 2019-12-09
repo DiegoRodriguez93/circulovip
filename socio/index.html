@@ -43,9 +43,9 @@
         <h4 id="fecha_vencimiento"></h4>
         <h4 id="descuento"></h4>
       </div>
-      <div class="modal-footer text-center">
-        <button type="button" id="confirmarTransaccionBtn" class="btn btn-indigo">Confirmar Transacción</button>
-        <button type="button" id="cancelarTransaccionBtn" class="btn btn-blue-grey" data-dismiss="modal">Cancelar y Cerrar</button>
+      <div class="modal-footer text-center mx-auto">
+        <button type="button" id="confirmarTransaccionBtn" class="btn btn-indigo">Confirmar</button>
+        <button type="button" id="cancelarTransaccionBtn" class="btn btn-blue-grey" data-dismiss="modal">Cancelar</button>
       </div>
     </div>
   </div>
@@ -224,12 +224,12 @@
               </table>
               <!-- Table  -->
             <div class="mb-5"></div>
-            <div class="mb-2"></div>
+
         <!--     </div>
           </div> -->
           </div>
           <!--/.Card-->
-
+          <div class="mb-5"></div>
         </div>
         <!--Grid column-->
 
@@ -266,287 +266,13 @@ bottom: 0;
   <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
   <script src="https://cdn.datatables.net/colreorder/1.5.2/js/dataTables.colReorder.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
   <script src="../lib/helper.js"></script>
   <script src="../lib/jquerysession.js"></script>
   <script src="js/cerrar_session.js"></script>
   <script src="include/sidebar.js"></script>
   <script src="js/push.js"></script>
-
-  <!-- Initializations -->
-  <script type="text/javascript">
-    // Animations initialization
-    new WOW().init();
-
-        //* FUNCIÓN PARA TREAR LA CONFIRMACIÓN DEL DESCUENTO
-
-function confirmacionDeDescuento() {  
-
-setInterval(function(){
-
-$id_user = localStorage.getItem("id_user");
-
-$.ajax({
-  type: "POST",
-  url: "https://vida-apps.com/vidapesos/ajax/chequear_transaccion_socio.php",
-  data: { id_user: $id_user },
-  dataType: "JSON",
-  success: function (res) {
-    if(res.result){
-      //abrir modal
-      displayConfirm(res.id_cupon);
-    }else{
-
-      console.log(res.message);
-
-    }
-  }
-});
-
-}, 10000  ); //cada 10 segundos
-
-}
-
-function displayConfirm($id_cupon){
-// primero armo el modal con los datos del cupón a confirmar
-$.ajax({
-  type: "POST",
-  url: "https://vida-apps.com/vidapesos/ajax/rellenar_confirm_modal_socio.php",
-  data: {id_cupon:$id_cupon},
-  dataType: "JSON",
-  success: function (res) {
-    $('#modalTitle').html('Cupón '+res.codigo);
-    $('#hidden_id_cupon').val(res.id_cupon);
-    $('#commerce_name').html('<i class="fas fa-store"></i> '+res.commerce_name);
-    $('#commerce_address').html('<i class="fas fa-map-marker-alt"></i> '+res.commerce_address);
-    $('#commerce_phone').html('<i class="fas fa-phone"></i> '+res.commerce_phone);
-    $('#fecha_vencimiento').html('<i class="fas fa-clock"></i> '+res.fecha_vencimiento);
-    $('#descuento').html('<i class="fas fa-money-bill-wave"></i> Total a pagar = $'+res.descuento);
-    
-    // abro el modal
-    $('#confirmModal').modal('show');
-  }
-});
-}
-
-  //* EVIAMOS DINERO A OTRO USUARIO
-  function enviarDinero(){
-
-$id_user = localStorage.getItem("id_user");
-$cedula = $('#cedula').val();
-$monto  = $('#monto').val();
-
-if(!comprobarCI($cedula)){
-alert('Cédula inválida');
-return false;
-}
-
-if($monto < 1){
-  alert('Transferencia mínima 1 vida peso');
-return false;
-}
-
-$.ajax({
-type: "POST",
-url: "https://vida-apps.com/vidapesos/ajax/enviar_dinero_a_otro_usuario_fn.php",
-data: {id_user: $id_user, cedula : $cedula, monto: $monto},
-dataType: "JSON",
-success: function (res) {
-  if(res.result){
-    alert(res.message);
-    $('#cedula').val('');
-    $('#monto').val('');
-    location.reload();
-  }else{
-    alert(res.message);
-  }
-}
-});
-
-}
-
-
-
-
-    $(document).ready(function() {
-
-            /* INCLUDES */
-
-            $('#sidebar_aqui').html(sidebar);
-
-        /* NAVBUTTON */
-
-        $('#menuToggle').on('click',function(){
-
-$( "#sidebar" ).toggle("normal"); 
-
-
-} );
-
-      //* función para confirmar transacción
-      $('#confirmarTransaccionBtn').on('click',function(){
-
-        $id_cupon = $('#hidden_id_cupon').val();
-        
-         $.ajax({
-           type: "POST",
-           url: "https://vida-apps.com/vidapesos/ajax/confirmar_transaccion_socio_fn.php",
-           data: {id_cupon : $id_cupon},
-           dataType: "JSON",
-           success: function (res) {
-            $('#confirmModal').modal('hide');
-    
-            alert(res.message);
-            location.reload();
-           }
-         });
-      });
-
-          //* función para confirmar transacción
-          $('#cancelarTransaccionBtn').on('click',function(){
-
-            $id_cupon = $('#hidden_id_cupon').val();
-
-            $.ajax({
-              type: "POST",
-              url: "https://vida-apps.com/vidapesos/ajax/cancelar_transaccion_socio_fn.php",
-              data: {id_cupon : $id_cupon},
-              dataType: "JSON",
-              success: function (res) {
-                $('#confirmModal').modal('hide');
-
-                alert(res.message);
-                location.reload();
-              }
-            });
-            });
-
-      $id_user = localStorage.getItem("id_user");
-      
-
-      if ($id_user != null) {
-        console.log('Usuario logeado!');
-      } else {
-
-        location.replace('../index.html');
-
-      }
-       //* RELLENAMOS VENCIMIENTOS DE SALDO
-/* 
-      var url = "https://vida-apps.com/vidapesos/ajax/listar_vencimientos_socio.php?id_user="+$id_user;
-
-      $.getJSON(url, function(vencimientos) {
-        $.each(vencimientos, function(i, vencimiento) {
-
-          var vencimientos_monto = vencimiento.monto;
-        
-          var vencimientos_fecha = vencimiento.fecha_vencimiento; 
-
-          $(vencimientos_monto).appendTo("#vencimiento_monto");
-           $(vencimientos_fecha).appendTo("#vencimiento_fecha"); 
-
-        });
-      });   */
-
-  
-      var url = "https://vida-apps.com/vidapesos/ajax/listar_vencimientos_socio.php?id_user="+$id_user;
-
-      $.getJSON(url, function(vencimientos) {
-      $.each(vencimientos, function(i, vencimientos) {
-        var lista_de_vencimientos = `
-        <div class="row">
-          <div class="col-6">
-           `+vencimientos.fecha_vencimiento+`
-          </div>
-          <div class="col-6">
-              $`+vencimientos.monto+`
-            </div>`;
-
-        $(lista_de_vencimientos).appendTo("#vencimientos");
-      });
-      });
-
-             //* RELLENAMOS COMERCIOS
-
-      var url = "https://vida-apps.com/vidapesos/ajax/listar_comercios_socio.php";
-
-      $.getJSON(url, function(comercios) {
-        $.each(comercios, function(i, comercios) {
-          var lista_de_comercios = `
-        <p>` + comercios.name + `
-      ` + comercios.address + `
-      ` + comercios.phone + `</p>
-      <hr>
-        `;
-
-          $(lista_de_comercios).appendTo("#comercios");
-        });
-      }); 
-
-      
-
-
-      //* RELLENAMOS ESTADO DE CUENTA
-
-      $.ajax({
-        type: "POST",
-        url: "https://vida-apps.com/vidapesos/ajax/rellenar_estado_de_cuenta_usuarios.php?id_user=" + $id_user,
-        data: {
-          id_user: $id_user
-        },
-        dataType: "JSON",
-        success: function(res) {
-          if (res.result) {
-            $('#dinero').html('$' + res.monto);
-          } else {
-            $('#dinero').html('No se pudo cargar');
-          }
-
-
-        }
-      });
-
-      $id_user = localStorage.getItem("id_user");
-
-      $.ajax({
-        type: "POST",
-        url: "https://vida-apps.com/vidapesos/ajax/chequear_transaccion_socio.php",
-        data: { id_user: $id_user },
-        dataType: "JSON",
-        success: function (res) {
-          if(res.result){
-            //abrir modal
-            displayConfirm(res.id_cupon);
-          }else{
-
-            console.log(res.message);
-
-          }
-        }
-      });
-
-      confirmacionDeDescuento();//disparar función
-
-      $('#indexSidebar').addClass('active');
-       
-            $url = 'https://vida-apps.com/vidapesos/ajax/listar_transacciones_socio.php?id_user='+$id_user;
-       
-             $('#TablaT').DataTable({lengthMenu: [10],
-                  ajax: $url ,
-                  lengthChange: false,
-                  order: [0,'desc'],
-                  oLanguage: {
-                      "sUrl": "../json/traducciontabla.json"
-                  },responsive: true,    
-                  columnDefs: [
-                  { responsivePriority: 1, targets: 0 },
-                  { responsivePriority: 2, targets: -1 }],
-                  colReorder: true,
-                  info: false });
-
-                  $('#TablaT_next').css('color','#79153a!important');
-       
-    });
-  </script>
+  <script src="js/index.js"></script>
 
 </body>
 

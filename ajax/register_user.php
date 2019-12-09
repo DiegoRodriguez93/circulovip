@@ -57,7 +57,7 @@ else {
         $userid = $user['id_user'];
 
         // si el usuario es tipo uno ya crear el estado de cuenta con los 500 pe
-        if($tipo == 1){
+        if($tipo == 1 OR $tipo == 2){
 
         $fecha = new DateTime('now');
         $fecha_hoy = $fecha->format('Y-m-d');
@@ -70,10 +70,7 @@ else {
         $ultimo_dia_mes = date("Y-m-d", strtotime($fecha_hoy . "+ $dias_restantes_para_fin_de_mes day"));
 
         $query3 = mysqli_query($mysqli,"INSERT INTO estado_de_cuenta_usuarios (id_user, tipo_user, monto, fecha_vencimiento)
-        VALUES ('$userid', '$tipo', '500', '$ultimo_dia_mes'); ");    
-
-        $query3 = mysqli_query($mysqli,"INSERT INTO estado_de_cuenta_usuarios (id_user, tipo_user, monto, fecha_vencimiento)
-        VALUES ('$userid', '$tipo', '500'); ");    
+        VALUES ('$userid', '$tipo', '1000', '$ultimo_dia_mes'); ");    
 
         } 
 
