@@ -7,9 +7,6 @@ require '_conexion250.php';
 
 $usuario = $mysqli->escape_string($_POST['usuario']);
 
-$query250 = mysqli_query($mysqli250,"SELECT cedula FROM abmmod.padron_datos_socio WHERE cedula = '$usuario' ");
-
-if ( $query250->num_rows == 0 ){ // NO ES SOCIO DE VIDA
 
      // Chequeamos que la cuenta este creada
 
@@ -22,53 +19,45 @@ if ( $query250->num_rows == 0 ){ // NO ES SOCIO DE VIDA
           $res = array('result'=>false,'message'=>'El usuario con esta cedula no existe');
         
         }else { // User exists
+
             $user = $result->fetch_assoc();
-        
+
+            if($user['activo'] == 1){
+                       
             if ( password_verify($_POST['pass'], $user['pass']) ) {
         
                 $nombre    = $user['name'];
                 $userid    = $user['id_user'];
+                $activo    = $user['activo'];
         
-                        $res = array('result'=>true,'message'=>'Bienvenido '. $nombre ,'id_user'=>$userid);
+                        $res = array('result'=>true,'message'=>'Bienvenido '. $nombre ,'id_user'=>$userid, 'activo'=>$activo);
                      
             }else {
                 $res = array('result'=>false,'message'=>'La contraseña es incorrecta, intenté de nuevo');
             }
+
+            }elseif($user['activo'] == 2){
+
+                if ( $_POST['pass'] == $user['hash'] ) {
+
+                    $nombre    = $user['name'];
+                    $userid    = $user['id_user'];
+                    $activo    = $user['activo'];
+
+                    $res = array('result'=>true,'message'=>'Bienvenido '. $nombre ,'id_user'=>$userid,'activo'=>$activo);
+
+                }else{
+                    $res = array('result'=>false,'message'=>'La contraseña temporal es incorrecta, intenté de nuevo');
+                }
+
+            }else{
+
+                $res = array('result'=>false,'message'=>'Su cuenta ha sido de deshabilitada por un administrador');
+            }
+
         }
 
         
-    }else{
-
-        // esta en el padrón!, Chequeamos que la cuenta este creada
-
-        $result = mysqli_query($mysqli,"SELECT * FROM usuarios WHERE usuario='$usuario'");
-        
-        $contar = mysqli_num_rows($result);
-        
-        if ( $contar != 1 ){ // User doesn't exist
-            
-          $res = array('result'=>false,'message'=>'El usuario con esta cedula no existe');
-        
-        }else { // User exists
-            $user = $result->fetch_assoc();
-        
-            if ( password_verify($_POST['pass'], $user['pass']) ) {
-        
-                $nombre    = $user['name'];
-                $userid    = $user['id_user'];
-        
-                        $res = array('result'=>true,'message'=>'Bienvenido '. $nombre ,'id_user'=>$userid);
-                     
-            }
-            else {
-                $res = array('result'=>false,'message'=>'Usuario o contraseña incorrectos, intenté de nuevo');
-            }
-        }
-
-       ////  $res = array('result'=>false,'message'=>'La cedula ingresada no es socio de vida'); 
-
-
-    }
 
 
 

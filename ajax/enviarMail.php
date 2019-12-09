@@ -18,7 +18,7 @@ header("Access-Control-Allow-Origin: *");
 
        			Has solicitado un cambio de clave!<br><br>
 
-        		Por favor ingrese al siguiente enlace para cambiar la clave:<br><br>'.$url.'<br><br>
+        		Por favor ingrese a su cuenta con la siguiente clave temporal <b>'.$hash.'</b>
       
 			</body>
 		</html>'

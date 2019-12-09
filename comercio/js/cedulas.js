@@ -70,6 +70,24 @@
 
  }
 
+ function estadoDeCuenta(){
+  $.ajax({
+    type: "GET",
+    url: "https://vida-apps.com/vidapesos/ajax/rellenar_estado_de_cuenta_comercios.php?id_comercio="+$id_comercio,
+    dataType: "JSON",
+    success: function (res) {
+      if(res.result){
+      
+        $('#estado_de_cuenta').html('$'+res.monto);
+
+      }else{
+        alert(res.message);
+      }
+    }
+  });
+
+ }
+
    $(document).ready(function(){
 
        /* INCLUDES */
@@ -128,13 +146,19 @@
        monto:$monto,
        id_comercio:$id_comercio},
        dataType: "JSON",
+       beforeSend:function () {
+        $('.loading').css('display','block');
+       },
        success: function (res) {
          if(res.result){
+          $('.loading').css('display','none');
+          estadoDeCuenta();
            alert(res.message);
            $('#monto').val('');
            $('#mdlTransferir').modal('hide');
 
          }else{
+          $('.loading').css('display','none');
            alert(res.message);
          }
        }
@@ -154,19 +178,7 @@
 
            $('#TablaT_next').css('color','#79153a!important');
 
-           $.ajax({
-       type: "GET",
-       url: "https://vida-apps.com/vidapesos/ajax/rellenar_estado_de_cuenta_comercios.php?id_comercio="+$id_comercio,
-       dataType: "JSON",
-       success: function (res) {
-         if(res.result){
-         
-           $('#estado_de_cuenta').html('$'+res.monto);
 
-         }else{
-           alert(res.message);
-         }
-       }
-     });
-
+           estadoDeCuenta(); // disparo función
+  
    });

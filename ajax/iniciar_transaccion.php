@@ -22,7 +22,7 @@ $contar1 = mysqli_num_rows($query_cedula_socio);
 
 if($contar1 == 0){
 
-    $response = array('result'=>false,'message'=>'La persona con esa cédula no tiene cuenta registrada');
+    $response = json_encode(array('result'=>false,'message'=>'La persona con esa cédula no tiene cuenta registrada'));
     exit($response);
 }
 
@@ -76,7 +76,7 @@ if($monto_socio < $monto || $monto_socio == null ){
 
         if($query_ingresar_cupon){
             // everything okay
-        $response = json_encode(array('result'=>true,'message'=>'Se puedo realizar la transacción correctamente!')) ;
+        $response = json_encode(array('result'=>true,'message'=>'Se pudo realizar la transacción correctamente!')) ;
         exit($response);
 
         }else{

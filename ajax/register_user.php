@@ -21,9 +21,17 @@ if($contar > 0){
 
 // Escape all $_POST variables to protect SQL injections
 
+                    // STRING RANDOM DE 8 CARACTERES
+                    $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
+                    $charactersLength = strlen($characters);
+                    $randomString = '';
+                    for ($i = 0; $i < 8 ; $i++) {
+                        $randomString .= $characters[rand(0, $charactersLength - 1)];
+                    }
+
 $email = $mysqli->escape_string($_POST['email']);
 $phone = $mysqli->escape_string($_POST['phone']);
-$hash = $mysqli->escape_string( md5( rand(0,1000) ) );
+$hash = $randomString;
 $name_post = $mysqli->escape_string($_POST['name']); 
 $namewithoutformat = strtolower($name_post);
 $name = ucwords($namewithoutformat);

@@ -34,6 +34,37 @@ $.ajax({
 
 function chequear_transaccion_socio_socio() {  
 
+  $.ajax({
+    type: "POST",
+    url: "https://vida-apps.com/vidapesos/ajax/chequear_transaccion_socio_socio.php",
+    data: { id_user: $id_user },
+    dataType: "JSON",
+    success: function (res) {
+      if(res.result){
+        //abrir modal
+        if(res.tipo == 1){
+          Swal.fire({
+              icon: 'success',
+              title: 'Felicidades!',
+              text: 'Has recibido una nueva transferencia de un comercio!',
+            })
+        }else{
+          Swal.fire({
+              icon: 'success',
+              title: 'Felicidades!',
+              text: 'Has recibido una nueva transferencia de otro socio!',
+            })
+        }
+       /*  setTimeout(function(){ location.reload(); }, 3500); */
+        
+      }else{
+  
+        console.log(res.message);
+  
+      }
+    }
+  });
+
 setInterval(function(){
 
 $id_user = localStorage.getItem("id_user");
@@ -125,13 +156,17 @@ type: "POST",
 url: "https://vida-apps.com/vidapesos/ajax/enviar_dinero_a_otro_usuario_fn.php",
 data: {id_user: $id_user, cedula : $cedula, monto: $monto},
 dataType: "JSON",
+beforeSend: function(){ 
+$('.loading').css('display','block');},
 success: function (res) {
   if(res.result){
+    $('.loading').css('display','none');
     alert(res.message);
     $('#cedula').val('');
     $('#monto').val('');
     location.reload();
   }else{
+    $('.loading').css('display','none');
     Swal.fire({
               icon: 'error',
               title: 'Oops...',

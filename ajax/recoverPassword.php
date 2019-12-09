@@ -13,12 +13,15 @@ require '_conexion.php';
     else {
 
         $user = $result->fetch_assoc(); 
-        
+
         $email = $user['email'];
         $hash = $user['hash'];
         $name = $user['name'];
 
-        $url =  "<a style='color:blue;' href='https://vida-apps.com/vidapesos/reset.php?email=".$email."&hash=".$hash."'>ENLACE AQUÍ</a>";  
+        $update = mysqli_query($mysqli,"UPDATE usuarios
+        SET activo = 2
+        WHERE email = '$email' ;");
+        
 
         include('../lib/PHPMailerAutoload.php');
         include('enviarMail.php');

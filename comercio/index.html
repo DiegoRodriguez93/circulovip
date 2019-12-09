@@ -16,10 +16,13 @@
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/mdb.min.css" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/loader.css">
   <link href="../css/estilosmenu.css" rel="stylesheet">
 </head>
 
 <body class="grey lighten-3">
+
+    <div style="display:none" class="loading"></div>
 
   <!-- MODAL CONFIRM DESCUENTOS-->
 <div class="modal fade" id="mdlVencimiento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -261,6 +264,7 @@ bottom: 0;
   <script src="js/cerrar_session.js"></script>
   <script src="include/modal.js"></script>
   <script src="include/sidebar.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
   <!-- Initializations -->
   <script type="text/javascript">
@@ -326,14 +330,30 @@ $.ajax({
         id_comercio:$id_comercio,
         monto:$monto},
         dataType: "JSON",
+        beforeSend: function(){
+          $('.loading').css('display','block');
+        },
         success: function (res) {
           if(res.result){
-            alert(res.message);
+            $('.loading').css('display','none');
+            
+            Swal.fire({
+             icon: 'success',
+             title: 'Felicidades',
+             text: res.message,
+           })
+    
             $cedula    = $('#cedula').val('');
             $monto     = $('#monto').val('');
 
           }else{
-            alert(res.message);
+            $('.loading').css('display','none');
+            Swal.fire({
+             icon: 'error',
+             title: 'Oops...',
+             text: res.message,
+           })
+            
           }
         }
       });
