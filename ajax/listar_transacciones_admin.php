@@ -2,30 +2,50 @@
 header("Access-Control-Allow-Origin: *");
 require '_conexion.php';
 
-$query = mysqli_query($mysqli,"SELECT *
-FROM transacciones AS t
-INNER JOIN cupones_generados AS cg
-ON t.id_cupon = cg.id_cupon
-INNER JOIN comercios AS c
-ON t.id_comercio = c.id_comercio
-INNER JOIN usuarios AS u
-ON t.id_user = u.id_user
-;");
+if(isset($_GET['startDate']) AND $_GET['startDate'] != ''){
+    $startDate = $_GET['startDate'];
+}
 
-while($row = mysqli_fetch_array($query)){
+if(isset($_GET['endDate']) AND $_GET['endDate'] != ''){
+    $endDate = $_GET['endDate'];
+}
 
-    $id = $row['id_transaccion'];
-    $fecha = $row['fecha'];
-    $cedula = $row['usuario'];
-    $name = $row['name'];
-    $codigo = $row['codigo'];
-    $monto = $row['monto'];
+if(isset($startDate) AND isset($endDate)){
 
-    $response[] = array($id, $fecha, $cedula, $name, $codigo, $monto);
+    $filtrar = " WHERE fecha >= '$startDate' and fecha <= '$endDate' ";
+
+}else{
+
+    $filtrar = '';
+
+}
+
+$query = mysqli_query($mysqli,"SELECT * FROM transacciones2_view $filtrar ");
+
+$contar = mysqli_num_rows($query);
+
+if($contar != 0){
+    while($row = mysqli_fetch_array($query)){
+
+        $id = $row['id_transaccion'];
+        $envia = $row['envia'];
+        $fecha = $row['fecha'];
+        $monto = $row['monto'];
+        $codigo = $row['codigo_cupon'];
+        $recibe = $row['recibe'];
+    
+        $response[] = array($id, $envia, $fecha, $monto, $codigo, $recibe, $contar);
+    }
+    
+   
+    
+}else{
+
+    $response = array();
+
 }
 
 echo '{"data":'. json_encode($response) . '}';
-
 mysqli_close($mysqli);
 
 

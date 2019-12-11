@@ -43,11 +43,12 @@ $usuario = $mysqli->escape_string($_POST['usuario']);
                     $nombre    = $user['name'];
                     $userid    = $user['id_user'];
                     $activo    = $user['activo'];
+                    $hash      = $user['hash'];
 
-                    $res = array('result'=>true,'message'=>'Bienvenido '. $nombre ,'id_user'=>$userid,'activo'=>$activo);
+                    $res = array('result'=>true,'message'=>'Bienvenido '. $nombre ,'id_user'=>$userid,'activo'=>$activo, 'hash'=>$hash );
 
                 }else{
-                    $res = array('result'=>false,'message'=>'La contraseña temporal es incorrecta, intenté de nuevo');
+                    $res = array('result'=>false,'message'=>'La contraseña temporal es incorrecta, intenté de nuevo,    (la constraseña temporal le fue enviada por mail)');
                 }
 
             }else{

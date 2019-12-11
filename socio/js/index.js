@@ -1,6 +1,65 @@
     // Animations initialization
     new WOW().init();
 
+        
+
+        function changePassword(){
+          $pass1 = $('#pass1').val();
+          $pass2 = $('#pass2').val();
+          $hash = localStorage.getItem("hash");
+          $id_user = localStorage.getItem("id_user");
+
+          if($pass1.length < 6){
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops!',
+              text: 'Las contraseña debe tener al menos 6 caracteres',
+            });
+            return false;
+          }
+
+          if($pass1 != $pass2){
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops!',
+              text: 'Las contraseñas no coinciden',
+            });
+            return false;
+          }
+
+          if($hash.length < 8){
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops!',
+              text: 'Error de seguridad, intenté más tarde',
+            });
+            return false;
+          }
+
+          $.ajax({
+            type: "POST",
+            url: "https://vida-apps.com/vidapesos/ajax/reset_password.php",
+            data: { pass1: $pass1, pass2: $pass2, hash: $hash, id_user: $id_user },
+            dataType: "JSON",
+            success: function(res){
+              if(res.result){
+                localStorage.setItem('activo',1);
+                $('#changePassword').modal('hide');
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Felicidades!',
+                  text: res.message,
+                });
+
+              }else{
+                alert(res.message);
+              }
+            }
+
+          })
+
+        }
+
         //* FUNCIÓN PARA TREAR LA CONFIRMACIÓN DEL DESCUENTO
 
 function confirmacionDeDescuento() {  
@@ -234,8 +293,15 @@ $( "#sidebar" ).toggle("normal");
             });
             });
 
+            /* Login */
+
       $id_user = localStorage.getItem("id_user");
-      
+      $activo = localStorage.getItem("activo");
+
+
+      if($activo == 2){
+        $('#changePassword').modal('show');
+      }
 
       if ($id_user != null) {
         console.log('Usuario logeado!');

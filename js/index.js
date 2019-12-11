@@ -76,7 +76,9 @@ async function iniciarSesion() {
          if(res.result){
 
            localStorage.setItem("id_user", res.id_user);
-           /*$.session.set('id_user', res.id_user);*/
+           localStorage.setItem("activo", res.activo);
+           localStorage.setItem("hash", res.hash);
+
            location.replace('socio/index.html')
          }else{
            Swal.fire({

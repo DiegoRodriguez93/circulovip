@@ -28,7 +28,7 @@ if($contar > 0){
                     for ($i = 0; $i < 8 ; $i++) {
                         $randomString .= $characters[rand(0, $charactersLength - 1)];
                     }
-
+$fecha_registro = Date('Y/m/d H:i:s');
 $email = $mysqli->escape_string($_POST['email']);
 $phone = $mysqli->escape_string($_POST['phone']);
 $hash = $randomString;
@@ -52,8 +52,8 @@ if ( $result->num_rows > 0 ) {
 }
 else { 
 
-    $sql = "INSERT INTO usuarios (usuario, email, phone, hash, name, pass, activo, tipo) 
-         VALUES ('$usuario', '$email', '$phone', '$hash', '$name', '$pass', '1', '$tipo')";
+    $sql = "INSERT INTO usuarios (usuario, email, phone, hash, name, pass, activo, tipo, fecha_registro) 
+         VALUES ('$usuario', '$email', '$phone', '$hash', '$name', '$pass', '1', '$tipo', '$fecha_registro')";
 
 
     if ( $mysqli->query($sql) ){

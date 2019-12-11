@@ -18,6 +18,28 @@
   <link href="css/style.css" rel="stylesheet">
   <link rel="stylesheet" href="css/loader.css">
   <link href="../css/estilosmenu.css" rel="stylesheet">
+ 
+  <!-- Modal CAMBIAR PASSWORD START -->
+<div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document" data-backdrop="static" data-keyboard="false">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cambiar Contraseña</h5>
+      </div>
+      <div class="modal-body">
+        <label for="pass1">Nueva contraseña</label>
+        <input type="password" class="form-control" id="pass1">
+        <label for="pass2">Repetir contraseña</label>
+        <input type="password" class="form-control" id="pass2">
+      </div>
+      <div class="modal-footer"><div class="mx-auto">
+        <button type="button" onclick="changePassword()" class="btn btn-indigo">Cambiar contraseña</button>
+      </div>
+      </div>
+    </div>
+  </div>
+</div> 
+<!-- Modal CAMBIAR PASSWORD END -->
 
 <!-- MODAL CONFIRM TRANSACCIÓN-->
 <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
