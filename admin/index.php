@@ -120,14 +120,23 @@ function logIn(){
 
     //cargamos la tabla
     var table = $('#TableTransacciones').DataTable({
-        ajax : '../ajax/listar_transacciones_admin.php',   
+        ajax : '../ajax/listar_transacciones_admin.php?startDate=&endDate=',   
                   lengthChange: false,
                   order: [0,'desc'],
                   oLanguage: {
                       "sUrl": "../json/traducciontabla.json"
                   }
-    });
 
+                  
+    });
+     $.ajax({
+      method:"GET",
+      url: '../ajax/listar_transacciones_admin.php', 
+      dataType: "JSON",
+      success: function(res){
+        $('#totalTransacciones').html(res.data[0][6]);
+      }
+    }) 
     }else{
         alert('Contraseña incorrecta');
         logIn();
@@ -160,7 +169,7 @@ $(document).ready( function () {
                   }
     });
 
-    $.ajax({
+     $.ajax({
       method:"GET",
       url: '../ajax/listar_transacciones_admin.php?startDate='+startDate+'&endDate='+endDate, 
       dataType: "JSON",
