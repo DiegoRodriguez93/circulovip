@@ -32,6 +32,47 @@
         <tbody></tbody>
         </table>
             </div>
+            <div class="col-lg-4 sm-0"></div>
+            
+          <div class="col-lg-4 sm-12">
+          <div class="text-center my-5">
+            <h3>Formulario de ingreso de comercio</h3>
+          </div>
+          <form enctype="multipart/form-data" id="form_comercio">
+  
+          <label for="">Email</label>
+          <input type="email" class="form-control" name="email" id="email">
+
+          <label for="">Contraseña</label>
+          <input type="password" class="form-control" name="pass" id="pass">
+
+          <label for="">Nombre</label>
+          <input type="text" class="form-control" name="nombre" id="nombre">
+
+          <label for="">Dirección</label>
+          <input type="text" class="form-control" name="address" id="address">
+
+          <label for="">Teléfono</label>
+          <input type="text" class="form-control" name="phone" id="phone">
+
+          <label for="">Rubro</label>
+          <input type="text" class="form-control" name="rubro" id="rubro">
+
+
+          <br>
+          <label for="">Cargar imagen .jpg .png .gif</label>
+          <input type="hidden" name="max_file_size" value="200000" />
+          <input name="fileToUpload" id='fileToUpload'  type="file" /><br><br>
+
+          <div class="text-center my-3">
+              <input type="submit" class="btn btn-success btn-lg" value="Ingresar Comercio">
+          </div>
+
+          </form>
+          </div>
+          <div class="col-lg-4 sm-0"></div>
+
+
         </div>
     </div>
 
@@ -42,6 +83,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" ></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script src="js/comercios.js"></script>
 
 <script>
 

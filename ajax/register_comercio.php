@@ -12,7 +12,7 @@ $hash    = $mysqli->escape_string( md5( rand(0,1000) ) );
 $pass    = $mysqli->escape_string(password_hash($_POST['pass'], PASSWORD_BCRYPT));
       
 // Check if commerce with that email already exists
-$result   = $mysqli->query("SELECT * FROM comercios WHERE email='$email'") or die($mysqli->error());
+$result   = $mysqli->query("SELECT * FROM comercios WHERE email='$email'") or die(mysqli_errno($mysqli));
 
 if ( $result->num_rows > 0 ) {
     
