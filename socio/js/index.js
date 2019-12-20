@@ -294,7 +294,7 @@ $( "#sidebar" ).toggle("normal");
             });
 
             /* Login */
-
+/* 
       $id_user = localStorage.getItem("id_user");
       $activo = localStorage.getItem("activo");
 
@@ -309,7 +309,7 @@ $( "#sidebar" ).toggle("normal");
 
         location.replace('../index.html');
 
-      }
+      } */
        //* RELLENAMOS VENCIMIENTOS DE SALDO
 /* 
       var url = "https://vida-apps.com/vidapesos/ajax/listar_vencimientos_socio.php?id_user="+$id_user;

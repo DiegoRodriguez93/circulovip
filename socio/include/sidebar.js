@@ -2,8 +2,8 @@
    <!-- Sidebar -->
     <div id="sidebar" class="sidebar-fixed position-fixed">
 
-        <a class="logo-wrapper waves-effect">
-          <img src="https://www.vida.com.uy/imagenes/logovidauruguay.png" class="img-fluid" alt=""><span style="font-size:1.5em;"></span>
+        <a class="pl-3 py-3 waves-effect">
+          <img src="../images/logo.png" class="img-fluid" alt=""><span style="font-size:1.5em;"></span>
         </a>
   
         <div class="list-group list-group-flush">

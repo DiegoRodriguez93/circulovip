@@ -8,7 +8,7 @@
   <meta http-equiv="Cache-Control" content="no-cache" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>Vida Pesos</title>
+  <title>Circulo Vip</title>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
@@ -112,13 +112,11 @@
   <header>
 
     <!-- Navbar -->
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
+
       <div class="container-fluid">
 
         <!-- Brand -->
-        <a class="navbar-brand waves-effect" href="index.html">
-          <i class="fas fa-wallet mr-1"></i><strong>Billetera</strong>
-        </a>
+
 
         <div id="menuToggle" >
 
@@ -129,7 +127,7 @@
         </div>
 
       </div>
-    </nav>
+ 
     <!-- Navbar -->
 
     <!-- SIDEBAR AQUI -->
@@ -140,66 +138,100 @@
   </header>
   <!--Main Navigation-->
 
+  <div style="background-image: url('../images/back1.jpg');position:fixed;height: 250px;width: 100%;display: none;"></div>
   <!--Main layout-->
-  <main class="pt-5 mx-lg-5">
+  <main class="pt-3 mx-lg-5">
     <div class="container-fluid mt-5" style="min-height: 480px">
 
-
+      
+      
       <!--Grid row-->
       <div class="row wow fadeIn">
 
         <!--Grid column-->
-        <div class="col-md-4 mb-4">
-
-          <!--Card-->
-          <div class="card view view-cascade gradient-card-header purple-gradient">
-
-            <!--Card content-->
-            <div class="card-body my-4 text-center" style="padding-top:30px;">
-
-              <h4 style="color:white;">Saldo</h5>
-              <div class=" text-white">
-                <h1 id="dinero"></h1>
-                <i style="cursor: pointer;" onclick="$('#mdlVencimiento').modal('show');" class="fa fa-info-circle fa-2x"></i>
-              </div>
-
-
-
-
-            </div>
-
-          </div>
-          <!--/.Card-->
-
-          
-
-        </div>
-        <!--Grid column-->
-
-        <!--Grid column-->
-        <div class="col-md-8 mb-4">
+        <div class="col-md-3 mb-4">
 
           <div class="card">
-            <h4 class="card-header">
-                <a class="collapsed d-block" data-toggle="collapse" href="#collapse-collapsed" aria-expanded="true" aria-controls="collapse-collapsed" id="heading-collapsed">
-                    <i style="float: right;" class="fa fa-chevron-down pull-right"></i>
-                    Transferir a otro usuario
-                </a>
-            </h4>
-            <div id="collapse-collapsed" class="collapse" aria-labelledby="heading-collapsed">
+
                 <div class="card-body">
-                  <label>Cedula:</label>
-                  <input type="text" class="solo_numeros inputtransferir" maxlength="8" id="cedula">
-                  <label>Monto:</label> 
-                  <input type="text" class="solo_numeros inputtransferir"  id="monto">
-                  <button onclick="enviarDinero()" class="btntransferir">Transferir</button>
-      
+                  <div class="row">
+                    <div class="col-8">                  <span style="font-size: 0.85em;">CITAS SOLICITADAS</span><BR>
+                      <b><span>0</span></b> </div>
+
+                    <div class="col-4 text-white deep-purple-text">
+                      <i class="fa fa-calendar-day fa-3x"></i>
+                    </div>
+                  </div>
+
                 </div>
-            </div>
-        </div>
 
         </div>
+        </div>
         <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-md-3 mb-4">
+
+          <div class="card">
+
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-8">                  <span style="font-size: 0.85em;">CITAS CONFIRMADAS</span><BR>
+                      <b><span>0</span></b> </div>
+
+                    <div class="col-4 text-white light-green-text">
+                      <i class="fa fa-clipboard-check fa-3x"></i>
+                    </div>
+                  </div>
+
+                </div>
+
+        </div>
+        </div>
+        <!--Grid column-->
+
+      <!--Grid column-->
+      <div class="col-md-3 mb-4">
+
+        <div class="card">
+
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-8">                  <span style="font-size: 0.85em;">CITAS RECHAZADAS</span><BR>
+                    <b><span>0</span></b> </div>
+
+                  <div class="col-4 text-white red-text">
+                    <i class="fa fa-calendar-times fa-3x"></i>
+                  </div>
+                </div>
+
+              </div>
+
+      </div>
+      </div>
+      <!--Grid column-->
+
+      <!--Grid column-->
+      <div class="col-md-3 mb-4">
+
+        <div class="card">
+
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-8">                  <span style="font-size: 0.85em;">MENSAJES</span><BR>
+                    <b><span>0</span></b> </div>
+
+                  <div class="col-4 text-white indigo-text">
+                    <i class="fa fa-envelope fa-3x"></i>
+                  </div>
+                </div>
+
+              </div>
+
+      </div>
+      </div>
+      <!--Grid column-->
+
 
 
 
@@ -211,45 +243,34 @@
       <div class="row wow fadeIn">
 
         <!--Grid column-->
-        <div class="col-md-12 mb-4">
+        <div class="col-md-8 mb-4">
 
           <!--Card-->
           <div class="card">
 
               <h4 class="card-header text-center">
-                  <a class="collapsed d-block" data-toggle="collapse" href="#collapse2" aria-expanded="true" aria-controls="collapse2" id="heading-collapsed">
-                     <!--  <i style="float: right;" class="fa fa-chevron-down pull-right"></i> -->
-                     Movimientos
-                  </a>
+                     Citas
+
               </h4>
 
-     <!--        <div class="card-title text-center mt-3">
-              <h4 style="color: #26448c;font-weight:bold;">Descuentos realizados</h4>
-            </div> -->
+          </div>
+          <!--/.Card-->
+          <div class="mb-5"></div>
+        </div>
+        <!--Grid column-->
 
-            <!--Card content-->
-      <!--       <div id="collapse2" class="collapse" aria-labelledby="heading-collapsed">
-            <div class="card-body"> -->
+        
+        <!--Grid column-->
+        <div class="col-md-4 mb-4">
 
-              <!-- Table  -->
-              <table id="TablaT" class="table table-hover" style="width:100%" >
-                <thead>
-                  <tr class="text-center">
-                    <th>Fecha</th>
-                    <th>Persona/Comercio</th>
-                    <th data-priority="1">Tipo</th>
-                    <th>Codigo de cupón</th>
-                    <th data-priority="2">Monto</th>
-                  </tr>
-                </thead>
-                <tbody class="text-center">
-                </tbody>
-              </table>
-              <!-- Table  -->
-            <div class="mb-5"></div>
+          <!--Card-->
+          <div class="card">
 
-        <!--     </div>
-          </div> -->
+              <h5 class="card-header">
+                  <b>Últimos mensajes</b> 
+
+              </h5>
+
           </div>
           <!--/.Card-->
           <div class="mb-5"></div>
@@ -265,14 +286,14 @@
   <!--Main layout-->
 
   <!--Footer-->
-  <footer class="page-footer text-center font-small primary-color-dark darken-2 mt-4 wow fadeIn" style="
-bottom: 0;
+  <footer class="page-footer text-center font-small deep-purple darken-1 mt-4 wow fadeIn" style="
+bottom: 0;position: fixed;width: 100%;
 ">
 
     <!--Copyright-->
     <div class="footer-copyright py-3">
-      © 2019 Copyright
-      <a href="https://vida.com.uy" target="_blank"> Vida.com.uy </a>
+      © 2020 Copyright
+      <a href="https://circulovip.com" target="_blank"> Circulo Vip Empresarial </a>
     </div>
     <!--/.Copyright-->
 
