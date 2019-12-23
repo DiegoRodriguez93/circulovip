@@ -1,24 +1,26 @@
 <?php
 header("Access-Control-Allow-Origin: *");
-require '_conexion.php';
-require '_conexion250.php';
 
-// Escape cedula to protect SQL injections
+loginUser();    //disparamos la función
 
-$usuario = $mysqli->escape_string($_POST['usuario']);
-
+function loginUser(){
+    
+    require '_conexion.php';
+    $email = $mysqli->escape_string($_POST['email']);
 
      // Chequeamos que la cuenta este creada
 
-        $result = mysqli_query($mysqli,"SELECT * FROM usuarios WHERE usuario='$usuario'");
+        $result = mysqli_query($mysqli,"SELECT * FROM usuarios WHERE email='$email'");
         
         $contar = mysqli_num_rows($result);
         
         if ( $contar != 1 ){ // User doesn't exist
-            
-          $res = array('result'=>false,'message'=>'El usuario con esta cedula no existe');
-        
-        }else { // User exists
+
+        $res = array('result'=>false,'message'=>'El usuario con ese correo electrónico no esta registrado!');
+        die(json_encode($res));
+}
+
+            // User exists
 
             $user = $result->fetch_assoc();
 
@@ -26,44 +28,26 @@ $usuario = $mysqli->escape_string($_POST['usuario']);
                        
             if ( password_verify($_POST['pass'], $user['pass']) ) {
         
-                $nombre    = $user['name'];
-                $userid    = $user['id_user'];
-                $activo    = $user['activo'];
+                $token     = $user['token'];
         
-                        $res = array('result'=>true,'message'=>'Bienvenido '. $nombre ,'id_user'=>$userid, 'activo'=>$activo);
+                        $res = array('result'=>true, 'token'=>$token);
+                        die(json_encode($res));
                      
             }else {
                 $res = array('result'=>false,'message'=>'La contraseña es incorrecta, intenté de nuevo');
+                die(json_encode($res));
             }
-
-            }elseif($user['activo'] == 2){
-
-                if ( $_POST['pass'] == $user['hash'] ) {
-
-                    $nombre    = $user['name'];
-                    $userid    = $user['id_user'];
-                    $activo    = $user['activo'];
-                    $hash      = $user['hash'];
-
-                    $res = array('result'=>true,'message'=>'Bienvenido '. $nombre ,'id_user'=>$userid,'activo'=>$activo, 'hash'=>$hash );
-
-                }else{
-                    $res = array('result'=>false,'message'=>'La contraseña temporal es incorrecta, intenté de nuevo,    (la constraseña temporal le fue enviada por mail)');
-                }
 
             }else{
 
                 $res = array('result'=>false,'message'=>'Su cuenta ha sido de deshabilitada por un administrador');
+                die(json_encode($res));
             }
 
+            mysqli_close($mysqli);
         }
 
-        
 
 
-
-echo json_encode($res);
- mysqli_close($mysqli);
-mysqli_close($mysqli250); 
 
 ?>

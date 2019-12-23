@@ -5,12 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-  <!-- Bootstrap core CSS -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Material Design Bootstrap -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.9/css/mdb.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="socio/css/loader.css">
   <link rel="stylesheet" href="css/login.css">
   <title>Login</title>
 </head>
@@ -20,6 +18,7 @@
 
     <header>
 
+      <div style="display:none" class="loading"></div>
 
       <!-- Full Page Intro -->
       <div class="view" style="background-image: url('images/91.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center center;">
@@ -46,16 +45,16 @@
                     <!--Body-->
                     <div class="md-form">
                       <i class="fas fa-envelope prefix white-text active"></i>
-                      <input type="email" id="form2" class="white-text form-control">
-                      <label for="form2" class="active">Correo electrónico</label>
+                      <input type="email" id="email" class="white-text form-control">
+                      <label for="email" class="active">Correo electrónico</label>
                     </div>
                     <div class="md-form">
                       <i class="fas fa-lock prefix white-text active"></i>
-                      <input type="password" id="form4" class="white-text form-control">
-                      <label for="form4">Contraseña</label>
+                      <input type="password" id="pass" class="white-text form-control">
+                      <label for="pass">Contraseña</label>
                     </div>
                     <div class="text-center mt-4">
-                      <button class="btn btn-indigo">Ingresar</button>
+                      <button onclick="logIn()" class="btn btn-indigo">Ingresar</button>
                       <hr class="hr-light mb-3 mt-4">
                       <div class="inline-ul text-center">
                         <a class="p-2 m-2 tw-ic">
@@ -97,7 +96,70 @@
 <script src="lib/jquerysession.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 <script src="lib/helper.js"></script>
-<script src="js/index.js"></script>
+
+<script>
+
+function logIn(){
+
+  $email = $('#email').val();
+  $pass = $('#pass').val();
+
+  if(!validateEmail($email)){
+    $('#email').addClass('is-invalid');
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Correo electrónico inválido',
+      footer: '<a href>¿Contactar administrador?</a>'
+    });
+
+    return false;
+  }else{
+    $('#email').attr('class','white-text form-control');
+  }
+
+  if($pass.length < 6){
+    $('#pass').addClass('is-invalid');
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Contraseña inválida',
+      footer: '<a href>¿Recuperar contraseña?</a>'
+    });
+    return false;
+  }else{
+    $('#pass').attr('class','white-text form-control');
+  }
+
+ $.ajax({
+   url:"ajax/login_user.php",
+   method:"POST",
+   data:{email:$email,pass:$pass},
+   dataType:"JSON",
+   beforeSend: function(){ 
+      $('.loading').css('display','block');},
+   success: function(res){
+    $('.loading').css('display','none');
+    if(res.result){
+      localStorage.setItem('token',res.token);
+      location.replace('socio/index.html');
+    }else{
+      $('.loading').css('display','none');
+      Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: res.message,
+      footer: '<a href>¿Contactar administrador?</a>'
+    });
+    }
+   }
+
+ })
+
+
+}
+
+</script>
 
 </body>
 

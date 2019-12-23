@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Administrador Transacciones</title>
+    <title>Administrador Citas</title>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
@@ -16,7 +16,7 @@
               <?php include 'include/navbar.php'; ?>
 
               <div class="d-inline"> 
-                <h4 class="d-inline">Total de transacciones:
+                <h4 class="d-inline">Total de citas:
                 <div class="d-inline" id="totalTransacciones">0</div></h4>   
               </div>
              <div class="mb-3"></div>
@@ -27,15 +27,14 @@
               </div>
 
 
-            <table id="TableTransacciones" class="display table" style="width: 100%">
+            <table id="TableCitas" class="display table" style="width: 100%">
         <thead>
             <tr>
-        <th>Id_transaccion</th>
-        <th>Envia</th>
-        <th>Fecha transacción</th>
-        <th>Monto</th>
-        <th>Código cupón</th>
-        <th>Recibe</th>
+        <th>Id_cita</th>
+        <th>Fecha Cita</th>
+        <th>Solicitante</th>
+        <th>Solicitado</th>
+        <th>Estado</th>
             </tr>
         </thead>
         <tbody></tbody>
@@ -53,44 +52,6 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
 <script>
-
-  function filtrar(){
-
-   $startDate = $('#startDate').val();
-   $endDate   = $('#endDate').val();
-
-   if($startDate == '' || $endDate == '' ){
-    Swal.fire({
-      title: 'Ingrese las dos fechas para filtrar',
-      icon: 'error',
-      confirmButtonText: 'Ok'
-    })
-
-    return false;
-
-   }
-
-   if($startDate ==  $endDate ){
-    Swal.fire({
-      title: 'Ingrese las dos fechas con al menos un día de diferencia para filtrar',
-      icon: 'error',
-      confirmButtonText: 'Ok'
-    })
-
-    return false;
-
-   }
-   localStorage.setItem('startDate', $startDate);
-   localStorage.setItem('endDate', $endDate);
-   location.reload();
-
-  }
-
-  function reset(){
-    localStorage.setItem('startDate', '');
-   localStorage.setItem('endDate', '');
-   location.reload();
-  }
 
 
 
@@ -148,7 +109,7 @@ function logIn(){
 
 $(document).ready( function () {
 
-  $('#transacciones').addClass('active');
+  $('#inicio').addClass('active');
 
   let admin = localStorage.getItem('admin');
   let startDate = localStorage.getItem('startDate');
@@ -159,7 +120,7 @@ $(document).ready( function () {
 
 
   if(admin == 'asdasd'){
-        //cargamos la tabla
+/*         //cargamos la tabla
         var table =  $('#TableTransacciones').DataTable({
         ajax : '../ajax/listar_transacciones_admin.php?startDate='+startDate+'&endDate='+endDate,   
                   lengthChange: false,
@@ -176,14 +137,11 @@ $(document).ready( function () {
       success: function(res){
         $('#totalTransacciones').html(res.data[0][6]);
       }
-    })
+    }) */
 
   }else{
     logIn(); // disparamos el logIn
   }
-
-
-
  
 } );
 </script>

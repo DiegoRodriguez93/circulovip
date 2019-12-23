@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta http-equiv="Cache-Control" content="no-cache" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Circulo Vip</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/colreorder/1.5.2/css/colReorder.dataTables.min.css">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/mdb.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/loader.css">
+  <link href="../css/estilosmenu.css" rel="stylesheet">
+ 
+  <!-- Modal CAMBIAR PASSWORD START -->
+<div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document" data-backdrop="static" data-keyboard="false">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cambiar Contraseña</h5>
+      </div>
+      <div class="modal-body">
+        <label for="pass1">Nueva contraseña</label>
+        <input type="password" class="form-control" id="pass1">
+        <label for="pass2">Repetir contraseña</label>
+        <input type="password" class="form-control" id="pass2">
+      </div>
+      <div class="modal-footer"><div class="mx-auto">
+        <button type="button" onclick="changePassword()" class="btn btn-indigo">Cambiar contraseña</button>
+      </div>
+      </div>
+    </div>
+  </div>
+</div> 
+<!-- Modal CAMBIAR PASSWORD END -->
+
+<!-- MODAL CONFIRM TRANSACCIÓN-->
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" data-backdrop="static" data-keyboard="false">
+
+  <!-- Change class .modal-sm to change the size of the modal -->
+  <div class="modal-dialog  modal-top" role="document">
+
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title w-100" id="modalTitle"></h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="hidden_id_cupon">
+        <h3>Datos del comercio:</h3>
+        <h4 id="commerce_name"></h4>
+        <h4 id="commerce_address"></h4>
+        <h4 id="commerce_phone"></h4>
+        <hr>
+        <h4 id="fecha_vencimiento"></h4>
+        <h4 id="descuento"></h4>
+      </div>
+      <div class="modal-footer text-center mx-auto">
+        <button type="button" id="confirmarTransaccionBtn" class="btn btn-indigo">Confirmar</button>
+        <button type="button" id="cancelarTransaccionBtn" class="btn btn-blue-grey" data-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MODAL CONFIRM TRANSACCIÓN-->
+
+<!-- MODAL CONFIRM DESCUENTOS-->
+<div class="modal fade" id="mdlVencimiento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" data-backdrop="static" data-keyboard="false">
+
+  <!-- Change class .modal-sm to change the size of the modal -->
+  <div class="modal-dialog  modal-top" role="document">
+
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title w-100">Vencimientos del saldo</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-6"><b>Fecha</b></div>
+          <div class="col-6"><b>Monto</b></div>
+        </div>
+          <div id="vencimientos"></div>
+      </div>
+      <div class="modal-footer text-center">
+        <button type="button" class="btn btn-blue-grey" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MODAL CONFIRM DESCUENTOS-->
+
+
+<body class="grey lighten-3">
+    <div style="display:none" class="loading"></div>
+  <!--Main Navigation-->
+  <header>
+
+    <!-- Navbar -->
+
+      <div class="container-fluid">
+
+        <!-- Brand -->
+
+
+        <div id="menuToggle" >
+
+          <input type="checkbox">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+      </div>
+ 
+    <!-- Navbar -->
+
+    <!-- SIDEBAR AQUI -->
+
+<div id="sidebar_aqui"></div>
+
+
+  </header>
+  <!--Main Navigation-->
+
+  <div style="background-image: url('../images/back1.jpg');position:fixed;height: 250px;width: 100%;display: none;"></div>
+  <!--Main layout-->
+  <main class="pt-3 mx-lg-5">
+    <div class="container-fluid mt-5" style="min-height: 480px">
+
+    
+      <div class="row wow fadeIn">
+
+        <!--Grid column-->
+        <div class="col-md-12 mb-4">
+
+          <!--Card-->
+          <div class="card">
+
+              <h4 class="card-header">
+                    Horarios disponibles
+
+              </h4>
+
+              <div class="row wow fadeIn">
+                <div class="col-lg-4"></div>
+                <div class="col-lg-4 md-6 sm-12 text-center">
+                  <button class="btn btn-success d-inline-block pt-3">
+                     <i class="fa fa-clock fa-2x d-inline-block"></i>
+                      <h5 class="d-inline-block" style="transform: translateY(-2px);">Agregar Horario</h5>
+                    </button>
+                </div>
+                <div class="col-lg-4"></div>
+              </div>
+
+              
+          </div>        
+
+   <!--        <div class="card my-3"> -->
+            <div class="row wow fadeIn my-3">
+
+              <div class="col-md-3 sm-12 my-1">
+                <div class="card">
+                <div class="row">
+
+                  <div class="col-6">
+                  <div class="green-text">
+                    <i class="fa p-2 fa-calendar-check fa-3x"></i>
+                  </div>
+                  </div>
+                  <div class="col-6 my-auto">
+                    <b style="font-size: 1.3em;">8:00hs</b>
+                  </div>
+                  <div class="col-12 text-center">
+                    <button class="btn btn-danger btn-sm">Eliminar horario</button>
+                  </div>
+                </div>
+              </div></div>
+
+              <div class="col-md-3 sm-12  my-1">
+                <div class="card">
+                <div class="row">
+
+                  <div class="col-6">
+                  <div class="green-text">
+                    <i class="fa p-2 fa-calendar-check fa-3x"></i>
+                  </div>
+                  </div>
+                  <div class="col-6 my-auto">
+                    <b style="font-size: 1.3em;">8:30hs</b>
+                  </div>
+                  <div class="col-12 text-center">
+                    <button class="btn btn-danger btn-sm">Eliminar horario</button>
+                  </div>
+                </div>
+              </div></div>
+
+              <div class="col-md-3 sm-12 my-1">
+                <div class="card">
+                <div class="row">
+
+                  <div class="col-6">
+                  <div class="green-text">
+                    <i class="fa p-2 fa-calendar-check fa-3x"></i>
+                  </div>
+                  </div>
+                  <div class="col-6 my-auto">
+                    <b style="font-size: 1.3em;">9:00hs</b>
+                  </div>
+                  <div class="col-12 text-center">
+                    <button class="btn btn-danger btn-sm">Eliminar horario</button>
+                  </div>
+                </div>
+              </div></div>
+
+              <div class="col-md-3 sm-12 my-1">
+                <div class="card">
+                <div class="row">
+
+                  <div class="col-6">
+                  <div class="green-text">
+                    <i class="fa p-2 fa-calendar-check fa-3x"></i>
+                  </div>
+                  </div>
+                  <div class="col-6 my-auto">
+                    <b style="font-size: 1.3em;">9:30hs</b>
+                  </div>
+                  <div class="col-12 text-center">
+                    <button class="btn btn-danger btn-sm">Eliminar horario</button>
+                  </div>
+                </div>
+                
+              </div></div>
+
+              
+    
+        </div>
+   <!--      </div> -->
+      
+
+
+
+          <!--/.Card-->
+          <div class="mb-5"></div>
+
+        <!--Grid column-->
+
+        
+      </div>
+      </div>
+      <!--Grid row-->
+
+
+    </div>
+  </main>
+  <!--Main layout-->
+
+  <!--Footer-->
+  <footer class="page-footer text-center font-small deep-purple darken-1 mt-4 wow fadeIn" style="
+bottom: 0;position: fixed;width: 100%;
+">
+
+    <!--Copyright-->
+    <div class="footer-copyright py-3">
+      © 2020 Copyright
+      <a href="https://circulovip.com" target="_blank"> Circulo Vip Empresarial </a>
+    </div>
+    <!--/.Copyright-->
+
+  </footer>
+  <!--/.Footer-->
+
+  <div id="modal_aqui"></div>
+
+  <!-- SCRIPTS -->
+  <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+  <script type="text/javascript" src="js/popper.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/mdb.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+  <script src="https://cdn.datatables.net/colreorder/1.5.2/js/dataTables.colReorder.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+  <script src="../lib/helper.js"></script>
+  <script src="../lib/jquerysession.js"></script>
+  <script src="js/cerrar_session.js"></script>
+  <script src="include/sidebar.js"></script>
+  <script src="js/push.js"></script>
+  <script src="js/index.js"></script>
+
+</body>
+
+</html>
