@@ -147,18 +147,29 @@
       <div class="row wow fadeIn">
 
         <!--Grid column-->
-        <div class="col-md-12 mb-4">
+        <div class="col-md-6 mb-4">
 
           <!--Card-->
           <div class="card">
 
               <h4 class="card-header">
-                    Mensajes
+                    Bandeja de entrada
 
               </h4>
 
               <div class="row wow fadeIn">
-                <div class="col-md-12"></div>
+                <div class="col-md-12 py-5 px-5">
+                  <table id="tableMensajes" class="table responsive text-center" style="width: 100%;">
+                    <thead>
+                      <tr>
+                        <th>Avatar</th>
+                        <th>Emisor</th>
+                        <th> </th>
+                        <th>Fecha</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
 
               </div>
 
@@ -211,11 +222,61 @@ bottom: 0;position: fixed;width: 100%;
   <script src="https://cdn.datatables.net/colreorder/1.5.2/js/dataTables.colReorder.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
   <script src="../lib/helper.js"></script>
-  <script src="../lib/jquerysession.js"></script>
   <script src="js/cerrar_session.js"></script>
   <script src="include/sidebar.js"></script>
-  <script src="js/push.js"></script>
-  <script src="js/index.js"></script>
+<!--   <script src="js/index.js"></script> -->
+  <script>
+  
+  
+  function startTable(){
+
+    
+
+if ( ! $.fn.DataTable.isDataTable( '#tableMensajes' ) ) {
+  $id_user = localStorage.getItem('id_user');
+          //cargamos la tabla
+           table = $('#tableMensajes').DataTable({
+              ajax : '../ajax/socio/mensajes/listar_mensajes_socio.php?id_receptor='+$id_user,   
+              lengthChange: false,
+              "info": false,
+              "searching": false,
+              "ordering": false,
+              oLanguage: {
+                  "sUrl": "../json/traducciontabla.json"
+              }
+});
+}else{
+  //ajax reload
+
+  table.ajax.reload();
+    
+}
+
+}
+
+$(document).ready(function(){
+
+/* INCLUDES */
+
+$('#sidebar_aqui').html(sidebar);
+
+/* NAVBUTTON */
+
+$('#menuToggle').on('click',function(){
+
+$( "#sidebar" ).toggle("normal"); 
+
+
+} );
+
+  new WOW().init();
+
+  startTable();
+
+});
+  
+  
+  </script>
 
 </body>
 

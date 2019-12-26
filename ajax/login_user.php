@@ -24,13 +24,25 @@ function loginUser(){
 
             $user = $result->fetch_assoc();
 
+            // comprobamos vencimiento
+
+            $fecha_hoy = Date('Y-m-d H:i:s');
+
+            if($fecha_hoy >= $user['fecha_vencimiento'] ){
+
+                $res = array('result'=>false,'message'=>'Su suscripción ha caducado');
+                die(json_encode($res));
+
+            }
+
             if($user['activo'] == 1){
                        
             if ( password_verify($_POST['pass'], $user['pass']) ) {
         
                 $token     = $user['token'];
+                $id_user   = $user['id'];
         
-                        $res = array('result'=>true, 'token'=>$token);
+                        $res = array('result'=>true, 'token'=>$token, 'id_user'=>$id_user);
                         die(json_encode($res));
                      
             }else {

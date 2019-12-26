@@ -237,6 +237,16 @@
             <div class="text-center">
               <img src="../images/profile.jpg" style="transform: translateY(-52px);" alt="foto_carita" height="140" width="140"  class="img-fluid rounded-circle">
             </div>
+            <div class="p-3 text-center">
+              <b><label for="nombres">Nombre</label></b>
+              <div id="nombres" class="mb-2" style="font-size: 1.4em;"></div>
+            <b><label for="apellidos">Apellido</label></b>
+              <div id="apellidos" class="mb-2" style="font-size: 1.4em;"></div>
+            <b><label for="cargo">Cargo</label></b>
+              <div id="cargo" class="mb-2" style="font-size: 1.4em;"></div>
+            <b><label for="acerca_de_mi">Acerca de mi</label></b>
+              <div id="acerca_de_mi" class="mb-2" style="font-size: 1.4em;"></div>
+            </div>
 
           </div>
           <!--/.Card-->
@@ -279,11 +289,51 @@ bottom: 0;position: fixed;width: 100%;
   <script src="https://cdn.datatables.net/colreorder/1.5.2/js/dataTables.colReorder.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
   <script src="../lib/helper.js"></script>
-  <script src="../lib/jquerysession.js"></script>
   <script src="js/cerrar_session.js"></script>
   <script src="include/sidebar.js"></script>
-  <script src="js/push.js"></script>
-  <script src="js/index.js"></script>
+  <script>
+  
+
+  $(document).ready(function(){
+
+    /* RELLENO LOS DATOS DE LA PERSONA */
+
+    $.ajax({
+      type: "POST",
+      url: "../ajax/socio/mi_perfil/cargar_datos_usuario.php",
+      data: {id_user:localStorage.getItem('id_user')},
+      dataType: "JSON",
+      success: function (res) {
+        if(res.result){
+        $('#nombres').html(res.nombres);
+        $('#apellidos').html(res.apellidos);
+        $('#cargo').html(res.cargo);
+        $('#acerca_de_mi').html(res.acerca_de_mi);
+        }
+
+      }
+    });
+
+/* INCLUDES */
+
+$('#sidebar_aqui').html(sidebar);
+
+/* NAVBUTTON */
+
+$('#menuToggle').on('click',function(){
+
+$( "#sidebar" ).toggle("normal"); 
+
+
+} );
+
+  new WOW().init();
+
+
+});
+  
+
+  </script>
 
 </body>
 
