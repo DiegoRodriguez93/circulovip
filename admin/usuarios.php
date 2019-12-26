@@ -10,7 +10,60 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
+
 <body>
+  <!-- MODAL CAMBIAR PASSWORD START -->
+<div class="modal" id="mdlPassword" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cambiar contraseña</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="id_user_pass">
+        <label for="pass_modal">Nueva contraseña</label>
+        <input type="password" class="form-control" id="pass_modal">
+        <label for="pass2_modal">Repetir nueva contraseña</label>
+        <input type="password" class="form-control" id="pass2_modal">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="cambiarPassOk()" class="btn btn-primary">Guardar cambios</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+ <!-- MODAL CAMBIAR PASSWORD END -->
+
+   <!-- MODAL CAMBIAR FECHA START -->
+<div class="modal" id="mdlVencimiento" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cambiar fecha de vencimiento</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="id_user_date">
+        <label for="vencimiento_modal">Nueva fecha de vencimiento</label>
+        <input type="datetime-local" class="form-control" id="vencimiento_modal">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="editarVencimientoOk()" class="btn btn-primary">Guardar cambios</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+ <!-- MODAL CAMBIAR FECHA END -->
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
@@ -23,9 +76,11 @@
             <tr>
         <th>Id_Usuario</th>
         <th>Fecha de registro</th>
+        <th>Nombre</th>
         <th>Email</th>
         <th>Contraseña</th>
         <th>Activo</th>
+        <th>Fecha Vencimiento</th>
         <th>Eliminar</th>
             </tr>
         </thead>
@@ -39,9 +94,14 @@
             <h3>Formulario de ingreso de usuario</h3>
           </div>
 
+          <label for="">Nombre</label>
+          <input type="text" class="form-control" name="nombre" id="nombre">
   
           <label for="">Email</label>
           <input type="email" class="form-control" name="email" id="email">
+
+          <label for="">Fencha vencimiento</label>
+          <input type="datetime-local" class="form-control" name="fecha_vencimiento" id="fecha_vencimiento">
 
           <label for="">Contraseña</label>
           <input type="password" class="form-control" name="pass" id="pass">
@@ -72,6 +132,96 @@
 <script src="../lib/helper.js"></script>
 
 <script>
+    function editarVencimiento($id){
+
+$('#id_user_date').val($id);
+$('#mdlVencimiento').modal('show');
+
+}
+
+function editarVencimientoOk(){
+
+$iduser         = $('#id_user_date').val();
+$vencimiento    = $('#vencimiento_modal').val();
+
+if($vencimiento == ''){
+alert('Ingrese una fecha de vencimiento válida');
+return false;
+}
+
+$.ajax({
+url: "../ajax/admin/cambiar_vencimiento_usuario_admin.php",
+method: "POST",
+dataType: "JSON",
+data:{id:$iduser,fecha_vencimiento:$vencimiento},
+beforeSend: function(){ 
+$('#mdlVencimiento').modal('hide');  
+$('.loading').css('display','block');},
+success: function(res){
+  if(res.result){
+    startTable();
+    $('.loading').css('display','none');
+    Swal.fire(
+      'Correcto!',
+      'La fecha de vencimiento ha sido actualizada correctamente.',
+      'success'
+    )
+  }else{
+    $('.loading').css('display','none');
+    alert(res.message);
+  }
+}
+})
+
+}
+
+  function cambiarPass($id){
+
+    $('#id_user_pass').val($id);
+    $('#mdlPassword').modal('show');
+
+  }
+
+  function cambiarPassOk(){
+
+  $iduser = $('#id_user_pass').val();
+  $pass   = $('#pass_modal').val();
+  $pass2   = $('#pass2_modal').val();
+
+  if($pass.length < 6){
+    alert('Contraseña demasiado corta, minimo 6 caracteres');
+    return false;
+  }
+
+  if($pass != $pass2){
+    alert('Las contraseñas no coinciden');
+    return false;
+  }
+
+    $.ajax({
+    url: "../ajax/admin/cambiar_pass_usuario_admin.php",
+    method: "POST",
+    dataType: "JSON",
+    data:{id:$iduser,pass:$pass2},
+    beforeSend: function(){ 
+    $('#mdlPassword').modal('hide');  
+    $('.loading').css('display','block');},
+    success: function(res){
+      if(res.result){
+        $('.loading').css('display','none');
+        Swal.fire(
+          'Correcto!',
+          'La contraseña ha sido cambiada correctamente.',
+          'success'
+        )
+      }else{
+        $('.loading').css('display','none');
+        alert(res.message);
+      }
+    }
+  })
+
+}
 
 function cambiarActivoUsuario($id,$activo){
 
@@ -102,6 +252,7 @@ $.ajax({
         'success'
       )
     }else{
+      $('.loading').css('display','none');
       alert(res.message);
     }
   }
@@ -145,6 +296,7 @@ $.ajax({
             'success'
           )
         }else{
+          $('.loading').css('display','none');
           alert(res.message);
         }
       }
@@ -163,6 +315,8 @@ $.ajax({
     $email = $('#email').val();
     $pass = $('#pass').val();
     $pass2 = $('#pass2').val();
+    $nombre = $('#nombre').val();
+    $fecha_vencimiento = $('#fecha_vencimiento').val();
 
     if(!validateEmail($email)){
 
@@ -195,10 +349,21 @@ $.ajax({
       $('#pass2').addClass('is-valid');
     }
 
+    if($fecha_vencimiento == ''){
+      alert('Fencha de vencimiento');
+      $('#fecha_vencimiento').addClass('is-invalid');
+      return false
+    }else{
+      $('#fecha_vencimiento').addClass('is-valid');
+    }
+
     $.ajax({
       url: "../ajax/admin/register_user.php",
       method: "POST",
-      data: {email: $email, pass: $pass2},
+      data: { email: $email,
+              pass: $pass2,
+              nombre: $nombre,
+              fecha_vencimiento: $fecha_vencimiento},
       dataType: "JSON",
       beforeSend: function(){ 
       $('.loading').css('display','block');},
@@ -209,11 +374,22 @@ $.ajax({
           $("#email").val('');
           $("#pass").val('');
           $("#pass2").val('');
+          $("#nombre").val('');
+          $("#fecha_vencimiento").val('');
           $("#email").attr('class', 'form-control');
           $("#pass").attr('class', 'form-control');
           $("#pass2").attr('class', 'form-control');
+          $("#nombre").attr('class', 'form-control');
+          $("#fecha_vencimiento").attr('class', 'form-control');
           startTable();
         }else{
+          if(res.emailerror){
+            $('#email').addClass('is-invalid');
+          }
+          if(res.vencidoerror){
+            $('#fecha_vencimiento').addClass('is-invalid');
+          }
+          $('.loading').css('display','none');
           alert(res.message);
         }
       }
