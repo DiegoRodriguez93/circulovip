@@ -235,7 +235,10 @@
           <!--Card-->
           <div class="card">
             <div class="text-center">
-              <img src="../images/profile.jpg" style="transform: translateY(-52px);" alt="foto_carita" height="140" width="140"  class="img-fluid rounded-circle">
+              <img src="../images/profile.jpg" style="transform: translateY(-52px);"
+               alt="foto_carita" height="140" width="140" id="foto_carita" class="img-fluid rounded-circle">
+               <input type="file" id="profilePicture" style="display:none;"/>
+               <label for="profilePicture"><h8 class="text-success"><i class="fas fa-upload fa-2x"></i></h8></label>
             </div>
             <div class="p-3 text-center">
               <b><label for="nombres">Nombre</label></b>
@@ -310,6 +313,11 @@ bottom: 0;position: fixed;width: 100%;
         $('#cargo').html(res.cargo);
         $('#acerca_de_mi').html(res.acerca_de_mi);
         }
+        if(res.url_avatar != null){
+          $('#foto_carita').attr('src',res.url_avatar);
+        }else{  
+          $('#foto_carita').attr('src','../images/profile.jpg');
+        }
 
       }
     });
@@ -328,6 +336,59 @@ $( "#sidebar" ).toggle("normal");
 } );
 
   new WOW().init();
+
+  /* PROFILE PICTURE */
+
+  
+$("#profilePicture").change(function() {
+    var file = this.files[0];
+    var imagefile = file.type;
+    var match= ["image/jpeg","image/png","image/jpg","image/webp","image/gif"];
+
+    if(!((imagefile==match[0]) || (imagefile==match[1]) || (imagefile==match[2]) || (imagefile==match[3]) || (imagefile==match[4]) )){
+        alert('Por favor seleccione un formato de imagen válido (JPEG/JPG/PNG/GIF/WEBP).');
+        $("#profilePicture").val('');
+        return false;
+    }
+
+    if(this.files[0].size > 614400){
+        alert("El archivo es demasiado grande!");
+        $("#profilePicture").val('');
+        return false;
+     };
+
+     
+    if($("#profilePicture").val() == ''){
+      alert("El archivo es esta vacio!");
+        return false;
+    }
+    var formData = new FormData();
+    formData.append('id_user', localStorage.getItem('id_user'));
+    formData.append('profilePicture', $('#profilePicture')[0].files[0]); 
+
+    $.ajax({
+    url: "../ajax/socio/mi_perfil/cargar_imagen_usuario.php",
+    type: "POST",
+    data : formData, 
+    processData: false,
+    contentType: false,
+    success: function(res){
+
+       var response = JSON.parse(res);
+
+        if(response.result){
+            alert(response.message);
+            location.reload();
+        }else{
+            alert(response.message);
+        }
+
+    },
+    error: function(xhr, ajaxOptions, thrownError) {
+       console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+    }
+});
+});
 
 
 });
