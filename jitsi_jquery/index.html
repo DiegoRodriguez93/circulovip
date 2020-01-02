@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sala conferencia</title>
+    <style>
+
+</style>
+</head>
+<body style="height: 100vh; margin: 0;padding: 0;">
+
+    <div style="height: 100vh; margin: 0;padding: 0;" id="jitsi-container"></div>
+    
+    <script src="https://meet.jit.si/external_api.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+/*             var iframe = document.getElementById('jitsiConferenceFrame0');
+iframe.addEventListener("load", function() {
+    window.frames[0].document.getElementsByClassName('watermark').style.display = "none";
+}); */
+
+     function startConference() {
+  try {
+   const domain = 'meet.jit.si';
+   const options = {
+    roomName: 'circuloVipRoom1',
+    parentNode: document.getElementById('jitsi-container'),
+    interfaceConfigOverwrite: {
+     filmStripOnly: false,
+     SHOW_JITSI_WATERMARK: false,
+     SHOW_BRAND_WATERMARK: false,
+     SHOW_WATERMARK_FOR_GUESTS: false,
+     defaultLanguage: 'es',
+     TOOLBAR_BUTTONS: [
+            "microphone", "camera", "desktop",
+            "chat", "filmstrip","settings",'etherpad','titleview','hangup'
+          ],
+          MAIN_TOOLBAR_BUTTONS: ['microphone', 'camera', 'desktop'],
+    },
+    configOverwrite: {
+     disableSimulcast: false,
+     defaultLanguage: 'es',
+    },
+   };
+
+   const api = new JitsiMeetExternalAPI(domain, options);
+   
+   api.addEventListener('videoConferenceJoined', () => {
+    console.log('Local User Joined');
+
+    api.executeCommand('displayName', 'MyName');
+   /*  api.executeCommand('toggleTileView'); */
+
+   api.on('readyToClose', () => {
+     location.replace('https:/google.com.uy')
+});
+
+
+   });
+  } catch (error) {
+   console.error('Failed to load Jitsi API', error);
+  }
+ }
+
+ $(document).ready(function(){
+
+
+    if (window.JitsiMeetExternalAPI) {startConference();
+
+       /*  $( "#react" ).attr('style','background: white;'); */
+
+         /*  var iframe = document.getElementById("jitsiConferenceFrame0");
+var elmnt = iframe.contentWindow.document.getElementsByTagName("div")[0];
+elmnt.style.display = "none";
+         
+         
+           $('#jitsiConferenceFrame0').attr('style','heigth: 100vh!important;width: 100%; border: 0px');  */
+    }
+  else {alert('Jitsi Meet API script not loaded')};
+
+
+ });
+
+
+
+    
+    </script>
+</body>
+</html>  

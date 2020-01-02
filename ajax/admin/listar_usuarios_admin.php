@@ -12,11 +12,11 @@ if($contar > 0){
     while ($row = mysqli_fetch_array($query)){
 
         $id_user            = $row['id'];
-        $fecha_registro     = $row['fecha_registro'];
         $nombre             = $row['nombre'];
         $email              = $row['email'];
         $activo             = $row['activo'];
         $fecha_vencimiento  = $row['fecha_vencimiento'];
+        $fecha_vencimiento = date_format (new DateTime($fecha_vencimiento), 'd-m-Y');
 
         $fecha_vencimiento_and_btn = $fecha_vencimiento . 
         ' <button class="btn btn-primary" onclick="editarVencimiento(`'.$id_user.'`)"><i class="fas fa-pen"></i></button> ' ;
@@ -32,7 +32,7 @@ if($contar > 0){
 
         $eliminar = '<button class="btn btn-danger" onclick="eliminarUsuario('.$id_user.')"><i class="fas fa-trash"></i></button>';
     
-        $response[] = array( $id_user, $fecha_registro, $nombre,
+        $response[] = array( $id_user, $nombre,
           $email, $editarpass, $activo2, $fecha_vencimiento_and_btn,  $eliminar);
     
     }

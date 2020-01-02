@@ -52,7 +52,7 @@
       <div class="modal-body">
         <input type="hidden" id="id_user_date">
         <label for="vencimiento_modal">Nueva fecha de vencimiento</label>
-        <input type="datetime-local" class="form-control" id="vencimiento_modal">
+        <input type="date" class="form-control" id="vencimiento_modal">
 
       </div>
       <div class="modal-footer">
@@ -75,7 +75,6 @@
         <thead>
             <tr>
         <th>Id_Usuario</th>
-        <th>Fecha de registro</th>
         <th>Nombre</th>
         <th>Email</th>
         <th>Contraseña</th>
@@ -101,7 +100,7 @@
           <input type="email" class="form-control" name="email" id="email">
 
           <label for="">Fencha vencimiento</label>
-          <input type="datetime-local" class="form-control" name="fecha_vencimiento" id="fecha_vencimiento">
+          <input type="date" class="form-control" name="fecha_vencimiento" id="fecha_vencimiento">
 
           <label for="">Contraseña</label>
           <input type="password" class="form-control" name="pass" id="pass">
@@ -405,7 +404,7 @@ $.ajax({
                table = $('#TableTransacciones').DataTable({
                   ajax : '../ajax/admin/listar_usuarios_admin.php',   
                   lengthChange: false,
-                  order: [1,'desc'],
+                  order: [0,'desc'],
                   oLanguage: {
                       "sUrl": "../json/traducciontabla.json"
                   }

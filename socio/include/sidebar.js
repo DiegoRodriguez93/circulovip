@@ -32,6 +32,12 @@
             <i class="fas fa-envelope mr-3"></i>Mensajes
           </a>
 
+          
+          <div class="list-group list-group-flush">
+          <a href="webinar.html" id="webinarSidebar" class="list-group-item list-group-item-action waves-effect">
+            <i class="fas fa-video mr-3"></i>Webinars
+          </a>
+
           <!--    <a href="lista_comercios.html" id="listaSidebar" class="list-group-item list-group-item-action waves-effect">
             <i class="fas fa-store-alt mr-3"></i>Lista de comercios
           </a> -->
