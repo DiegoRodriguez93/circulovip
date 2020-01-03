@@ -5,7 +5,7 @@ loginUser();    //disparamos la función
 
 function loginUser(){
     
-    require '_conexion.php';
+    require '../_conexion.php';
     $email = $mysqli->escape_string($_POST['email']);
 
      // Chequeamos que la cuenta este creada
@@ -41,8 +41,9 @@ function loginUser(){
         
                 $token     = $user['token'];
                 $id_user   = $user['id'];
+                $nombre    = $user['nombre'];
         
-                        $res = array('result'=>true, 'token'=>$token, 'id_user'=>$id_user);
+                        $res = array('result'=>true, 'token'=>$token, 'id_user'=>$id_user, 'nombre'=>$nombre);
                         die(json_encode($res));
                      
             }else {

@@ -38,6 +38,11 @@
             <i class="fas fa-video mr-3"></i>Webinars
           </a>
 
+          <div class="list-group list-group-flush">
+          <a href="ronda.html" id="rondaSidebar" class="list-group-item list-group-item-action waves-effect">
+            <i class="fas fa-video mr-3"></i>videotest
+          </a>
+
           <!--    <a href="lista_comercios.html" id="listaSidebar" class="list-group-item list-group-item-action waves-effect">
             <i class="fas fa-store-alt mr-3"></i>Lista de comercios
           </a> -->
