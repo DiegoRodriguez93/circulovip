@@ -18,7 +18,11 @@
   <link href="css/style.css" rel="stylesheet">
   <link rel="stylesheet" href="css/loader.css">
   <link href="../css/estilosmenu.css" rel="stylesheet">
- 
+  <style>
+  
+  </style>
+  </head>
+  <body>
   <!-- Modal CAMBIAR PASSWORD START -->
 <div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document" data-backdrop="static" data-keyboard="false">
@@ -187,6 +191,67 @@
 
         
       </div>
+
+         <!--Grid column-->
+         <div id="rightPart" class="col-md-6 mb-4">
+
+          <!--Card-->
+          <div class="card">
+
+              <h4 id="conversacionTitulo" class="card-header">
+              </h4>
+
+              <div class="row wow fadeIn">
+                <div class="col-md-12 py-5 px-5">
+                  <table id="tableChat" class="table responsive" style="width: 100%;">
+                    <thead>
+                      <tr>
+                        <th></th>
+                      </tr>
+                    </thead>
+                  </table>
+                  <div class="row">
+                    <div class="col-9">
+                      <input type="hidden" id="id_emisor_hidden">
+                      <textarea maxlength="250" id="textMessage" class="form-control" ></textarea>
+                      <small class="text-danger" id="mensajeVacio"></small>
+                    </div>
+                    <div class="col-3 my-auto mx-auto">
+                      <button style="
+                      border: none;
+                      color: white;
+                      padding: 15% 15%;
+                      border-radius: 12px;
+                      text-align: center;
+                      text-decoration: none;
+                      display: inline-block;
+                      font-size: 16px;" class="btn-cyan" onclick="sendMessage()" >ENVIAR</button c>
+                    </div>
+                  </div>
+                  
+                  <div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+              
+          </div>        
+
+  
+
+
+
+          <!--/.Card-->
+          <div class="mb-5"></div>
+
+        <!--Grid column-->
+
+        
+      </div ir>
+
       </div>
       <!--Grid row-->
 
@@ -220,12 +285,167 @@ bottom: 0;position: fixed;width: 100%;
   <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
   <script src="https://cdn.datatables.net/colreorder/1.5.2/js/dataTables.colReorder.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-scrollTo/2.1.2/jquery.scrollTo.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
   <script src="../lib/helper.js"></script>
   <script src="js/cerrar_session.js"></script>
   <script src="include/sidebar.js"></script>
 <!--   <script src="js/index.js"></script> -->
   <script>
+
+    function sendMessage(){
+
+      $id_receptor = $('#id_emisor_hidden').val();
+      $id_emisor = localStorage.getItem('id_user');
+      $mensaje    = $('#textMessage').val();
+
+      if($mensaje.length < 1 || $mensaje == null || $mensaje == '' ){
+        $('#textMessage').addClass('is-invalid');
+        $('#mensajeVacio').html('El mensaje no puede estar vacio');
+        return false;
+      }else{
+        $('#textMessage').removeClass('is-invalid');
+        $('#mensajeVacio').html('');
+      }
+
+      var date = new Date;
+
+      var seconds = date.getSeconds();
+      var minutes = date.getMinutes();
+      var hour = date.getHours();
+
+      var dd = (date.getDate() < 10 ? '0' : '') + date.getDate();
+      // 01, 02, 03, ... 10, 11, 12
+      var MM = ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1);
+
+
+
+      $.ajax({
+        type: "POST",
+        url: "../ajax/socio/mensajes/enviarMensaje.php",
+        data: {id_emisor: $id_emisor,
+        id_receptor: $id_receptor,
+        mensaje: $mensaje},
+        dataType: "JSON",
+        beforeSend: function(){
+          var row = `<tr role='row' class='odd'>
+          <td tabindex='0'>
+          <div style=" border-radius: 25px;float:left"><small><b>`+dd+`/`+MM+` `+hour+`:`+minutes+`</b>
+          </small> Tú: `+$mensaje+`</div>
+          </td></tr>`;
+          $("#tableChat tbody").append(row);
+          $('#textMessage').val('');
+          $( "div.dataTables_scrollBody" ).scrollTop( 99999 );
+          if (typeof interval !== 'undefined') {
+            clearInterval(interval);
+        }
+        if (typeof intervall !== 'undefined') {
+            clearInterval(interval);
+        }
+          chat.context[0].jqXHR.abort();
+        },
+        success: function (res) {
+            if(res.result){
+              chat.ajax.reload();
+              intervall = setInterval(function(){
+                chat.ajax.reload();
+              },10000);
+              console.log('Mensaje enviado correctamente');
+            }else{
+              alert('Ha ocurrido un error al enviar su mensaje');
+            }
+        }, error: function(error){
+          alert('Ha ocurrido un error al enviar su mensaje');
+          console.log(error);
+        }
+      });
+    }
+
+    function cargarConversacion($id_emisor, $url_avatar, $nombre_emisor){
+
+      if (typeof interval !== 'undefined') {
+    clearInterval(interval);
+}
+
+      $('#rightPart').show();
+      $('#id_emisor_hidden').val($id_emisor);
+      $('#conversacionTitulo').html('Conversación con '+$nombre_emisor );
+
+      $id_receptor = localStorage.getItem('id_user');
+      if ( ! $.fn.DataTable.isDataTable( '#tableChat' ) ) {
+                //cargamos la tabla del chat
+
+             var goToBottom = function(){
+                $( "div.dataTables_scrollBody" ).scrollTop( 99999 );
+                
+                $('div#dataTables_scrollHead').css({"background-color": "#dee2e6'", "height": "2px"});
+              }
+
+              chat = $('#tableChat').DataTable({
+              ajax : {"url" : '../ajax/socio/mensajes/cargarConversacion.php?id_receptor='+$id_receptor+'&id_emisor='+$id_emisor+'&nombre_emisor='+$nombre_emisor,   
+            "complete" : goToBottom},
+              "lengthChange": false,
+              "info": false,
+              "searching": false,
+              "ordering": false,
+              "scrollY":        "250px",
+              "scrollX": false,
+              "scrollCollapse": false,
+              "paging":         false,
+              oLanguage: {
+                  "sUrl": "../json/traducciontabla.json"
+              }
+              });
+
+            
+
+            }else{
+           /*    $( "div.dataTables_scrollBody" ).scrollTop( 99999 ); */
+              chat.ajax.reload();
+            }
+
+      interval = setInterval(function(){ 
+
+      $('#rightPart').show();
+      $('#id_emisor_hidden').val($id_emisor);
+      $('#conversacionTitulo').html('Conversación con '+$nombre_emisor );
+
+      $id_receptor = localStorage.getItem('id_user');
+      if ( ! $.fn.DataTable.isDataTable( '#tableChat' ) ) {
+                //cargamos la tabla del chat
+
+             var goToBottom = function(){
+                $( "div.dataTables_scrollBody" ).scrollTop( 99999 );
+              }
+
+              chat = $('#tableChat').DataTable({
+              ajax : {"url" : '../ajax/socio/mensajes/cargarConversacion.php?id_receptor='+$id_receptor+'&id_emisor='+$id_emisor+'&nombre_emisor='+$nombre_emisor,   
+            "complete" : goToBottom},
+              "lengthChange": false,
+              "info": false,
+              "searching": false,
+              "ordering": false,
+              "scrollY":        "250px",
+              "scrollX": false,
+              "scrollCollapse": false,
+              "paging":         false,
+              oLanguage: {
+                  "sUrl": "../json/traducciontabla.json"
+              }
+              });
+
+            
+
+            }else{
+           /*    $( "div.dataTables_scrollBody" ).scrollTop( 99999 ); */
+              chat.ajax.reload();
+            }
+        
+        }, 10000);
+
+
+
+    }
   
   
   function startTable(){
@@ -236,25 +456,29 @@ if ( ! $.fn.DataTable.isDataTable( '#tableMensajes' ) ) {
   $id_user = localStorage.getItem('id_user');
           //cargamos la tabla
            table = $('#tableMensajes').DataTable({
-              ajax : '../ajax/socio/mensajes/listar_mensajes_socio.php?id_receptor='+$id_user,   
+              ajax : '../ajax/socio/mensajes/listar_mensajes_socio.php?id_receptor='+$id_user,
               lengthChange: false,
               "info": false,
               "searching": false,
               "ordering": false,
               oLanguage: {
                   "sUrl": "../json/traducciontabla.json"
-              }
-});
+              }});
 }else{
   //ajax reload
 
   table.ajax.reload();
+ 
     
 }
 
 }
 
 $(document).ready(function(){
+
+  $("div.dataTables_scrollBody").on('load',function(){
+   
+  });
 
 /* INCLUDES */
 
@@ -272,6 +496,16 @@ $( "#sidebar" ).toggle("normal");
   new WOW().init();
 
   startTable();
+
+     $('#rightPart').hide();   
+
+   $("textarea").keypress(function(event) {
+        if (event.keyCode == 13 && !event.shiftKey) {
+         sendMessage(); //Submit your form here
+         return false;
+         }
+});
+
 
 });
   
