@@ -43,6 +43,37 @@
 </div> 
 <!-- Modal SUBIR PRODUCTO END -->
 
+  <!-- Modal editar PRODUCTO START -->
+  <div class="modal fade" id="editarProducto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" data-backdrop="static" data-keyboard="false">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Editar producto</h5>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" class="form-control" id="idProductoEditar">
+          <label for="nombreProductoEditar">Nombre</label>
+          <input type="text" class="form-control" id="nombreProductoEditar">
+          <label for="descripcionProductoEditar">Descripción</label>
+          <textarea id="descripcionProductoEditar" class="form-control"></textarea>
+          <input type="file" class="my-2" id="imagenProducto">
+          <!-- Default switch -->
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="imagenOff">
+            <label class="custom-control-label" for="imagenOff">Dejar producto sin imagen</label>
+          </div>
+        </div>
+        <div class="modal-footer"><div class="mx-auto">
+          <button type="button" id="editarProductoBtn" onclick="editarProducto()" class="btn btn-deep-purple">Editar producto</button>
+          <button type="button" class="btn btn-blue-grey" data-dismiss="modal">Cancelar</button>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div> 
+  <!-- Modal editar PRODUCTO END -->
+  
+
 
 
 
@@ -208,6 +239,43 @@ bottom: 0;position: fixed;width: 100%;
   <script src="js/cerrar_session.js"></script>
   <script src="include/sidebar.js"></script>
   <script>
+
+    function editarProducto(){
+
+      $nombre       = $('#nombreProductoEditar').val();
+      $descripcion  = $('#descripcionProductoEditar').val();
+      $imagen       = $('#imagenProductoEditar').val();
+
+    }
+
+    function editarProductoModal($id_producto){
+
+      /* RELLENAMOS EL MODAL */
+
+      $.ajax({
+        type: "GET",
+        url: "../ajax/socio/mis_productos/rellenarProductoAEditar.php?id_producto="+$id_producto,
+        dataType: "JSON",
+        beforeSend: function(){
+          $('.loading').css('display','block');
+        },
+        success: function (res) {
+          $('#idProductoEditar').val(res.id);
+          $('#nombreProductoEditar').val(res.nombre);
+          $('#descripcionProductoEditar').val(res.descripcion);
+          $('#editarProducto').modal('show');
+        },complete: function(){
+          $('.loading').css('display','none');
+        }
+      });
+/* 
+      $nombre = $('#nombreProductoEditar').val();
+      $descripcion = $('#descripcionProductoEditar').val();
+      $imagen = $('#imagenProductoEditar').val();
+ */
+
+    }
+
     function eliminarProducto($id_producto) {
       const swalWithBootstrapButtons = Swal.mixin({
   customClass: {
@@ -386,7 +454,7 @@ swalWithBootstrapButtons.fire({
                     <p>`+val.descripcion+`</p>
                   </div>
                   <div class="col-12 text-center">
-                    <button onclick="editarProducto('`+val.id_producto+`')" class="btn btn-indigo btn-sm">Editar</button>
+                    <button onclick="editarProductoModal('`+val.id_producto+`')" class="btn btn-indigo btn-sm">Editar</button>
                     <button onclick="eliminarProducto('`+val.id_producto+`')" class="btn btn-danger btn-sm">Eliminar</button>
                   </div>
                 </div>
@@ -448,6 +516,13 @@ swalWithBootstrapButtons.fire({
     });
 
     rellenarProductos(0);
+
+    /* DETECTAR EL CAMBIO DEL CHECKER DE EDITAR PRODUCTO */
+
+    $('#imagenOff').on('click',function(){
+    if($(this).prop("checked") == true){
+    $('#imagenProducto').addClass('disabled');
+    }      })
     
 
   });

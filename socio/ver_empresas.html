@@ -18,12 +18,7 @@
   <link href="css/style.css" rel="stylesheet">
   <link rel="stylesheet" href="css/loader.css">
   <link href="../css/estilosmenu.css" rel="stylesheet">
-  <style>
-  span{
-    cursor: pointer;
-  }
-  </style>
-  </head><body>
+</head><body>
  
   <!-- Modal CAMBIAR PASSWORD START -->
 <div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -161,29 +156,42 @@
           <div class="card">
 
               <h4 class="card-header">
-                    Horarios disponibles
+                    Empresas disponibles
 
               </h4>
 
-              <div class="row wow fadeIn">
-                <div class="col-lg-4"></div>
+              <div class="row wow fadeIn p-3">
                 <div class="col-lg-4 md-6 sm-12 text-center">
-                  <button class="btn btn-success d-inline-block pt-3">
-                     <i class="fa fa-clock fa-2x d-inline-block"></i>
-                      <h5 class="d-inline-block" style="transform: translateY(-2px);">Agregar Horario</h5>
-                    </button>
+                  <label for="pais">Filtrar por País</label>
+                  <select class="form-control" name="" id="">
+                    <option value="Todos">Todos</option>
+                    <option value="Argentina">Argentina</option>
+                  </select>
                 </div>
-                <div class="col-lg-4"></div>
+                <div class="col-lg-8 md-6 sm-12 text-center d-inline-block mx-auto">
+
+                  <form style="align-items: center;" class="form-inline md-form form-sm mx-auto text-center">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <input class="form-control form-control-sm ml-3" style="width: 85%;" type="text" placeholder="Buscar Empresa"
+                      aria-label="Buscar Empresa" id="buscardorDeEmpresas">
+                  </form>
+                  
+                  </div>
+
+                </div>
+
               </div>
 
               
           </div>        
 
-          <div style="display:none" class="loading"></div>
-
    <!--        <div class="card my-3"> -->
-            <div id="dateContainer" class="row wow fadeIn my-3">
 
+    <div class="col-md-12 mb-4">
+
+            <div id="empresasContainer" class="row wow fadeIn my-3">
+
+              <div style="display:none" class="loading"></div>
               
     
         </div>
@@ -204,6 +212,7 @@
 
 
     </div>
+    <div class="mb-5"></div>
   </main>
   <!--Main layout-->
 
@@ -241,109 +250,47 @@ bottom: 0;position: fixed;width: 100%;
 
   <script>
 
-    function agregarDia($id_dia, $id_horario){
-
-
-
-    }
-
-    function eliminarHorario($id_horario){
-
-      const swalWithBootstrapButtons = Swal.mixin({
-  customClass: {
-    confirmButton: 'btn btn-success',
-    cancelButton: 'btn btn-danger'
-  },
-  buttonsStyling: false
-})
-
-swalWithBootstrapButtons.fire({
-  title: '¿Estas seguro?',
-  text: "Se va a eliminar el horario!",
-  icon: 'warning',
-  showCancelButton: true,
-  confirmButtonText: 'Si, eliminar!',
-  cancelButtonText: 'No, cancelar!'
-}).then((result) => {
-  if (result.value) {
-
-    $.ajax({
-      type: "POST",
-      url: "../ajax/socio/mis_horarios/eliminarHorario.php",
-      data: {id_horario: $id_horario},
-      dataType: "JSON",        
-      beforeSend: function () {
-          $('.loading').css('display','block');
-        },
-      success: function (res) {
-        if(res.result){
-          swalWithBootstrapButtons.fire(
-          'Eliminado!',
-          'El horario ha sido eliminado correctamente',
-          'success'
-        )
-         listarHorarios();
-
-        }else{
-          swalWithBootstrapButtons.fire(
-            'Ha ocurrido un error',
-            res.message,
-            'error'
-          )
-        }
-      },complete: function () {
-          $('.loading').css('display','none');
-        }
-    });
-
-
-  }else{
-    swalWithBootstrapButtons.fire(
-      'Cancelado',
-      'Acción cancelada',
-      'error'
-    )
-  }
-})
-
-    }
-
-    function listarHorarios(){
+    function listarEmpresas(){
 
       $.ajax({
         type: "POST",
-        url: "../ajax/socio/mis_horarios/listarHorarios.php",
+        url: "../ajax/socio/ver_empresas/listarEmpresas.php",
         data: {id_user : localStorage.getItem('id_user')},
         dataType: "JSON ",beforeSend: function(){
           $('.loading').css('display','block');
         },
         success: function (data) {
           var html = '',
-      el = document.getElementById("dateContainer");
+      el = document.getElementById("empresasContainer");
       $.each(data, function (key, val) {
 
-         html += `<div class="col-md-3 sm-12 my-1">
+        html += `
+              <div class="col-lg-4 sm-12 my-1">
                 <div class="card">
                 <div class="row">
 
-                  <div class="col-8">
-                  <div class="green-text">
-                    <i class="fa p-2 fa-calendar-check fa-3x"></i>
-                  </div><b> 
-                  `+val.diasConLetra+`</b>
+                  <div class="col-12 pt-2 text-center">
+                    <img 
+                    src="`+val.url_image+`"
+                     class="img-fluid" 
+                     style="max-height: 140px;"
+                     alt="">
                   </div>
-                  <div class="col-4 my-auto">
-                    <b style="font-size: 1.3em;">`+val.hora+`</b>
+                  <div class="col-12 text-center my-auto">
+                    <b style="font-size: 1.3em;">`+val.nombre+`</b>
+                    <p>`+val.descripcion+`</p>
                   </div>
                   <div class="col-12 text-center">
-                    <button 
-                     onclick="eliminarHorario(`+val.id_horario+`)"
-                     class="btn btn-danger btn-sm">
-                     Eliminar horario
-                     </button>
+                    <button onclick="editarProductoModal('`+val.id_empresa+`')" class="btn btn-indigo btn-sm">Contactar</button>
+                    <button onclick="eliminarProducto('`+val.id_empresa+`')" class="btn btn-danger btn-sm">Ver más</button>
                   </div>
                 </div>
-              </div></div>`;
+              </div></div>
+              
+            
+              
+              `;
+
 
       });
 
@@ -357,7 +304,7 @@ swalWithBootstrapButtons.fire({
     }
 
     $(document).ready(function(){
-      listarHorarios();
+
             /* INCLUDES */
 
   $('#sidebar_aqui').html(sidebar);
@@ -373,6 +320,8 @@ swalWithBootstrapButtons.fire({
 
     // Animations initialization
     new WOW().init();
+
+    listarEmpresas();
 
  /*    if($nombre != null && $nombre.length > 1 && $id_user != null && $id_user.length > 0 &&
     $token != null && $token.length == 32){

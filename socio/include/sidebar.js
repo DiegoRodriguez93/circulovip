@@ -17,6 +17,11 @@
           </a>
 
           <div class="list-group list-group-flush">
+          <a href="ver_empresas.html" id="empresasSidebar" class="list-group-item list-group-item-action waves-effect">
+            <i class="fas fa-building mr-3"></i>Ver Empresas
+          </a>
+
+          <div class="list-group list-group-flush">
           <a href="mis_horarios.html" id="horariosSidebar" class="list-group-item list-group-item-action waves-effect">
             <i class="fas fa-user-clock mr-3"></i>Mis horarios
           </a>

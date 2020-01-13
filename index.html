@@ -161,6 +161,27 @@ function logIn(){
 
 }
 
+$(document).ready(function(){
+
+  new WOW().init();
+
+  $nombre = localStorage.getItem('nombre');
+  $id_user = localStorage.getItem('id_user');
+  $token = localStorage.getItem('token');
+
+/*   console.log(localStorage.getItem('aaa')); */
+
+  if($nombre != null && $nombre.length > 1 && $id_user != null && $id_user.length > 0 &&
+  $token != null && $token.length == 32){
+    location.replace('socio/index.html');
+  }else{
+    console.log('usuario no logeado');
+  }
+
+/*   if(localStorage.getItem('a')) */
+
+});
+
 </script>
 
 </body>
