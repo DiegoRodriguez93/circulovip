@@ -10,14 +10,14 @@
   <meta http-equiv="Expires" content="0" />
   <title>Circulo Vip</title>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
-  <link rel="stylesheet" href="https://cdn.datatables.net/colreorder/1.5.2/css/colReorder.dataTables.min.css">
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/mdb.min.css" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
   <link rel="stylesheet" href="css/loader.css">
   <link href="../css/estilosmenu.css" rel="stylesheet">
+  <style>
+  i{cursor: pointer;}
+  </style>
  </head>
  <body>
 
@@ -274,11 +274,7 @@ bottom: 0;position: fixed;width: 100%;
   <script type="text/javascript" src="js/popper.min.js"></script>
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
   <script type="text/javascript" src="js/mdb.min.js"></script>
-  <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
-  <script src="https://cdn.datatables.net/colreorder/1.5.2/js/dataTables.colReorder.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-  <script src="../lib/helper.js"></script>
   <script src="js/cerrar_session.js"></script>
   <script src="include/sidebar.js"></script>
   <script>
@@ -394,7 +390,7 @@ bottom: 0;position: fixed;width: 100%;
           $('#paisEmpresa').html('('+res.pais_empresa+')');
           $('#pais').val(res.pais_empresa);
         }else{
-          $('#paisEmpresa').html('Internacional');
+          $('#paisEmpresa').html('(Internacional)');
         }
         if(res.descripcion_empresa != null){
           $('#descripcionEmpresa').html(res.descripcion_empresa);

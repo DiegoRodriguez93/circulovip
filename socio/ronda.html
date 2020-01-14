@@ -1,94 +1,25 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sala conferencia</title>
-    <style>
-
-</style>
+    <title>React Parcel</title>
+    <style>iframe{
+        height: 100vh;
+        margin:0;
+        padding: 0;
+        overflow: hidden;
+    }body, html, div{
+        overflow: hidden;
+    }</style>
 </head>
-<body style="height: 100vh; margin: 0;padding: 0;">
-
-    <div style="height: 100vh; margin: 0;padding: 0;" id="jitsi-container"></div>
+<body style="height: 100vh!important; width: 100%; margin: 0; padding: 0;">
     
+    <div style="height: 100vh!important; width: 100%;margin: 0; padding: 0;" id="app"></div>
+
     <script src="https://meet.jit.si/external_api.js"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script>
-/*             var iframe = document.getElementById('jitsiConferenceFrame0');
-iframe.addEventListener("load", function() {
-    window.frames[0].document.getElementsByClassName('watermark').style.display = "none";
-}); */
-
-     function startConference() {
-  try {
-   const domain = 'meet.jit.si';
-   const options = {
-    roomName: 'circuloVipRoom1',
-    parentNode: document.getElementById('jitsi-container'),
-    interfaceConfigOverwrite: {
-     filmStripOnly: false,
-     SHOW_JITSI_WATERMARK: false,
-     SHOW_BRAND_WATERMARK: false,
-     SHOW_WATERMARK_FOR_GUESTS: false,
-     defaultLanguage: 'es',
-     TOOLBAR_BUTTONS: [
-            "microphone", "camera", "desktop",
-            "chat", "filmstrip","settings",'etherpad','titleview','hangup'
-          ],
-          MAIN_TOOLBAR_BUTTONS: ['microphone', 'camera', 'desktop'],
-    },
-    configOverwrite: {
-     disableSimulcast: false,
-     defaultLanguage: 'es',
-    },
-   };
-
-   const api = new JitsiMeetExternalAPI(domain, options);
-   
-   api.addEventListener('videoConferenceJoined', () => {
-    console.log('Local User Joined');
-
-    api.executeCommand('displayName', localStorage.getItem('nombre'));
-   /*  api.executeCommand('toggleTileView'); */
-
-   api.on('readyToClose', () => {
-     location.replace('index.html');
-});
-
-
-   });
-  } catch (error) {
-   console.error('Failed to load Jitsi API', error);
-  }
- }
-
- $(document).ready(function(){
-
-  if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1){
-     // Do Firefox-related activities
-     alert('Navegador no compatible, pruebe utilizar Opera o Google Chorme');
-     location.replace('index.html');
-}else{
-  if (window.JitsiMeetExternalAPI) {
     
-    startConference();
-
-}else {
-
-  alert('Ha ocurrido un error o esta utilizando un navegador no compatible, pruebe utilizar Opera o Google Chorme');
-  location.replace('index.html');
-}
-
-}
-
-    }
-);
-
-
-
-    
-    </script>
+    <script src="jitsi/src.7ed060e2.js"></script>
 </body>
-</html>  
+</html>

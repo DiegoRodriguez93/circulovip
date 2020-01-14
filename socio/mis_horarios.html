@@ -10,9 +10,6 @@
   <meta http-equiv="Expires" content="0" />
   <title>Circulo Vip</title>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
-  <link rel="stylesheet" href="https://cdn.datatables.net/colreorder/1.5.2/css/colReorder.dataTables.min.css">
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/mdb.min.css" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
@@ -82,7 +79,7 @@
 <!-- MODAL CONFIRM TRANSACCIÓN-->
 
 <!-- MODAL CONFIRM DESCUENTOS-->
-<div class="modal fade" id="mdlVencimiento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div class="modal fade" id="agregarHorarioMdl" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true" data-backdrop="static" data-keyboard="false">
 
   <!-- Change class .modal-sm to change the size of the modal -->
@@ -91,19 +88,40 @@
 
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title w-100">Vencimientos del saldo</h4>
+        <h4 class="modal-title w-100">Agregar horario</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <div class="row">
-          <div class="col-6"><b>Fecha</b></div>
-          <div class="col-6"><b>Monto</b></div>
+        <label for="hora">Hora</label>
+        <input type="time" id="hora" class="form-control w-25">
+        <div class="row mt-4">
+          <div class="col"><b>LU</b>
+          <input type="checkbox" id="1">
+          </div>
+          <div class="col"><b>MA</b><input type="checkbox" id="2">
+          </div>
+          <div class="col"><b>MI</b>
+            <input type="checkbox" id="3">
+          </div>
+          <div class="col"><b>JU</b>
+            <input type="checkbox" id="4">
+          </div>
+          <div class="col"><b>VI</b>
+            <input type="checkbox" id="5">
+          </div>
+          <div class="col"><b>SA</b>
+            <input type="checkbox" id="6">
+          </div>
+          <div class="col"><b>DO</b>
+            <input type="checkbox" id="7">
+          </div>
         </div>
           <div id="vencimientos"></div>
       </div>
-      <div class="modal-footer text-center">
+      <div class="modal-footer text-center mx-auto">
+        <button type="button" onclick="agregarHorario()" class="btn btn-deep-purple">Confirmar</button>
         <button type="button" class="btn btn-blue-grey" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
@@ -168,7 +186,9 @@
               <div class="row wow fadeIn">
                 <div class="col-lg-4"></div>
                 <div class="col-lg-4 md-6 sm-12 text-center">
-                  <button class="btn btn-success d-inline-block pt-3">
+                  <button 
+                  onclick="$('#agregarHorarioMdl').modal('show');"
+                  class="btn btn-success d-inline-block pt-3">
                      <i class="fa fa-clock fa-2x d-inline-block"></i>
                       <h5 class="d-inline-block" style="transform: translateY(-2px);">Agregar Horario</h5>
                     </button>
@@ -229,21 +249,302 @@ bottom: 0;position: fixed;width: 100%;
   <script type="text/javascript" src="js/popper.min.js"></script>
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
   <script type="text/javascript" src="js/mdb.min.js"></script>
-  <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
-  <script src="https://cdn.datatables.net/colreorder/1.5.2/js/dataTables.colReorder.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-  <script src="../lib/helper.js"></script>
-  <script src="../lib/jquerysession.js"></script>
   <script src="js/cerrar_session.js"></script>
   <script src="include/sidebar.js"></script>
 
 
   <script>
 
+    function agregarHorario(){
+
+      if($('#1').is(":checked")){
+        $lunes = 1;
+      }else{
+        $lunes = 0;
+      }
+      
+      if($('#2').is(":checked")){
+        $martes = 1;
+      }else{
+        $martes = 0;
+      }
+      
+      if($('#3').is(":checked")){
+        $miercoles = 1;
+      }else{
+        $miercoles = 0;
+      }
+      
+      if($('#4').is(":checked")){
+        $jueves = 1;
+      }else{
+        $jueves = 0;
+      }
+      
+      if($('#5').is(":checked")){
+        $viernes = 1;
+      }else{
+        $viernes = 0;
+      }
+      
+      if($('#6').is(":checked")){
+        $sabado = 1;
+      }else{
+        $sabado = 0;
+      }
+      
+      if($('#7').is(":checked")){
+        $domingo = 1;
+      }else{
+        $domingo = 0;
+      }
+
+      if($('#hora').val() == ''){
+        Swal.fire(
+      'Ha ocurrido un error',
+      'La hora no puede estar vacia',
+      'error'
+      );
+      return false;
+      }
+
+      if(!$('#1').is(":checked") && !$('#2').is(":checked") && !$('#3').is(":checked") && !$('#4').is(":checked")
+      && !$('#5').is(":checked") && !$('#6').is(":checked") && !$('#7').is(":checked") ){
+        Swal.fire(
+      'Ha ocurrido un error',
+      'Debe seleccionar al menos un día',
+      'error'
+      );
+      return false;
+      }
+
+      $.ajax({
+        type: "POST",
+        url: "../ajax/socio/mis_horarios/agregarHorario.php",
+        data: {lunes: $lunes,
+          martes: $martes,
+          miercoles:$miercoles,
+          jueves: $jueves,
+          viernes: $viernes,
+          sabado:$sabado,
+          domingo: $domingo,
+          hora : $('#hora').val(),
+        id_user : localStorage.getItem('id_user')},
+        dataType: "JSON",        
+        beforeSend: function () {
+            $('.loading').css('display','block');
+          },
+        success: function (res) {
+          if(res.result){
+            Swal.fire(
+            'Agregado!',
+            res.message,
+            'success'
+          )
+          listarHorarios();
+          $('#agregarHorarioMdl').modal('hide');
+          $('#hora').val('');
+          $('#1').prop('checked', true);
+          $('#2').prop('checked', true);
+          $('#3').prop('checked', true);
+          $('#4').prop('checked', true);
+          $('#5').prop('checked', true);
+          $('#6').prop('checked', false);
+          $('#7').prop('checked', false);
+          
+        }else{
+            Swal.fire(
+              'Ha ocurrido un error',
+              res.message,
+              'error'
+            )
+          }
+        },complete: function () {
+            $('.loading').css('display','none');
+          }
+        
+      });
+
+    }
+
+
+
+       function quitarDia($id_dia, $id_horario){
+
+if($id_dia == 1){
+  $dia = 'Lunes';
+}
+
+if($id_dia == 2){
+  $dia = 'Martes';
+}
+
+if($id_dia == 3){
+  $dia = 'Miércoles';
+}
+
+if($id_dia == 4){
+  $dia = 'Jueves';
+}
+
+if($id_dia == 5){
+  $dia = 'Viernes';
+}
+
+if($id_dia == 6){
+  $dia = 'Sábado';
+}
+
+if($id_dia == 7){
+  $dia = 'Domingo';
+}
+
+const swalWithBootstrapButtons = Swal.mixin({
+customClass: {
+confirmButton: 'btn btn-success',
+cancelButton: 'btn btn-danger'
+},
+buttonsStyling: false
+})
+
+swalWithBootstrapButtons.fire({
+title: '¿Estas seguro?',
+text: "Se va a quitar el día "+$dia+" al horario!",
+icon: 'warning',
+showCancelButton: true,
+confirmButtonText: 'Si, quitar!',
+cancelButtonText: 'No, cancelar!'
+}).then((result) => {
+if (result.value) {
+
+$.ajax({
+type: "POST",
+url: "../ajax/socio/mis_horarios/quitarDia.php",
+data: {id_dia: $id_dia, id_horario: $id_horario},
+dataType: "JSON",        
+beforeSend: function () {
+    $('.loading').css('display','block');
+  },
+success: function (res) {
+  if(res.result){
+    swalWithBootstrapButtons.fire(
+    'Eliminado!',
+    'El día se ha quitado correctamente',
+    'success'
+  )
+   listarHorarios();
+
+  }else{
+    swalWithBootstrapButtons.fire(
+      'Ha ocurrido un error',
+      res.message,
+      'error'
+    )
+  }
+},complete: function () {
+    $('.loading').css('display','none');
+  }
+});
+
+
+}else{
+swalWithBootstrapButtons.fire(
+'Cancelado',
+'Acción cancelada',
+'error'
+)
+}
+})
+
+}
+
     function agregarDia($id_dia, $id_horario){
 
+      if($id_dia == 1){
+        $dia = 'Lunes';
+      }
+      
+      if($id_dia == 2){
+        $dia = 'Martes';
+      }
+      
+      if($id_dia == 3){
+        $dia = 'Miércoles';
+      }
+      
+      if($id_dia == 4){
+        $dia = 'Jueves';
+      }
+      
+      if($id_dia == 5){
+        $dia = 'Viernes';
+      }
+      
+      if($id_dia == 6){
+        $dia = 'Sábado';
+      }
+      
+      if($id_dia == 7){
+        $dia = 'Domingo';
+      }
 
+      const swalWithBootstrapButtons = Swal.mixin({
+  customClass: {
+    confirmButton: 'btn btn-success',
+    cancelButton: 'btn btn-danger'
+  },
+  buttonsStyling: false
+})
+
+swalWithBootstrapButtons.fire({
+  title: '¿Estas seguro?',
+  text: "Se va a agregrar el día "+$dia+" al horario!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonText: 'Si, agregar!',
+  cancelButtonText: 'No, cancelar!'
+}).then((result) => {
+  if (result.value) {
+
+    $.ajax({
+      type: "POST",
+      url: "../ajax/socio/mis_horarios/agregarDia.php",
+      data: {id_dia: $id_dia, id_horario: $id_horario},
+      dataType: "JSON",        
+      beforeSend: function () {
+          $('.loading').css('display','block');
+        },
+      success: function (res) {
+        if(res.result){
+          swalWithBootstrapButtons.fire(
+          'Agregado!',
+          'El día se ha agregado correctamente',
+          'success'
+        )
+         listarHorarios();
+
+        }else{
+          swalWithBootstrapButtons.fire(
+            'Ha ocurrido un error',
+            res.message,
+            'error'
+          )
+        }
+      },complete: function () {
+          $('.loading').css('display','none');
+        }
+    });
+
+
+  }else{
+    swalWithBootstrapButtons.fire(
+      'Cancelado',
+      'Acción cancelada',
+      'error'
+    )
+  }
+})
 
     }
 
@@ -326,14 +627,14 @@ swalWithBootstrapButtons.fire({
                 <div class="card">
                 <div class="row">
 
-                  <div class="col-8">
+                  <div class="col-7">
                   <div class="green-text">
                     <i class="fa p-2 fa-calendar-check fa-3x"></i>
-                  </div><b> 
+                  </div><b class="text-nowrap"> 
                   `+val.diasConLetra+`</b>
                   </div>
-                  <div class="col-4 my-auto">
-                    <b style="font-size: 1.3em;">`+val.hora+`</b>
+                  <div class="col-5 text-nowrap my-auto">
+                    <b  style="font-size: 1.3em;">`+val.hora+`</b>
                   </div>
                   <div class="col-12 text-center">
                     <button 
@@ -381,6 +682,12 @@ swalWithBootstrapButtons.fire({
       console.log('usuario no logeado');
     } */
     });
+
+    $('#1').prop('checked', true);
+    $('#2').prop('checked', true);
+    $('#3').prop('checked', true);
+    $('#4').prop('checked', true);
+    $('#5').prop('checked', true);
 
   
   </script>
