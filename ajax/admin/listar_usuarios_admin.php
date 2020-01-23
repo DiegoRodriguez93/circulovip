@@ -2,7 +2,6 @@
 header("Access-Control-Allow-Origin: *");
 require '../_conexion.php';
 
-
 $query = mysqli_query($mysqli,"SELECT id, nombre, email, activo, fecha_registro, fecha_vencimiento, hash FROM usuarios ");
 
 $contar = mysqli_num_rows($query);

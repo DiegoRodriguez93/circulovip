@@ -1,3 +1,12 @@
+<?php 
+
+$id_empresa = $_GET['id_empresa'];
+
+if(!isset($id_empresa) OR $id_empresa == null OR $id_empresa == ''){
+  header('Location: ver_empresas.html');
+}
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -163,7 +172,9 @@
               <div class="row wow fadeIn p-3">
                 <div class="col-lg-4 md-6 sm-12 text-center">
                   <label for="pais">Filtrar por País</label>
-                  <select class="form-control" name="" id="selectPaises">
+                  <select class="form-control" name="" id="">
+                    <option value="Todos">Todos</option>
+                    <option value="Argentina">Argentina</option>
                   </select>
                 </div>
                 <div class="col-lg-8 md-6 sm-12 text-center d-inline-block mx-auto">
@@ -248,36 +259,11 @@ bottom: 0;position: fixed;width: 100%;
 
   <script>
 
-    function rellenarSelectPaises(){
-
-      $.ajax({
-        type: "GET",
-        url: "../ajax/socio/ver_empresas/rellenarSelectPaises.php",
-        dataType: "JSON",
-        success: function (data) {
-          var html = '',
-      el = document.getElementById("selectPaises");
-
-      $.each(data, function (key, val) {
-
-        html += `<option value="`+val.pais+`">`+val.pais+`</option>`;
-
-      });
-
-      $('<option>Todos</option>').appendTo(el);
-
-      $(html).appendTo(el);
-        
-        }
-      });
-
-    }
-
-    function listarEmpresas($pais, $nombre){
+    function listarEmpresa(){
 
       $.ajax({
         type: "POST",
-        url: "../ajax/socio/ver_empresas/listarEmpresas.php?pais="+$pais+"&nombre="+$nombre,
+        url: "../ajax/socio/ver_empresas/listarEmpresas.php",
         data: {id_user : localStorage.getItem('id_user')},
         dataType: "JSON ",beforeSend: function(){
           $('.loading').css('display','block');
@@ -345,28 +331,6 @@ bottom: 0;position: fixed;width: 100%;
     new WOW().init();
 
     listarEmpresas();
-    rellenarSelectPaises();
-
-
-
-
-  $('#selectPaises').on('change',function(){
-
-  $pais = $('#selectPaises').val();
-  $nombre = $('#buscardorDeEmpresas').val();
-
-  listarEmpresas($pais,$nombre);
-
-  });
-
-$('#buscardorDeEmpresas').on('keyup',function(){
-
-  $pais = $('#selectPaises').val();
-  $nombre = $('#buscardorDeEmpresas').val();
-
-  listarEmpresas($pais,$nombre);
-
-});
 
  /*    if($nombre != null && $nombre.length > 1 && $id_user != null && $id_user.length > 0 &&
     $token != null && $token.length == 32){

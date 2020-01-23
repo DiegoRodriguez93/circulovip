@@ -1,9 +1,5 @@
 <?php
 header("Access-Control-Allow-Origin: *");
-
-loginUser();    //disparamos la función
-
-function loginUser(){
     
     require '../_conexion.php';
     $email = $mysqli->escape_string($_POST['email']);
@@ -58,7 +54,7 @@ function loginUser(){
             }
 
             mysqli_close($mysqli);
-        }
+        
 
 
 
