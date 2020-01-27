@@ -42,8 +42,8 @@
 </div> 
 <!-- Modal CAMBIAR PASSWORD END -->
 
-<!-- MODAL CONFIRM TRANSACCIÓN-->
-<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<!-- MODAL CONTACT-->
+<div class="modal fade" id="contactModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true" data-backdrop="static" data-keyboard="false">
 
   <!-- Change class .modal-sm to change the size of the modal -->
@@ -52,29 +52,28 @@
 
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title w-100" id="modalTitle"></h4>
+        <h4 class="modal-title w-100" id="contactModalTitle">Enviar mensaje</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <input type="hidden" id="hidden_id_cupon">
-        <h3>Datos del comercio:</h3>
-        <h4 id="commerce_name"></h4>
-        <h4 id="commerce_address"></h4>
-        <h4 id="commerce_phone"></h4>
-        <hr>
-        <h4 id="fecha_vencimiento"></h4>
-        <h4 id="descuento"></h4>
-      </div>
+
+        <input type="hidden" id="idEmpresaContactModal" >
+
+        <label for="mensajeContactModal">Mensaje</label>
+        <textarea id="mensajeContactModal" maxlength="250" class="form-control"></textarea>
+    
+
       <div class="modal-footer text-center mx-auto">
-        <button type="button" id="confirmarTransaccionBtn" class="btn btn-indigo">Confirmar</button>
-        <button type="button" id="cancelarTransaccionBtn" class="btn btn-blue-grey" data-dismiss="modal">Cancelar</button>
+        <button type="button" onclick="enviarMensajeDeContacto()" class="btn btn-indigo">Enviar mensaje </button>
+        <button type="button" class="btn btn-blue-grey" data-dismiss="modal">Cancelar</button>
       </div>
     </div>
   </div>
 </div>
-<!-- MODAL CONFIRM TRANSACCIÓN-->
+</div>
+<!-- MODAL CONTACT-->
 
 <!-- MODAL CONFIRM DESCUENTOS-->
 <div class="modal fade" id="mdlVencimiento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -248,6 +247,33 @@ bottom: 0;position: fixed;width: 100%;
 
   <script>
 
+    function enviarMensajeDeContacto(){
+
+      $id_empresa = $('#idEmpresaContactModal').val();
+      $mensaje = $('#mensajeContactModal').val();
+
+      $.ajax({
+        type: "POST",
+        url: "../ajax/socio/ver_empresas/mensajeDeContacto.php",
+        data: {id_empresa: $id_empresa, mensaje:$mensaje, id_user: localStorage.getItem('id_user')},
+        dataType: "JSON",
+        success: function (res) {
+          $('#contactModal').modal('hide');
+        }
+      });
+
+    }
+
+    function contactModal($id_empresa, $nombre_empresa, $pais_empresa){
+
+      $('#idEmpresaContactModal').val($id_empresa);
+
+      $('#contactModalTitle').html('Enviar mensaje a '+$nombre_empresa+'('+$pais_empresa+')');
+
+      $('#contactModal').modal('show');
+
+    }
+
     function rellenarSelectPaises(){
 
       $.ajax({
@@ -304,7 +330,7 @@ bottom: 0;position: fixed;width: 100%;
                     <p>`+val.descripcion+`</p>
                   </div>
                   <div class="col-12 text-center">
-                    <button onclick="editarProductoModal('`+val.id_empresa+`')" class="btn btn-indigo btn-sm">Contactar</button>
+                    <button onclick="contactModal('`+val.id_empresa+`','`+val.nombre+`','`+val.pais+`')" class="btn btn-indigo btn-sm">Contactar</button>
                     <button onclick="eliminarProducto('`+val.id_empresa+`')" class="btn btn-danger btn-sm">Ver más</button>
                   </div>
                 </div>

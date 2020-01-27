@@ -2,7 +2,7 @@
 header("Access-Control-Allow-Origin: *");
 require '../_conexion.php';
 
-$query = mysqli_query($mysqli,"SELECT id, nombre, email, activo, fecha_registro, fecha_vencimiento, hash FROM usuarios ");
+$query = mysqli_query($mysqli,"SELECT id, nombre, email, activo, fecha_registro, fecha_vencimiento, hash, zona_horaria FROM usuarios ");
 
 $contar = mysqli_num_rows($query);
 
@@ -31,8 +31,10 @@ if($contar > 0){
 
         $eliminar = '<button class="btn btn-danger" onclick="eliminarUsuario('.$id_user.')"><i class="fas fa-trash"></i></button>';
     
+        $zona_horaria = 'GMT'.$row['zona_horaria'];
+
         $response[] = array( $id_user, $nombre,
-          $email, $editarpass, $activo2, $fecha_vencimiento_and_btn,  $eliminar);
+          $email, $editarpass, $activo2, $zona_horaria, $fecha_vencimiento_and_btn,  $eliminar);
     
     }
     echo '{ "data" : ' . json_encode($response) . '}' ;

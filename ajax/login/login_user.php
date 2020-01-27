@@ -35,11 +35,16 @@ header("Access-Control-Allow-Origin: *");
                        
             if ( password_verify($_POST['pass'], $user['pass']) ) {
         
-                $token     = $user['token'];
-                $id_user   = $user['id'];
-                $nombre    = $user['nombre'];
+                $token          = $user['token'];
+                $id_user        = $user['id'];
+                $nombre         = $user['nombre'];
+                $zona_horaria   = $user['zona_horaria'];
         
-                        $res = array('result'=>true, 'token'=>$token, 'id_user'=>$id_user, 'nombre'=>$nombre);
+                        $res = array('result'=>true,
+                        'token'=>$token,
+                        'id_user'=>$id_user,
+                        'nombre'=>$nombre,
+                        'zona_horaria'=>$zona_horaria);
                         die(json_encode($res));
                      
             }else {

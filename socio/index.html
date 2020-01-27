@@ -156,7 +156,7 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col-8">                  <span style="font-size: 0.85em;">CITAS SOLICITADAS</span><BR>
-                      <b><span>0</span></b> </div>
+                      <b><span id="citasSolicitadasBadge">0</span></b> </div>
 
                     <div class="col-4 text-white deep-purple-text">
                       <i class="fa fa-calendar-day fa-3x"></i>
@@ -177,7 +177,7 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col-8">                  <span style="font-size: 0.85em;">CITAS CONFIRMADAS</span><BR>
-                      <b><span>0</span></b> </div>
+                      <b><span id="citasConfirmadasBadge">0</span></b> </div>
 
                     <div class="col-4 text-white light-green-text">
                       <i class="fa fa-clipboard-check fa-3x"></i>
@@ -198,7 +198,7 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col-8">                  <span style="font-size: 0.85em;">CITAS RECHAZADAS</span><BR>
-                    <b><span>0</span></b> </div>
+                    <b><span id="citasRechazadasBadge">0</span></b> </div>
 
                   <div class="col-4 text-white red-text">
                     <i class="fa fa-calendar-times fa-3x"></i>
@@ -219,7 +219,7 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col-8">                  <span style="font-size: 0.85em;">MENSAJES</span><BR>
-                    <b><span>0</span></b> </div>
+                    <b><span id="mensajesBadge">0</span></b> </div>
 
                   <div class="col-4 text-white indigo-text">
                     <i class="fa fa-envelope fa-3x"></i>
@@ -243,7 +243,7 @@
       <div class="row wow fadeIn">
 
         <!--Grid column-->
-        <div class="col-md-8 mb-4">
+        <div class="col-md-6 sm-12 mb-4">
 
           <!--Card-->
           <div class="card">
@@ -255,20 +255,30 @@
 
           </div>
           <!--/.Card-->
+          <div id="citasContainer"></div>
           <div class="mb-5"></div>
         </div>
         <!--Grid column-->
 
         
         <!--Grid column-->
-        <div class="col-md-4 mb-4">
+        <div class="col-md-6 sm-12 mb-4">
 
           <!--Card-->
           <div class="card">
 
               <h5 class="card-header">
                   <b>Últimos mensajes</b> 
-
+                  <table id="tableMensajes" class="table responsive text-center" style="width: 100%;">
+                    <thead>
+                      <tr>
+                        <th>Avatar</th>
+                        <th>Emisor</th>
+                        <th> </th>
+                        <th>Fecha</th>
+                      </tr>
+                    </thead>
+                  </table>
               </h5>
 
           </div>
@@ -312,11 +322,138 @@ bottom: 0;position: fixed;width: 100%;
   <script src="https://cdn.datatables.net/colreorder/1.5.2/js/dataTables.colReorder.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
   <script src="../lib/helper.js"></script>
-  <script src="../lib/jquerysession.js"></script>
-  <script src="js/cerrar_session.js"></script>
   <script src="include/sidebar.js"></script>
-  <script src="js/push.js"></script>
-  <script src="js/index.js"></script>
+  <script src="js/cerrar_session.js"></script>
+
+  <script>
+
+    function listarCitas(){
+
+      $id_user = localStorage.getItem('id_user');
+      $zona_horaria = localStorage.getItem('zona_horaria');
+
+      $.ajax({
+        type: "POST",
+        url: "../ajax/socio/index/listarCitas.php",
+        data: {id_user:$id_user, zona_horaria:$zona_horaria},
+        dataType: "JSON",
+        success: function (data) {
+          var html = '',
+      el = document.getElementById("citasContainer");
+      $.each(data, function (key, val) {
+
+         html += `<div class="row">
+              <div class="col-md-12 sm-12 my-1">
+                <div class="card">
+                <div class="row">
+
+                  <div class="col-6 m-auto text-center">
+                    <img 
+                    src="`+val.avatar+`"
+                     class="img-fluid p-3" 
+                     style="max-height: 140px;"
+                     alt="">
+                  </div>
+                  <div class="col-6 my-auto">
+                    <b style="font-size: 1.3em;">`+val.nombre+`</b>
+                    <p>`+val.tipo+`</p>
+                    <p>`+val.estado+`</p>
+                  </div>
+                  <div class="col-12 text-center">
+                    <button onclick="editarProductoModal('`+val.button+`')" class="btn btn-indigo btn-sm">Editar</button>
+                    <button onclick="eliminarProducto('`+val.button+`')" class="btn btn-danger btn-sm">Eliminar</button>
+                  </div>
+                </div>
+              </div></div></div>`;
+
+      });
+
+      el.innerHTML = html;
+        }
+      });
+
+
+
+    }
+
+function rellenarBadges(){
+
+  $id_user = localStorage.getItem('id_user');
+
+  $.ajax({
+    type: "POST",
+    url: "../ajax/socio/index/rellenarBadges.php",
+    data: {id_user:$id_user},
+    dataType: "JSON",
+    success: function (res) {
+      $('#citasSolicitadasBadge').html(res.citas_solicitadas);
+      $('#citasConfirmadasBadge').html(res.citas_confirmadas);
+      $('#citasRechazadasBadge').html(res.citas_rechazadas);
+      $('#mensajesBadge').html(res.mensajes);
+    }
+  });
+
+}
+
+function startTable(){
+
+if ( ! $.fn.DataTable.isDataTable( '#tableMensajes' ) ) {
+  $id_user = localStorage.getItem('id_user');
+          //cargamos la tabla
+           table = $('#tableMensajes').DataTable({
+              ajax : '../ajax/socio/mensajes/listar_mensajes_socio.php?id_receptor='+$id_user+'?limit=5',
+              lengthChange: false,
+              "info": false,
+              "searching": false,
+              "ordering": false,
+              "paging": false,
+              oLanguage: {
+              "sUrl": "../json/traducciontabla.json"
+              }});
+}else{
+  //ajax reload
+
+  table.ajax.reload();
+ 
+} }
+
+  $(document).ready(function(){ 
+
+/* INCLUDES */
+
+$('#sidebar_aqui').html(sidebar);
+
+/* NAVBUTTON */
+
+$('#menuToggle').on('click',function(){
+
+$( "#sidebar" ).toggle("normal"); 
+
+
+});
+
+  startTable();
+   rellenarBadges();
+   listarCitas();
+
+  // Animations initialization
+  new WOW().init();
+
+/*    listarEmpresa();  */
+/* 
+
+    if($nombre != null && $nombre.length > 1 && $id_user != null && $id_user.length > 0 &&
+  $token != null && $token.length == 32){
+    location.replace('../index.html');
+  }else{
+    console.log('usuario no logeado');
+  }  */
+
+
+  });
+  
+  
+  </script>
 
 </body>
 

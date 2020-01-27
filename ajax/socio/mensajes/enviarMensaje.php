@@ -9,8 +9,8 @@ $mensaje = htmlentities($mensaje);
         
 $fecha = date('Y-m-d H:i:s');
 
-$insert = mysqli_query($mysqli,"INSERT INTO mensajes (id_emisor, id_receptor, mensaje, fecha)
-VALUES ('$id_emisor', '$id_receptor', '$mensaje', '$fecha') ;");
+$insert = mysqli_query($mysqli,"INSERT INTO mensajes (id_emisor, id_receptor, mensaje, fecha, leido)
+VALUES ('$id_emisor', '$id_receptor', '$mensaje', '$fecha', '1') ;");
 
 if($insert){
 

@@ -1,10 +1,10 @@
 <?php 
 
-$id_empresa = $_GET['id_empresa'];
+/* $id_empresa = $_GET['id_empresa'];
 
 if(!isset($id_empresa) OR $id_empresa == null OR $id_empresa == ''){
   header('Location: ver_empresas.html');
-}
+} */
 
 ?>
 <!DOCTYPE html>
@@ -164,30 +164,8 @@ if(!isset($id_empresa) OR $id_empresa == null OR $id_empresa == ''){
           <!--Card-->
           <div class="card">
 
-              <h4 class="card-header">
-                    Empresas disponibles
-
+              <h4 id="nombreEmpresa" class="card-header">
               </h4>
-
-              <div class="row wow fadeIn p-3">
-                <div class="col-lg-4 md-6 sm-12 text-center">
-                  <label for="pais">Filtrar por País</label>
-                  <select class="form-control" name="" id="">
-                    <option value="Todos">Todos</option>
-                    <option value="Argentina">Argentina</option>
-                  </select>
-                </div>
-                <div class="col-lg-8 md-6 sm-12 text-center d-inline-block mx-auto">
-
-                  <form style="align-items: center;" class="form-inline md-form form-sm mx-auto text-center">
-                    <i class="fas fa-search" aria-hidden="true"></i>
-                    <input class="form-control form-control-sm ml-3" style="width: 85%;" type="text" placeholder="Buscar Empresa"
-                      aria-label="Buscar Empresa" id="buscardorDeEmpresas">
-                  </form>
-                  
-                  </div>
-
-                </div>
 
               </div>
 
@@ -198,7 +176,7 @@ if(!isset($id_empresa) OR $id_empresa == null OR $id_empresa == ''){
 
     <div class="col-md-12 mb-4">
 
-            <div id="empresasContainer" class="row wow fadeIn my-3">
+            <div id="empresaContainer" class="row wow fadeIn my-3">
 
               <div style="display:none" class="loading"></div>
               
@@ -252,7 +230,6 @@ bottom: 0;position: fixed;width: 100%;
   <script src="https://cdn.datatables.net/colreorder/1.5.2/js/dataTables.colReorder.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
   <script src="../lib/helper.js"></script>
-  <script src="../lib/jquerysession.js"></script>
   <script src="js/cerrar_session.js"></script>
   <script src="include/sidebar.js"></script>
 
@@ -261,16 +238,18 @@ bottom: 0;position: fixed;width: 100%;
 
     function listarEmpresa(){
 
+      $id_empresa = <?= $_GET['id_empresa']; ?>;
+
       $.ajax({
         type: "POST",
-        url: "../ajax/socio/ver_empresas/listarEmpresas.php",
-        data: {id_user : localStorage.getItem('id_user')},
+        url: "../ajax/socio/ver_empresa/listarEmpresa.php",
+        data: {id_empresa = $id_empresa},
         dataType: "JSON ",beforeSend: function(){
           $('.loading').css('display','block');
         },
         success: function (data) {
           var html = '',
-      el = document.getElementById("empresasContainer");
+      el = document.getElementById("empresaContainer");
       $.each(data, function (key, val) {
 
         html += `
@@ -330,7 +309,7 @@ bottom: 0;position: fixed;width: 100%;
     // Animations initialization
     new WOW().init();
 
-    listarEmpresas();
+     listarEmpresa(); 
 
  /*    if($nombre != null && $nombre.length > 1 && $id_user != null && $id_user.length > 0 &&
     $token != null && $token.length == 32){

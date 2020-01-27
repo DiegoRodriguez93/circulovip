@@ -174,22 +174,12 @@
                     </thead>
                   </table>
                 </div>
-
-              </div>
-
-              
+              </div>              
           </div>        
-
-  
-
-
 
           <!--/.Card-->
           <div class="mb-5"></div>
-
         <!--Grid column-->
-
-        
       </div>
 
          <!--Grid column-->
@@ -450,8 +440,6 @@ bottom: 0;position: fixed;width: 100%;
   
   function startTable(){
 
-    
-
 if ( ! $.fn.DataTable.isDataTable( '#tableMensajes' ) ) {
   $id_user = localStorage.getItem('id_user');
           //cargamos la tabla
@@ -462,14 +450,13 @@ if ( ! $.fn.DataTable.isDataTable( '#tableMensajes' ) ) {
               "searching": false,
               "ordering": false,
               oLanguage: {
-                  "sUrl": "../json/traducciontabla.json"
+              "sUrl": "../json/traducciontabla.json"
               }});
 }else{
   //ajax reload
 
   table.ajax.reload();
  
-    
 }
 
 }

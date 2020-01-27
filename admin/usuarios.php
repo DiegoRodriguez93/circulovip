@@ -79,6 +79,7 @@
         <th>Email</th>
         <th>Contraseña</th>
         <th>Activo</th>
+        <th>Zona Horaria</th>
         <th>Fecha Vencimiento</th>
         <th>Eliminar</th>
             </tr>
@@ -101,6 +102,19 @@
 
           <label for="">Fencha vencimiento</label>
           <input type="date" class="form-control" name="fecha_vencimiento" id="fecha_vencimiento">
+
+          <label for="">Zona horaria</label>
+          <select class="form-control" id="zona_horaria">
+            <option value="2">GMT+2</option>
+            <option value="1">GMT+1 (ES)</option>
+            <option value="0">GMT</option>
+            <option value="-1">GMT-1</option>
+            <option value="-2">GMT-2</option>
+            <option value="-3">GMT-3 (AR UY CH)</option>
+            <option value="-4">GMT-4 (BO PY)</option>
+            <option value="-5">GMT-5 (CO EC P)</option>
+            <option value="-6">GMT-6 (MX)</option>
+          </select>
 
           <label for="">Contraseña</label>
           <input type="password" class="form-control" name="pass" id="pass">
