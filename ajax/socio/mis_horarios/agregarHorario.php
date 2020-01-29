@@ -22,18 +22,32 @@ if($viernes == '1')     {$id_dia .= '5'; }else{ $id_dia .= '';}
 if($sabado == '1')      {$id_dia .= '6'; }else{ $id_dia .= '';}
 if($domingo == '1')     {$id_dia .= '7'; }else{ $id_dia .= '';}
 
-$insert = mysqli_query($mysqli, "INSERT INTO horarios (id_dia, hora, id_user)
- VALUES ('$id_dia', '$hora' , '$id_user')");
+$hora2 = $hora . ':00';
 
- if($insert){
+$select = mysqli_query($mysqli,"SELECT hora, id_user FROM horarios WHERE id_user = '$id_user' AND hora = '$hora2' ");
 
-    $res = array('result'=>true,'message'=>'Se ha ingresado el horario correctamente');
+if(mysqli_num_rows($select) > 0){
 
- }else{
+   $res = array('result'=>false,'message'=>'Ese horario ya se encuentra ingresado');
 
-    $res = array('result'=>false,'message'=>'Ha ocurrido un error intenté más tarde');
+}else{
 
- }
+   $insert = mysqli_query($mysqli, "INSERT INTO horarios (id_dia, hora, id_user)
+   VALUES ('$id_dia', '$hora' , '$id_user')");
+  
+   if($insert){
+  
+      $res = array('result'=>true,'message'=>'Se ha ingresado el horario correctamente');
+  
+   }else{
+  
+      $res = array('result'=>false,'message'=>'Ha ocurrido un error intenté más tarde');
+  
+   }
+
+}
+
+
 
  echo json_encode($res);
  mysqli_close($mysqli);
