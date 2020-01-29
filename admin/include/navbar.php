@@ -11,6 +11,12 @@
                   <li id="usuarios" class="nav-item">
                     <a class="nav-link" href="usuarios.php">Usuarios</a>
                   </li>
+                  <li id="fecha_ronda" class="nav-item">
+                    <a class="nav-link" href="fecha_ronda.php">Fechas de ronda</a>
+                  </li>
+                  <li id="banners" class="nav-item">
+                    <a class="nav-link" href="banners.php">Banners </a>
+                  </li>
                 </ul>
                 <a href="../"><h3>
                 <span class="navbar-text text-primary">

@@ -14,7 +14,7 @@
             <div class="col-12">
 
               <?php include 'include/navbar.php'; ?>
-
+<!-- 
               <div class="d-inline"> 
                 <h4 class="d-inline">Total de citas:
                 <div class="d-inline" id="totalTransacciones">0</div></h4>   
@@ -26,7 +26,10 @@
                 <button class="btn btn-warning btn-lg ml-4" onclick="reset()">Reset</button>
               </div>
 
-
+   -->
+     <div class="text-center">
+     <h3>Listado de citas</h3>
+     </div> 
             <table id="TableCitas" class="display table" style="width: 100%">
         <thead>
             <tr>
@@ -55,94 +58,161 @@
 
 
 
-function logIn(){
-    Swal.mixin({
+function eliminarFecha($id){
 
-  input: 'password',
-  confirmButtonText: 'Ingresar &rarr;',
-  backdrop: false,
-  background: '#fff',
-}).queue([
-  {
-    title: 'Ingrese la contraseña de administrador'
-  }
-]).then((result) => {
-  if (result.value) {
-    const answers = JSON.stringify(result.value)
+Swal.fire({
+title: '¿Estas seguro que deseas eliminar la fecha?',
+text: "Decisión irreversible!",
+icon: 'warning',
+showCancelButton: true,
+confirmButtonColor: '#3085d6',
+cancelButtonColor: '#d33',
+confirmButtonText: 'Si!'
+}).then((result) => {
+if (result.value) {
 
-    if(result.value == 1980){
-        Swal.fire({
-      title: 'Bienvienido!',
-     icon: 'success',
-      confirmButtonText: 'Ok'
-    })
-
-    localStorage.setItem('admin','asdasd');
-
-    //cargamos la tabla
-    var table = $('#TableTransacciones').DataTable({
-        ajax : '../ajax/listar_transacciones_admin.php?startDate=&endDate=',   
-                  lengthChange: false,
-                  order: [0,'desc'],
-                  oLanguage: {
-                      "sUrl": "../json/traducciontabla.json"
-                  }
-
-                  
-    });
-     $.ajax({
-      method:"GET",
-      url: '../ajax/listar_transacciones_admin.php', 
-      dataType: "JSON",
-      success: function(res){
-        $('#totalTransacciones').html(res.data[0][6]);
-      }
-    }) 
+$.ajax({
+  url: "../ajax/admin/eliminar_fecha.php",
+  method: "POST",
+  dataType: "JSON",
+  data:{id:$id},
+  beforeSend: function(){ 
+  $('.loading').css('display','block');},
+  success: function(res){
+    if(res.result){
+      startTable();
+      $('.loading').css('display','none');
+      Swal.fire(
+        'Eliminado!',
+        'La fecha ha sido eliminado correctamente.',
+        'success'
+      )
     }else{
-        alert('Contraseña incorrecta');
-        logIn();
+
+      alert(res.message);
     }
- 
+  },complete: function () {
+    $('.loading').css('display','none');
   }
+})
+
+
+
+}
+})
+
+
+}
+
+function ingresarFecha(){
+
+$fecha = $('#fecha').val();
+
+if($fecha == ''){
+  alert('Fencha de vencimiento');
+  $('#fecha').addClass('is-invalid');
+  return false
+}else{
+  $('#fecha').addClass('is-valid');
+}
+
+$.ajax({
+  url: "../ajax/admin/ingresar_fecha.php",
+  method: "POST",
+  data: {fecha: $fecha},
+  dataType: "JSON",
+  beforeSend: function(){ 
+  $('.loading').css('display','block');},
+  success: function(res){
+    if(res.result){
+      $('.loading').css('display','none');
+      alert(res.message);
+      $("#fecha").val('');
+      $("#fecha").attr('class', 'form-control');
+      startTable();
+    }else{
+      alert(res.message);
+    }
+  },complete: function () { 
+    $('.loading').css('display','none');
+   }
+})
+
+}
+
+function startTable(){
+
+if ( ! $.fn.DataTable.isDataTable( '#TableCitas' ) ) {
+          //cargamos la tabla
+           table = $('#TableCitas').DataTable({
+              ajax : '../ajax/admin/listar_citas.php',   
+              lengthChange: false,
+              order: [0,'desc'],
+              oLanguage: {
+                  "sUrl": "../json/traducciontabla.json"
+              }
+});
+}else{
+  //ajax reload
+
+  table.ajax.reload();
+    
+}
+
+}
+
+function logIn(){
+Swal.mixin({
+
+input: 'password',
+confirmButtonText: 'Ingresar &rarr;',
+backdrop: false,
+background: '#fff',
+}).queue([
+{
+title: 'Ingrese la contraseña de administrador'
+}
+]).then((result) => {
+if (result.value) {
+const answers = JSON.stringify(result.value)
+
+if(result.value == 1980){
+    Swal.fire({
+  title: 'Bienvienido!',
+  icon: 'success',
+  confirmButtonText: 'Ok'
+})
+
+localStorage.setItem('admin','asdasd');
+
+startTable();
+
+}else{
+    alert('Contraseña incorrecta');
+    logIn();
+}
+
+}
 })
 }
 
 $(document).ready( function () {
 
-  $('#inicio').addClass('active');
+$('#inicio').addClass('active');
 
-  let admin = localStorage.getItem('admin');
-  let startDate = localStorage.getItem('startDate');
-  let endDate = localStorage.getItem('endDate');
+let admin = localStorage.getItem('admin');
 
-  $('#startDate').val(startDate);
-  $('#endDate').val(endDate);
+if(admin == 'asdasd'){
+
+startTable();
+
+}else{
+logIn(); // disparamos el logIn
+}
 
 
-  if(admin == 'asdasd'){
-/*         //cargamos la tabla
-        var table =  $('#TableTransacciones').DataTable({
-        ajax : '../ajax/listar_transacciones_admin.php?startDate='+startDate+'&endDate='+endDate,   
-                  lengthChange: false,
-                  order: [0,'desc'],
-                  oLanguage: {
-                      "sUrl": "../json/traducciontabla.json"
-                  }
-    });
 
-     $.ajax({
-      method:"GET",
-      url: '../ajax/listar_transacciones_admin.php?startDate='+startDate+'&endDate='+endDate, 
-      dataType: "JSON",
-      success: function(res){
-        $('#totalTransacciones').html(res.data[0][6]);
-      }
-    }) */
 
-  }else{
-    logIn(); // disparamos el logIn
-  }
- 
 } );
 </script>
 </body>

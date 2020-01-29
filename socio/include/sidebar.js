@@ -37,6 +37,11 @@
             <i class="fas fa-envelope mr-3"></i>Mensajes
           </a>
 
+          <div class="list-group list-group-flush">
+          <a href="sala_de_espera.html" id="salaDeEspera" class="list-group-item list-group-item-action waves-effect">
+            <i class="fas fa-users mr-3"></i>Sala de espera
+          </a>
+
           <!--
            <div class="list-group list-group-flush">
           <a href="webinar.html" id="webinarSidebar" class="list-group-item list-group-item-action waves-effect">
