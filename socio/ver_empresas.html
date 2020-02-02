@@ -247,6 +247,12 @@ bottom: 0;position: fixed;width: 100%;
 
   <script>
 
+    function verEmpresa($id_empresa){
+
+      Location.replace('ver_empresa.php?id_empresa='+$id_empresa);
+
+    }
+
     function enviarMensajeDeContacto(){
 
       $id_empresa = $('#idEmpresaContactModal').val();
@@ -258,7 +264,25 @@ bottom: 0;position: fixed;width: 100%;
         data: {id_empresa: $id_empresa, mensaje:$mensaje, id_user: localStorage.getItem('id_user')},
         dataType: "JSON",
         success: function (res) {
-          $('#contactModal').modal('hide');
+          if(res.result){
+            $('#contactModal').modal('hide');
+          $('#idEmpresaContactModal').val('');
+          $('#mensajeContactModal').val('');
+          Swal.fire(
+            'Correcto!',
+            'Mensaje enviado correctamente!',
+            'success'
+          );
+          }else{
+
+            Swal.fire(
+            'Error!',
+            res.message,
+            'error'
+          ); 
+
+          }
+
         }
       });
 
@@ -331,7 +355,7 @@ bottom: 0;position: fixed;width: 100%;
                   </div>
                   <div class="col-12 text-center">
                     <button onclick="contactModal('`+val.id_empresa+`','`+val.nombre+`','`+val.pais+`')" class="btn btn-indigo btn-sm">Contactar</button>
-                    <button onclick="eliminarProducto('`+val.id_empresa+`')" class="btn btn-danger btn-sm">Ver más</button>
+                    <a href="ver_empresa.php?id_empresa=`+val.id_empresa+`"><button class="btn btn-deep-purple btn-sm">Ver más</button></a>
                   </div>
                 </div>
               </div></div>

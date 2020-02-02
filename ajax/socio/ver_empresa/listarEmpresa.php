@@ -26,7 +26,27 @@ if(mysqli_num_rows($select) > 0){
             $acerca_de_mi = $row2['acerca_de_mi'];
             $url_avatar   = $row2['url_avatar'];
 
-            $res = array('nombre_empresa'=>$nombre_empresa,
+            if($url_image == null){
+                $url_image = '../images/greyenterprice.jpg';
+            }
+
+            if($url_avatar == null){
+                $url_avatar = '../images/profile.jpg';
+            }
+
+            if($descripcion == null){
+                $descripcion = '';
+            }
+
+            if($acerca_de_mi == null){
+                $acerca_de_mi = '';
+            }
+
+            if($cargo == null){
+                $cargo = '';
+            }
+
+            $res[] = array('nombre_empresa'=>$nombre_empresa,
             'pais'=>$pais,
             'descripcion'=>$descripcion,
             'url_image'=>$url_image,
