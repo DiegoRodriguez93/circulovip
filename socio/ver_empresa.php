@@ -246,6 +246,21 @@ bottom: 0;position: fixed;width: 100%;
 
 
   <script>
+
+    function solicitarRonda($id_user){
+
+      $.ajax({
+        type: "POST",
+        url: "../ajax/socio/ver_empresa/rellenarSelectRondas.php",
+        data: {id_user: $id_user},
+        dataType: "JSON",
+        success: function (res) {
+          
+        }
+      });
+
+    }
+
     function abrirModalMensaje($id_user_receptor, $nombre, $pais){
 
       $('#id_user_receptor').val($id_user_receptor);
