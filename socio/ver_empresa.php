@@ -62,42 +62,9 @@ if(!isset($id_empresa) OR $id_empresa == null OR $id_empresa == ''){
 </div>
 <!-- MODAL CONTACT-->
 
-<!-- MODAL CONFIRM TRANSACCIÓN-->
-<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-  aria-hidden="true" data-backdrop="static" data-keyboard="false">
-
-  <!-- Change class .modal-sm to change the size of the modal -->
-  <div class="modal-dialog  modal-top" role="document">
-
-
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title w-100" id="modalTitle"></h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <input type="hidden" id="hidden_id_cupon">
-        <h3>Datos del comercio:</h3>
-        <h4 id="commerce_name"></h4>
-        <h4 id="commerce_address"></h4>
-        <h4 id="commerce_phone"></h4>
-        <hr>
-        <h4 id="fecha_vencimiento"></h4>
-        <h4 id="descuento"></h4>
-      </div>
-      <div class="modal-footer text-center mx-auto">
-        <button type="button" id="confirmarTransaccionBtn" class="btn btn-indigo">Confirmar</button>
-        <button type="button" id="cancelarTransaccionBtn" class="btn btn-blue-grey" data-dismiss="modal">Cancelar</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- MODAL CONFIRM TRANSACCIÓN-->
 
 <!-- MODAL CONFIRM DESCUENTOS-->
-<div class="modal fade" id="mdlVencimiento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div class="modal fade" id="rondaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true" data-backdrop="static" data-keyboard="false">
 
   <!-- Change class .modal-sm to change the size of the modal -->
@@ -106,19 +73,25 @@ if(!isset($id_empresa) OR $id_empresa == null OR $id_empresa == ''){
 
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title w-100">Vencimientos del saldo</h4>
+        <h4 class="modal-title w-100">Solicitar Ronda</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <div class="row">
-          <div class="col-6"><b>Fecha</b></div>
-          <div class="col-6"><b>Monto</b></div>
+        <div class="row p-2">
+
+        <input type="hidden" id="idUserHidden">
+
+        <select class="form-control" name="diasRondasSelect" id="diasRondasSelect"></select>
+
+        <select class="form-control" name="horasRodasSelect" id="horasRodasSelect"></select>
+
         </div>
-          <div id="vencimientos"></div>
+
       </div>
       <div class="modal-footer text-center">
+      <button type="button" onclick="" class="btn btn-indigo">Solicitar Ronda</button>
         <button type="button" class="btn btn-blue-grey" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
@@ -250,14 +223,26 @@ bottom: 0;position: fixed;width: 100%;
     function solicitarRonda($id_user){
 
       $.ajax({
-        type: "POST",
+        type: "GET",
         url: "../ajax/socio/ver_empresa/rellenarSelectRondas.php",
-        data: {id_user: $id_user},
         dataType: "JSON",
-        success: function (res) {
-          
+        success: function (data) {
+          var html = '';
+
+          el = document.getElementById("diasRondasSelect");
+          $.each(data, function (key, val) {
+
+        html += `<option value="`+val.dia+`" >`+val.fecha+`</option>`;
+
+      });
+
+      el.innerHTML = html;
         }
       });
+
+      $('#idUserHidden').val($id_user);
+
+      $('#rondaModal').modal('show');
 
     }
 
@@ -379,6 +364,40 @@ bottom: 0;position: fixed;width: 100%;
     new WOW().init();
 
      listarEmpresa(); 
+
+     $('#horasRodasSelect').addClass('disabled');
+
+     $('#diasRondasSelect').change(function () { 
+
+       $.ajax({
+         type: "POST",
+         url: "../ajax/usuario/ver_empresa/rellenarHorasSelect.php",
+         data: {id_emisor: localStorage.getItem('id_user'),
+         id_receptor: $('#idUserHidden').val(),
+         zona_horaria_emisor:localStorage.getItem('zona_horaria')
+         },
+         dataType: "JSON",
+         success: function (data) {
+           
+          $.each(data, function (key, val) {
+
+            html = '';
+           el = document.getElementById("horasRodasSelect");
+           html = `<option></option>`;
+          
+            el.innerHTML = html;
+            
+          });
+
+          }
+
+         
+       });
+
+      $('#horasRodasSelect').removeClass('disabled');
+
+
+      });
 
  /*    if($nombre != null && $nombre.length > 1 && $id_user != null && $id_user.length > 0 &&
     $token != null && $token.length == 32){
