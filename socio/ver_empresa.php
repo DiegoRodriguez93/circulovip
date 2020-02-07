@@ -369,12 +369,15 @@ bottom: 0;position: fixed;width: 100%;
 
      $('#diasRondasSelect').change(function () { 
 
+      $diaSeleccionado = $("#diasRondasSelect option:selected" ).val();
+
        $.ajax({
          type: "POST",
-         url: "../ajax/usuario/ver_empresa/rellenarHorasSelect.php",
+         url: "../ajax/socio/ver_empresa/rellenarHorasSelect.php",
          data: {id_emisor: localStorage.getItem('id_user'),
          id_receptor: $('#idUserHidden').val(),
-         zona_horaria_emisor:localStorage.getItem('zona_horaria')
+         zona_horaria_emisor:localStorage.getItem('zona_horaria'),
+         dia_seleccionado : $diaSeleccionado
          },
          dataType: "JSON",
          success: function (data) {
