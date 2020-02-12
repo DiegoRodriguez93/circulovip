@@ -64,11 +64,12 @@ if($row2['id'] == null){
         'zona_horaria_mia'=>'GMT'.$zona_horaria_emisor
     );
 
+    
 }
 }
 
-mysqli_close($mysqli);
 echo json_encode($res);
+mysqli_close($mysqli);
 
 
 ?>

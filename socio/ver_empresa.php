@@ -82,16 +82,16 @@ if(!isset($id_empresa) OR $id_empresa == null OR $id_empresa == ''){
         <div class="row p-2">
 
         <input type="hidden" id="idUserHidden">
-
+        <label for="diasRondasSelect">Días de ronda:</label>
         <select class="form-control" name="diasRondasSelect" id="diasRondasSelect"></select>
-
+        <label for="diasRondasSelect">Horario disponible:</label>
         <select class="form-control" name="horasRodasSelect" id="horasRodasSelect"></select>
 
         </div>
 
       </div>
       <div class="modal-footer text-center">
-      <button type="button" onclick="" class="btn btn-indigo">Solicitar Ronda</button>
+      <button type="button" onclick="insertarRonda()" class="btn btn-indigo">Solicitar Ronda</button>
         <button type="button" class="btn btn-blue-grey" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
@@ -220,6 +220,44 @@ bottom: 0;position: fixed;width: 100%;
 
   <script>
 
+      function insertarRonda(){
+        $id_emisor = localStorage.getItem('id_user');
+        $id_receptor = $('#idUserHidden').val();
+        $dia = $("#diasRondasSelect option:selected" ).val();
+        $hora = $("#horasRodasSelect option:selected" ).val();
+
+        $.ajax({
+        type: "POST",
+        data: {
+          id_emisor : $id_emisor,
+          id_receptor: $id_receptor,
+          dia: $dia,
+          hora: $hora
+        },
+        url: "../ajax/socio/ver_empresa/insertarCita.php",
+        dataType: "JSON",
+        success: function (res) {
+          if(res.result){
+            Swal.fire(
+            'Correcto!',
+            res.message,
+            'success'
+          );
+          }else{
+
+            Swal.fire(
+            'Error!',
+            res.message,
+            'error'
+          );
+
+          }
+
+        } });
+
+
+      }
+
     function solicitarRonda($id_user){
 
       $.ajax({
@@ -237,10 +275,44 @@ bottom: 0;position: fixed;width: 100%;
       });
 
       el.innerHTML = html;
+
+      /* DESPUÈS QUE CARGA EL DÌA YA RELLENA CON LOS HORARIOS DEL DÍA MÁS ARRIBA */
+
+      $diaSeleccionado = $("#diasRondasSelect option:selected" ).val();
+
+$.ajax({
+  type: "POST",
+  url: "../ajax/socio/ver_empresa/rellenarHorasSelect.php",
+  data: {id_emisor: localStorage.getItem('id_user'),
+  id_receptor: $('#idUserHidden').val(),
+  zona_horaria_emisor:localStorage.getItem('zona_horaria'),
+  dia_seleccionado : $diaSeleccionado
+  },
+  dataType: "JSON",
+  success: function (data) {
+    var html = '';
+    
+  $.each(data, function (key, val) {
+
+    el = document.getElementById("horasRodasSelect");
+    html += `<option val="`+val.hora+`">`+val.hora+` (`+val.zona_horaria+`) ⇒ Mi horario `+val.hora_mia+` (`+val.zona_horaria_mia+`)</option>`;
+  
+    el.innerHTML = html;
+    
+  });
+
+  }
+
+});
+
+$('#horasRodasSelect').removeClass('disabled');
+
         }
       });
 
       $('#idUserHidden').val($id_user);
+
+
 
       $('#rondaModal').modal('show');
 
@@ -381,20 +453,19 @@ bottom: 0;position: fixed;width: 100%;
          },
          dataType: "JSON",
          success: function (data) {
+            var html = '';
            
           $.each(data, function (key, val) {
 
-            html = '';
            el = document.getElementById("horasRodasSelect");
-           html = `<option></option>`;
+           html += `<option val="`+val.hora+`">`+val.hora+` (`+val.zona_horaria+`) ⇒ Mi horario `+val.hora_mia+` (`+val.zona_horaria_mia+`)</option>`;
           
             el.innerHTML = html;
             
           });
 
           }
-
-         
+        
        });
 
       $('#horasRodasSelect').removeClass('disabled');
