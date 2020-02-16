@@ -181,6 +181,13 @@ $(document).ready(function(){
 
 /*   if(localStorage.getItem('a')) */
 
+$(document).keypress(function(event){
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    if(keycode == '13'){
+        logIn();
+    }
+});
+
 });
 
 </script>

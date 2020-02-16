@@ -8,10 +8,10 @@ $select_solicitadas = mysqli_query($mysqli, "SELECT COUNT(id_cita) as citas_soli
 FROM citas WHERE id_emisor = '$id_user' ");
 
 $select_confirmadas = mysqli_query($mysqli, "SELECT COUNT(id_cita) AS citas_confirmadas 
-FROM citas WHERE id_emisor = '$id_user' OR id_receptor = '$id_user' AND estado = 2 ");
+FROM citas WHERE (id_emisor = '$id_user' OR id_receptor = '$id_user') AND estado = 1 ");
 
 $select_rechazadas = mysqli_query($mysqli, "SELECT COUNT(id_cita) AS citas_rechazadas
-FROM citas WHERE id_emisor = '$id_user' OR id_receptor = '$id_user' AND estado = 0 ");
+FROM citas WHERE (id_emisor = '$id_user' OR id_receptor = '$id_user') AND estado = 0 ");
 
 $select_mensajes = mysqli_query($mysqli,"SELECT COUNT(id) AS mensajes FROM mensajes
 WHERE id_emisor = '$id_user' OR id_receptor = '$id_user' ");

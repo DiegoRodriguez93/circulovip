@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta http-equiv="Cache-Control" content="no-cache" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Circulo Vip</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/colreorder/1.5.2/css/colReorder.dataTables.min.css">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/mdb.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/loader.css">
+  <link href="../css/estilosmenu.css" rel="stylesheet">
+  <link rel="stylesheet" href="../lib/countdown/countdown.css">
+  </head>
+ 
+  <!-- Modal SUBIR PRODUCTO START -->
+<div class="modal fade" id="agregarProducto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document" data-backdrop="static" data-keyboard="false">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Subir nuevo producto</h5>
+      </div>
+      <div class="modal-body">
+        <label for="nombreProducto">Nombre</label>
+        <input type="text" class="form-control" id="nombreProducto">
+        <label for="descripcionProducto">Descripción</label>
+        <textarea id="descripcionProducto" class="form-control"></textarea>
+        <input type="file" class="my-2" id="imagenProducto">
+      </div>
+      <div class="modal-footer"><div class="mx-auto">
+        <button type="button" id="subirProductoBtn" onclick="agregarProducto()" class="btn btn-deep-purple">Subir producto</button>
+        <button type="button" class="btn btn-blue-grey" data-dismiss="modal">Cancelar</button>
+      </div>
+      </div>
+    </div>
+  </div>
+</div> 
+<!-- Modal SUBIR PRODUCTO END -->
+
+  <!-- Modal editar PRODUCTO START -->
+  <div class="modal fade" id="editarProducto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" data-backdrop="static" data-keyboard="false">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Editar producto</h5>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" class="form-control" id="idProductoEditar">
+          <label for="nombreProductoEditar">Nombre</label>
+          <input type="text" class="form-control" id="nombreProductoEditar">
+          <label for="descripcionProductoEditar">Descripción</label>
+          <textarea id="descripcionProductoEditar" class="form-control"></textarea>
+          <input type="file" class="my-2" id="imagenProducto">
+          <!-- Default switch -->
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="imagenOff">
+            <label class="custom-control-label" for="imagenOff">Dejar producto sin imagen</label>
+          </div>
+        </div>
+        <div class="modal-footer"><div class="mx-auto">
+          <button type="button" id="editarProductoBtn" onclick="editarProducto()" class="btn btn-deep-purple">Editar producto</button>
+          <button type="button" class="btn btn-blue-grey" data-dismiss="modal">Cancelar</button>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div> 
+  <!-- Modal editar PRODUCTO END -->
+  
+
+
+
+
+<body class="grey lighten-3">
+    <div style="display:none" class="loading"></div>
+  <!--Main Navigation-->
+  <header>
+
+    <!-- Navbar -->
+
+      <div class="container-fluid">
+
+        <!-- Brand -->
+
+
+        <div id="menuToggle" >
+
+          <input type="checkbox">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+      </div>
+ 
+    <!-- Navbar -->
+
+    <!-- SIDEBAR AQUI -->
+
+<div id="sidebar_aqui"></div>
+
+
+  </header>
+  <!--Main Navigation-->
+
+  <div style="background-image: url('../images/back1.jpg');position:fixed;height: 250px;width: 100%;display: none;"></div>
+  <!--Main layout-->
+  <main class="pt-3 mx-lg-5">
+    <div class="container-fluid mt-5" style="min-height: 480px">
+
+    
+      <div class="row wow fadeIn">
+
+        <!--Grid column-->
+        <div class="col-md-12 mb-4">
+
+          <!--Card-->
+          <div class="card">
+
+              <h4 class="card-header">
+                    Próxima ronda confirmada
+              </h4>
+
+              <div class="row wow fadeIn">
+                <div class="col-lg-4"></div>
+                <div class="col-lg-4 md-6 sm-12 text-center">
+                  <button onclick="entrar_a_la_sala()" class="btn btn-success">
+                    <i class="fas fa-sign-in-alt fa-2x"></i>  <h5  class="pt-2">Entrar a la sala</h5 t>
+                    </button>
+                </div>
+                <div class="col-lg-4"></div>
+              </div>
+
+              
+          </div>        
+
+
+            <!-- START CUENTA REGRESIVA HERE -->
+
+            <div id="row" class="row wow fadeIn my-3"> 
+              <div class="col-12 my-1">
+                <div class="card text-center"> 
+                  <h3 class="mt-3">
+                    Cuenta regresiva para proxima cita
+                  </h3>
+                  <ul id="example">
+                    <li><span class="days">00</span><p class="days_text">Días</p></li>
+                    <li class="seperator">:</li>
+                    <li><span class="hours">00</span><p class="hours_text">Horas</p></li>
+                    <li class="seperator">:</li>
+                    <li><span class="minutes">00</span><p class="minutes_text">Minutos</p></li>
+                    <li class="seperator">:</li>
+                    <li><span class="seconds">00</span><p class="seconds_text">Segundos</p></li>
+                  </ul>
+
+                </div></div>
+    
+        </div>  <!-- END CUENTA REGRESIVA HERE -->
+
+                    <!-- START SPONSOR 1 HERE -->
+            
+                    <div id="row" class="row wow fadeIn my-3"> 
+                      <div class="col-12 my-1">
+                        <div class="card text-center"> 
+                          <h3>
+                            SPONSOR 1
+                          </h3>
+        
+                        </div></div>
+            
+                </div>  <!-- END SPONSOR 1 HERE -->
+        
+                
+                    <!-- START SPONSOR 2 HERE -->
+            
+                    <div id="row" class="row wow fadeIn my-3"> 
+                      <div class="col-12 my-1">
+                        <div class="card text-center"> 
+                          <h3>
+                            SPONSOR 2
+                          </h3>
+        
+                        </div></div>
+            
+                </div>  <!-- END SPONSOR 2 HERE -->
+        
+
+      
+
+
+
+          <!--/.Card-->
+          <div class="mb-5"></div>
+
+        <!--Grid column-->
+
+        
+      </div>
+      </div>
+      <!--Grid row-->
+
+    </div>
+  </main>
+  <!--Main layout-->
+
+  <!--Footer-->
+  <footer class="page-footer text-center font-small deep-purple darken-1 mt-4 wow fadeIn" style="
+bottom: 0;position: fixed;width: 100%;
+">
+
+    <!--Copyright-->
+    <div class="footer-copyright py-3">
+      © 2020 Copyright
+      <a href="https://circulovip.com" target="_blank"> Circulo Vip Empresarial </a>
+    </div>
+    <!--/.Copyright-->
+
+  </footer>
+  <!--/.Footer-->
+
+  <div id="modal_aqui"></div>
+
+  <!-- SCRIPTS -->
+  <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+  <script type="text/javascript" src="js/popper.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/mdb.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+  <script src="https://cdn.datatables.net/colreorder/1.5.2/js/dataTables.colReorder.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+  <script src="../lib/helper.js"></script>
+  <script src="../lib/jquerysession.js"></script>
+  <script src="js/cerrar_session.js"></script>
+  <script src="include/sidebar.js"></script>
+  <script src="../lib/countdown/countdown.min.js"></script>
+  <script>
+
+    function editarProducto(){
+
+      $nombre       = $('#nombreProductoEditar').val();
+      $descripcion  = $('#descripcionProductoEditar').val();
+      $imagen       = $('#imagenProductoEditar').val();
+
+    }
+
+    function editarProductoModal($id_producto){
+
+      /* RELLENAMOS EL MODAL */
+
+      $.ajax({
+        type: "GET",
+        url: "../ajax/socio/mis_productos/rellenarProductoAEditar.php?id_producto="+$id_producto,
+        dataType: "JSON",
+        beforeSend: function(){
+          $('.loading').css('display','block');
+        },
+        success: function (res) {
+          $('#idProductoEditar').val(res.id);
+          $('#nombreProductoEditar').val(res.nombre);
+          $('#descripcionProductoEditar').val(res.descripcion);
+          $('#editarProducto').modal('show');
+        },complete: function(){
+          $('.loading').css('display','none');
+        }
+      });
+/* 
+      $nombre = $('#nombreProductoEditar').val();
+      $descripcion = $('#descripcionProductoEditar').val();
+      $imagen = $('#imagenProductoEditar').val();
+ */
+
+    }
+
+    function eliminarProducto($id_producto) {
+      const swalWithBootstrapButtons = Swal.mixin({
+  customClass: {
+    confirmButton: 'btn btn-success',
+    cancelButton: 'btn btn-danger'
+  },
+  buttonsStyling: false
+})
+
+swalWithBootstrapButtons.fire({
+  title: '¿Estas seguro?',
+  text: "Se va a eliminar el producto!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonText: 'Si, eliminar!',
+  cancelButtonText: 'No, cancelar!'
+}).then((result) => {
+  if (result.value) {
+
+    $.ajax({
+      type: "POST",
+      url: "../ajax/socio/mis_productos/eliminarProducto.php",
+      data: {id_producto: $id_producto},
+      dataType: "JSON",        
+      beforeSend: function () {
+          $('.loading').css('display','block');
+        },
+      success: function (res) {
+        if(res.result){
+          swalWithBootstrapButtons.fire(
+          'Eliminado!',
+          'El producto ha sido eliminado correctamente',
+          'success'
+        )
+          rellenarProductos(0);
+
+        }else{
+          swalWithBootstrapButtons.fire(
+            'Ha ocurrido un error',
+            res.message,
+            'error'
+          )
+        }
+      },complete: function () {
+          $('.loading').css('display','none');
+        }
+    });
+
+
+  }else{
+    swalWithBootstrapButtons.fire(
+      'Cancelado',
+      'Acción cancelada',
+      'error'
+    )
+  }
+})
+    }
+
+    function agregarProducto(){
+
+      $nombre = $('#nombreProducto').val();
+      $descripcion = $('#descripcionProducto').val();
+      $imagen = $('#imagenProducto').val();
+
+      if($nombre.length < 1){
+        alert('El nombre no debe estar vacio');
+        $('#nombreProducto').addClass('is-invalid');
+        return false;
+      }else{
+
+        $('#nombreProducto').removeClass('is-invalid');
+
+      }
+
+      if($descripcion.length < 1){
+        alert('La descripción del producto no debe estar vacia');
+        $('#descripcionProducto').addClass('is-invalid');
+        return false;
+      }else{
+
+        $('#descripcionProducto').removeClass('is-invalid');
+
+      }
+
+      var formData = new FormData();
+    formData.append('id_user', localStorage.getItem('id_user'));
+    formData.append('nombreProducto', $nombre);
+    formData.append('descripcionProducto', $descripcion);
+    formData.append('imagenProducto', $('#imagenProducto')[0].files[0]); 
+
+      
+    $.ajax({
+    url: "../ajax/socio/mis_productos/cargarProducto.php",
+    type: "POST",
+    data : formData, 
+    processData: false,
+    contentType: false,
+    beforeSend: function () { 
+      $('.loading').css('display','block');
+      $('#subirProductoBtn').addClass('disabled');
+     },
+    success: function(res){
+
+       var response = JSON.parse(res);
+
+        if(response.result){
+            alert(response.message);
+            rellenarProductos(1);
+            $('#agregarProducto').modal('hide');
+            $nombre = $('#nombreProducto').val('');
+            $descripcion = $('#descripcionProducto').val('');
+            $imagen = $('#imagenProducto').val('');
+        }else{
+            alert(response.message);
+        }
+
+    },complete: function () {
+      $('.loading').css('display','none');
+      $('#subirProductoBtn').removeClass('disabled');
+    },
+    error: function(xhr, ajaxOptions, thrownError) {
+       console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+    }
+});
+
+    }
+
+    function rellenarProductos($animation){
+
+      $id_user = localStorage.getItem('id_user');
+
+      $.ajax({
+        type: "GET",
+        url: "../ajax/socio/mis_productos/rellenarProductos.php?id_user="+$id_user,
+        dataType: "JSON",
+        beforeSend: function () {
+          /* $('.loading').css('display','block'); */
+          if($animation == 1){
+            var htmll = `
+              <div class="col-md-4 sm-12 my-1">
+                <div class="card">
+                <div class="row">
+
+                  <div class="col-12 my-5 text-center">
+                  <h5>Cargando....</h5>
+                  </div>
+          
+                </div>
+              </div></div>`;
+              $(htmll).appendTo( "#row" );
+          }else{
+            $('.loading').css('display','block');
+          }
+          
+        },
+        success: function (data) {
+          var html = '',
+      el = document.getElementById("row");
+      $.each(data, function (key, val) {
+
+         html += `
+              <div class="col-md-4 sm-12 my-1">
+                <div class="card">
+                <div class="row">
+
+                  <div class="col-6 m-auto text-center">
+                    <img 
+                    src="`+val.img_url+`"
+                     class="img-fluid p-3" 
+                     style="max-height: 140px;"
+                     alt="">
+                  </div>
+                  <div class="col-6 my-auto">
+                    <b style="font-size: 1.3em;">`+val.nombre+`</b>
+                    <p>`+val.descripcion+`</p>
+                  </div>
+                  <div class="col-12 text-center">
+                    <button onclick="editarProductoModal('`+val.id_producto+`')" class="btn btn-indigo btn-sm">Editar</button>
+                    <button onclick="eliminarProducto('`+val.id_producto+`')" class="btn btn-danger btn-sm">Eliminar</button>
+                  </div>
+                </div>
+              </div></div>`;
+
+      });
+
+      el.innerHTML = html;
+        },complete: function () {
+          $('.loading').css('display','none');
+        }
+
+      });
+
+    }
+  
+  $(document).ready(function(){
+
+  /* INCLUDES */
+
+  $('#sidebar_aqui').html(sidebar);
+
+  /* NAVBUTTON */
+
+  $('#menuToggle').on('click',function(){
+
+  $( "#sidebar" ).toggle("normal"); 
+
+
+  } );
+
+    new WOW().init();
+
+  /* COMPROBACIÓN DE LA IMAGEN DEL PODUCTO */
+
+  $("#imagenProducto").change(function() {
+    var file = this.files[0];
+    var imagefile = file.type;
+    var match= ["image/jpeg","image/png","image/jpg","image/webp","image/gif"];
+
+    if(!((imagefile==match[0]) || (imagefile==match[1]) || (imagefile==match[2]) || (imagefile==match[3]) || (imagefile==match[4]) )){
+        alert('Por favor seleccione un formato de imagen válido (JPEG/JPG/PNG/GIF/WEBP).');
+        $("#imagenProducto").val('');
+        return false;
+    }
+
+    if(this.files[0].size > 614400){
+        alert("El archivo es demasiado grande!");
+        $("#imagenProducto").val('');
+        return false;
+     };
+
+     
+    if($("#imagenProducto").val() == ''){
+      alert("El archivo es esta vacio!");
+        return false;
+    }  
+    
+    });
+
+/*     rellenarProductos(0); */
+
+    /* DETECTAR EL CAMBIO DEL CHECKER DE EDITAR PRODUCTO */
+
+    $('#imagenOff').on('click',function(){
+    if($(this).prop("checked") == true){
+    $('#imagenProducto').addClass('disabled');
+    }});
+    
+    /* CUENTA REGRESIVA TEST */
+
+    
+		var now = new Date();
+		var day = now.getDate() + 2 ;
+		var month = now.getMonth() + 1;
+		var year = now.getFullYear();
+
+		var nextyear = month + '/' + day + '/' + year + ' 07:07:07';
+
+		$('#example').countdown({
+			date: nextyear, // TODO Date format: 07/27/2017 17:00:00
+			offset: +2 // TODO Your Timezone Offset
+		}, function () {
+			alert('Done!');
+		});
+
+  });
+
+  </script>
+
+</body>
+
+</html>

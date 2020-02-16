@@ -75,8 +75,8 @@
 </div>
 <!-- MODAL CONFIRM TRANSACCIÓN-->
 
-<!-- MODAL CONFIRM DESCUENTOS-->
-<div class="modal fade" id="mdlVencimiento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<!-- MODAL CONTACT-->
+<div class="modal fade" id="contactModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true" data-backdrop="static" data-keyboard="false">
 
   <!-- Change class .modal-sm to change the size of the modal -->
@@ -85,25 +85,28 @@
 
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title w-100">Vencimientos del saldo</h4>
+        <h4 class="modal-title w-100" id="contactModalTitle">Enviar mensaje</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <div class="row">
-          <div class="col-6"><b>Fecha</b></div>
-          <div class="col-6"><b>Monto</b></div>
-        </div>
-          <div id="vencimientos"></div>
-      </div>
-      <div class="modal-footer text-center">
-        <button type="button" class="btn btn-blue-grey" data-dismiss="modal">Cerrar</button>
+
+        <input type="hidden" id="id_user_receptor" >
+
+        <label for="mensajeContactModal">Mensaje</label>
+        <textarea id="mensajeContactModal" maxlength="250" class="form-control"></textarea>
+    
+
+      <div class="modal-footer text-center mx-auto">
+        <button type="button" id="enviarMensajeBtn" onclick="enviarMensaje()" class="btn btn-indigo">Enviar mensaje </button>
+        <button type="button" class="btn btn-blue-grey" data-dismiss="modal">Cancelar</button>
       </div>
     </div>
   </div>
 </div>
-<!-- MODAL CONFIRM DESCUENTOS-->
+</div>
+<!-- MODAL CONTACT-->
 
 
 <body class="grey lighten-3">
@@ -250,9 +253,18 @@
 
               <h4 class="card-header text-center">
                      Citas
-
               </h4>
-
+              <table id="tableCitas" class="table responsive text-center" style="width: 100%;">
+                <thead>
+                  <tr>
+                    <th>Avatar</th>
+                    <th>Nombre</th>
+                    <th>Datos</th>
+                    <th>Opciones</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+              </table>
           </div>
           <!--/.Card-->
           <div id="citasContainer"></div>
@@ -272,8 +284,8 @@
                   <table id="tableMensajes" class="table responsive text-center" style="width: 100%;">
                     <thead>
                       <tr>
-                        <th>Avatar</th>
-                        <th>Emisor</th>
+                        <th> </th>
+                        <th> </th>
                         <th> </th>
                         <th>Fecha</th>
                       </tr>
@@ -326,6 +338,178 @@ bottom: 0;position: fixed;width: 100%;
   <script src="js/cerrar_session.js"></script>
 
   <script>
+function cancelarCita($id_cita){
+      
+      const swalWithBootstrapButtons = Swal.mixin({
+  customClass: {
+    confirmButton: 'btn btn-success',
+    cancelButton: 'btn btn-danger'
+  },
+  buttonsStyling: false
+})
+
+swalWithBootstrapButtons.fire({
+  title: '¿Estas seguro?',
+  text: "Se va a rechazar la cita!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonText: 'Si, rechazar!',
+  cancelButtonText: 'No, quiero rechazar!'
+}).then((result) => {
+  if (result.value) {
+
+    $.ajax({
+      type: "POST",
+      url: "../ajax/socio/index/cancelarCita.php",
+      data: {id_cita: $id_cita},
+      dataType: "JSON",        
+      beforeSend: function () {
+          $('.loading').css('display','block');
+        },
+      success: function (res) {
+        if(res.result){
+          swalWithBootstrapButtons.fire(
+          'Rechazado!',
+          res.message,
+          'success'
+        )
+         startTable2();
+
+        }else{
+          swalWithBootstrapButtons.fire(
+            'Ha ocurrido un error',
+            res.message,
+            'error'
+          )
+        }
+      },complete: function () {
+          $('.loading').css('display','none');
+        }
+    });
+
+
+  }else{
+    swalWithBootstrapButtons.fire(
+      'Cancelado',
+      'Acción cancelada',
+      'error'
+    )
+  }
+})
+
+
+    }
+
+    function aceptarCita($id_cita){
+      
+      const swalWithBootstrapButtons = Swal.mixin({
+  customClass: {
+    confirmButton: 'btn btn-success',
+    cancelButton: 'btn btn-danger'
+  },
+  buttonsStyling: false
+})
+
+swalWithBootstrapButtons.fire({
+  title: '¿Estas seguro?',
+  text: "Se va a aceptar la cita!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonText: 'Si, aceptar!',
+  cancelButtonText: 'No, cancelar!'
+}).then((result) => {
+  if (result.value) {
+
+    $.ajax({
+      type: "POST",
+      url: "../ajax/socio/index/aceptarCita.php",
+      data: {id_cita: $id_cita},
+      dataType: "JSON",        
+      beforeSend: function () {
+          $('.loading').css('display','block');
+        },
+      success: function (res) {
+        if(res.result){
+          swalWithBootstrapButtons.fire(
+          'Aceptado!',
+          res.message,
+          'success'
+        )
+         startTable2();
+
+        }else{
+          swalWithBootstrapButtons.fire(
+            'Ha ocurrido un error',
+            res.message,
+            'error'
+          )
+        }
+      },complete: function () {
+          $('.loading').css('display','none');
+        }
+    });
+
+
+  }else{
+    swalWithBootstrapButtons.fire(
+      'Cancelado',
+      'Acción cancelada',
+      'error'
+    )
+  }
+})
+
+
+    }
+    
+    function enviarMensaje(){
+
+$mensaje = $('#mensajeContactModal').val();
+$id_user_receptor = $('#id_user_receptor').val();
+
+$.ajax({
+  type: "POST",
+  url: "../ajax/socio/index/enviarMensaje.php",
+  data: {id_user_emisor: localStorage.getItem('id_user'),
+  id_user_receptor: $id_user_receptor,
+  mensaje: $mensaje},
+  dataType: "JSON",beforeSend: function(){
+    $('#enviarMensajeBtn').addClass('disabled');
+  },
+  success: function (res) {
+    if(res.result){
+      $('#contactModal').modal('hide');
+    $('#id_user_receptor').val('');
+    $('#mensajeContactModal').val('');
+    Swal.fire(
+      'Correcto!',
+      'Mensaje enviado correctamente!',
+      'success'
+    );
+    }else{
+      Swal.fire(
+      'Error!',
+      res.message,
+      'error'
+    );
+    }
+
+  },complete: function(){
+    $('#enviarMensajeBtn').removeClass('disabled');
+  }
+});
+
+}
+    
+    function abrirModalMensaje($id_user_receptor, $nombre){
+
+$('#id_user_receptor').val($id_user_receptor);
+
+$('#contactModalTitle').html('Enviar mensaje a '+$nombre);
+
+$('#contactModal').modal('show');
+
+}
 
     function listarCitas(){
 
@@ -417,6 +601,31 @@ if ( ! $.fn.DataTable.isDataTable( '#tableMensajes' ) ) {
  
 } }
 
+function startTable2(){
+
+if ( ! $.fn.DataTable.isDataTable( '#tableCitas' ) ) {
+
+  $id_user = localStorage.getItem('id_user');
+  $zona_horaria = localStorage.getItem('zona_horaria');
+
+          //cargamos la tabla
+           table = $('#tableCitas').DataTable({
+              ajax : '../ajax/socio/index/listarCitas.php?id_user='+$id_user+'&zona_horaria='+$zona_horaria,
+              lengthChange: false,
+              "info": false,
+              "searching": false,
+              "ordering": false,
+              "paging": false,
+              oLanguage: {
+              "sUrl": "../json/traducciontabla_mensajes.json"
+              }});
+}else{
+  //ajax reload
+
+  table.ajax.reload();
+ 
+} }
+
   $(document).ready(function(){ 
 
 /* INCLUDES */
@@ -433,8 +642,9 @@ $( "#sidebar" ).toggle("normal");
 });
 
   startTable();
+  startTable2();
    rellenarBadges();
-   listarCitas();
+/*    listarCitas(); */
 
   // Animations initialization
   new WOW().init();

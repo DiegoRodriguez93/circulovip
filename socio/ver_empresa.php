@@ -91,7 +91,7 @@ if(!isset($id_empresa) OR $id_empresa == null OR $id_empresa == ''){
 
       </div>
       <div class="modal-footer text-center">
-      <button type="button" onclick="insertarRonda()" class="btn btn-indigo">Solicitar Ronda</button>
+      <button type="button" onclick="insertarRonda()" id="solicitarRondaBtn" class="btn btn-indigo">Solicitar Ronda</button>
         <button type="button" class="btn btn-blue-grey" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
@@ -223,7 +223,7 @@ bottom: 0;position: fixed;width: 100%;
       function insertarRonda(){
         $id_emisor = localStorage.getItem('id_user');
         $id_receptor = $('#idUserHidden').val();
-        $dia = $("#diasRondasSelect option:selected" ).val();
+        $dia = $("#diasRondasSelect option:selected" ).text();
         $hora = $("#horasRodasSelect option:selected" ).val();
 
         $.ajax({
@@ -236,6 +236,9 @@ bottom: 0;position: fixed;width: 100%;
         },
         url: "../ajax/socio/ver_empresa/insertarCita.php",
         dataType: "JSON",
+        beforeSend: function (){
+          $('#solicitarRondaBtn').addClass('disabled');
+        },  
         success: function (res) {
           if(res.result){
             Swal.fire(
@@ -243,6 +246,7 @@ bottom: 0;position: fixed;width: 100%;
             res.message,
             'success'
           );
+          $('#rondaModal').modal('hide');
           }else{
 
             Swal.fire(
@@ -253,7 +257,9 @@ bottom: 0;position: fixed;width: 100%;
 
           }
 
-        } });
+        },complete: function (){
+          $('#solicitarRondaBtn').removeClass('disabled');
+        }   });
 
 
       }
@@ -295,7 +301,7 @@ $.ajax({
   $.each(data, function (key, val) {
 
     el = document.getElementById("horasRodasSelect");
-    html += `<option val="`+val.hora+`">`+val.hora+` (`+val.zona_horaria+`) ⇒ Mi horario `+val.hora_mia+` (`+val.zona_horaria_mia+`)</option>`;
+    html += `<option value="`+val.hora+`">`+val.hora+` (`+val.zona_horaria+`) ⇒ Mi horario `+val.hora_mia+` (`+val.zona_horaria_mia+`)</option>`;
   
     el.innerHTML = html;
     

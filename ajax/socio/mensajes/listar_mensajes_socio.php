@@ -15,16 +15,51 @@ LEFT JOIN datos_user as d ON d.id_user = m.id_emisor
 INNER JOIN usuarios as u ON u.id = m.id_emisor
 WHERE m.id_receptor = '$id_receptor' GROUP BY m.id_emisor ORDER BY m.fecha DESC LIMIT 1 "); */
 
- $query = mysqli_query($mysqli,"SELECT m.id_emisor as id_emisor, m.id_receptor, m.fecha as fecha,
+/*  $query = mysqli_query($mysqli,"SELECT m.id_emisor as id_emisor, m.id_receptor, m.fecha as fecha,
 m.leido as leido, d.url_avatar as url_avatar, u.nombre as nombre
 FROM mensajes as m
 LEFT JOIN datos_user as d ON d.id_user = m.id_emisor
 INNER JOIN usuarios as u ON u.id = m.id_emisor
-WHERE m.id_receptor = '$id_receptor' AND m.id IN ( 
+WHERE (m.id_receptor = '$id_receptor' OR m.id_emisor = '$id_receptor' ) AND m.id IN ( 
               SELECT max(id)
               FROM mensajes
               GROUP BY id_emisor
-              ) $limit "); 
+              ) $limit ");  */
+
+$query = mysqli_query($mysqli,"SELECT
+m.id_emisor AS id_emisor,
+m.id_receptor,
+m.fecha AS fecha,
+m.leido AS leido,
+d.url_avatar AS url_avatar,
+u.nombre AS nombre
+FROM
+mensajes AS m
+LEFT JOIN datos_user AS d ON d.id_user = m.id_emisor
+INNER JOIN usuarios AS u ON u.id = m.id_emisor
+WHERE
+(
+    m.id_receptor = '$id_receptor'
+    OR (
+        m.id_emisor = '$id_receptor'
+        AND m.id_receptor NOT IN (
+            SELECT
+                id_receptor
+            FROM
+                mensajes
+            WHERE
+                id_emisor = m.id_emisor
+        )
+    )
+)
+AND m.id IN (
+SELECT
+    max(id)
+FROM
+    mensajes
+GROUP BY
+    id_emisor
+) $limit ");
 
 $contar = mysqli_num_rows($query);
 
@@ -74,7 +109,7 @@ if($contar > 0){
 
        if($fecha != null){
         $time = strtotime($fecha);
-        $fecha_formateada = date("d/m/Y H:i:s", $time);
+        $fecha_formateada = date("d/m/Y H:i", $time);
        }else{
         $fecha_formateada = null;  
        }
@@ -85,18 +120,29 @@ if($contar > 0){
             $leido = '<i class="fas fa-envelope-open fa-2x" style="color: #95a5a6"></i>';
        }
 
+       if($id_emisor == $id_receptor){
+           $id_otro = $row['id_receptor'];
+           $query2 = mysqli_query($mysqli, "SELECT u.nombre AS nombre, d.url_avatar AS url_avatar FROM usuarios as u 
+           LEFT JOIN datos_user as d ON u.id = d.id_user WHERE u.id = '$id_otro'");
+           $row2 = mysqli_fetch_assoc($query2);
+           $nombre = $row2['nombre'];
+           $url_avatar = $row2['url_avatar'];
+       }else{
+        $id_otro = $id_emisor;
+       }
+
         $nombre_emisor_fn   = "<p class='pointer'
-        onclick='cargarConversacion(`".$id_emisor."`,`". $url_avatar."`,`". $nombre."`)'>". $nombre."</p>";
+        onclick='cargarConversacion(`".$id_otro."`,`". $url_avatar."`,`". $nombre."`)'>". $nombre."</p>";
 
         $fecha_formateada_fn   = "<p class='pointer'
-        onclick='cargarConversacion(`".$id_emisor."`,`". $url_avatar."`,`".$nombre."`)'>".$fecha_formateada."</p>";
+        onclick='cargarConversacion(`".$id_otro."`,`". $url_avatar."`,`".$nombre."`)'>".$fecha_formateada."</p>";
 
         $leido_fn   = "<p class='pointer'
-        onclick='cargarConversacion(`".$id_emisor."`,`". $url_avatar."`,`".$row['nombre']."`)'>".$leido."</p>";
+        onclick='cargarConversacion(`".$id_otro."`,`". $url_avatar."`,`".$row['nombre']."`)'>".$leido."</p>";
 
 
         $res[] = array($img_avatar_fn, $nombre_emisor_fn, $leido_fn, $fecha_formateada_fn);
-
+      /*   $res = array_unique($array); */
     }
 
 
