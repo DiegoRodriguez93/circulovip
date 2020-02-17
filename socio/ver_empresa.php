@@ -225,6 +225,7 @@ bottom: 0;position: fixed;width: 100%;
         $id_receptor = $('#idUserHidden').val();
         $dia = $("#diasRondasSelect option:selected" ).text();
         $hora = $("#horasRodasSelect option:selected" ).val();
+        $zona_horaria = localStorage.getItem('zona_horaria');
 
         $.ajax({
         type: "POST",
@@ -232,7 +233,8 @@ bottom: 0;position: fixed;width: 100%;
           id_emisor : $id_emisor,
           id_receptor: $id_receptor,
           dia: $dia,
-          hora: $hora
+          hora: $hora,
+          zona_horaria : $zona_horaria
         },
         url: "../ajax/socio/ver_empresa/insertarCita.php",
         dataType: "JSON",
