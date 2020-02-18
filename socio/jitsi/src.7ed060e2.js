@@ -31776,7 +31776,7 @@ function JitsiMeetComponent() {
     try {
       var domain = 'meet.jit.si';
       var options = {
-        roomName: 'Circulo Vip 1',
+        roomName: localStorage.getItem('sala') != null ? localStorage.getItem('sala') : 'Circulo Vip',
         height: '100vh',
         parentNode: document.getElementById('jitsi-container'),
         interfaceConfigOverwrite: {

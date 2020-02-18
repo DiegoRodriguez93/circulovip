@@ -143,13 +143,17 @@ if(!isset($id_empresa) OR $id_empresa == null OR $id_empresa == ''){
         <div style="display:none" class="loading"></div>
 
         <!--Grid column-->
-        <div class="col-md-12 mb-4">
+        <div class="col-md-6 sm-12 mb-4">
 
           <!--Card-->
           <div class="card">
 
               <h4 id="nombreEmpresa" class="card-header">
               </h4>
+
+              <div id="imageEmpresa" class="text-center mx-auto my-auto"></div>
+
+              <blockquote id="descripcionEmpresa" class="text-center"></blockquote>
 
               </div>
 
@@ -413,8 +417,17 @@ $('#horasRodasSelect').removeClass('disabled');
               </div></div>
               `;
 
+              $('#nombreEmpresa').html(val.nombre_empresa);
+
+              $('#imageEmpresa').html(`<img 
+                    src="`+val.url_image+`"
+                     class="img-fluid" >`);
+
+                     $('#descripcionEmpresa').html(val.descripcion);
 
       });
+
+   
 
       el.innerHTML = html;
         },complete: function () {

@@ -15,6 +15,7 @@ if(mysqli_num_rows($select) > 0){
       $id_emisor    = $row['id_emisor'];
       $id_receptor  = $row['id_receptor'];
       $estado       = $row['estado'];
+      $sala         = $row['sala'];
 
       if($id_emisor == $id_user){
         $id_destinatario = $id_receptor;
@@ -46,7 +47,8 @@ if(mysqli_num_rows($select) > 0){
           $opciones = '<button onclick="abrirModalMensaje(`'.$id_destinatario.'`,`'.$nombre.'`)" class="btn btn-indigo btn-sm"><i class="fas fa-envelope fa-2x"></i></button>';
         }else{
           $estado = '<b><p class="text-success"><i class="fas fa-check"></i> Aceptada<p></b>';
-          $opciones = '<button onclick="abrirModalMensaje(`'.$id_destinatario.'`,`'.$nombre.'`)" class="btn btn-indigo btn-sm"><i class="fas fa-envelope fa-2x"></i></button>';
+          $opciones = '<button onclick="abrirModalMensaje(`'.$id_destinatario.'`,`'.$nombre.'`)" class="btn btn-indigo btn-sm"><i class="fas fa-envelope fa-2x"></i></button>
+          <button onclick="IngresarASala(`'.$sala.'`)" class="btn btn-deep-purple btn-sm"><i class="fas fa-sign-in-alt fa-2x"></i></button>';
         }
     
       }
@@ -102,7 +104,8 @@ if(mysqli_num_rows($select) > 0){
         <button onclick="abrirModalMensaje(`'.$id_destinatario.'`,`'.$nombre.'`)" class="btn btn-indigo btn-sm"><i class="fas fa-envelope fa-2x"></i></button>';
       }else{
         $estado = '<b><p class="text-success"><i class="fas fa-check"></i> Aceptada<p></b>';
-        $opciones = '<button onclick="abrirModalMensaje(`'.$id_destinatario.'`,`'.$nombre.'`)" class="btn btn-indigo btn-sm"><i class="fas fa-envelope fa-2x"></i></button>';
+        $opciones = '<button onclick="abrirModalMensaje(`'.$id_destinatario.'`,`'.$nombre.'`)" class="btn btn-indigo btn-sm"><i class="fas fa-envelope fa-2x"></i></button>
+        <button onclick="IngresarASala(`'.$sala.'`)" class="btn btn-deep-purple btn-sm"><i class="fas fa-sign-in-alt fa-2x"></i></button>';
       }
   
     }

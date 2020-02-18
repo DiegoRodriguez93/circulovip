@@ -131,10 +131,10 @@
 
               <div class="row wow fadeIn">
                 <div class="col-lg-4"></div>
-                <div class="col-lg-4 md-6 sm-12 text-center">
-                  <button onclick="entrar_a_la_sala()" class="btn btn-success">
+                <div class="col-lg-4 md-6 sm-12 text-center" id="mostrarLaSala">
+<!--                   <button onclick="entrar_a_la_sala()" class="btn btn-success">
                     <i class="fas fa-sign-in-alt fa-2x"></i>  <h5  class="pt-2">Entrar a la sala</h5 t>
-                    </button>
+                    </button> -->
                 </div>
                 <div class="col-lg-4"></div>
               </div>
@@ -244,7 +244,18 @@ bottom: 0;position: fixed;width: 100%;
   <script src="../lib/countdown/countdown.min.js"></script>
   <script>
 
+    function IngresarASala($sala){
+
+    localStorage.setItem('sala',$sala);
+
+    location.replace('ronda.html');
+
+    }
+
     function cargarContenido(){
+
+      $id_user      = localStorage.getItem('id_user');
+      $zona_horaria = localStorage.getItem('zona_horaria');
 
       $.ajax({
         type: "POST",
@@ -254,25 +265,34 @@ bottom: 0;position: fixed;width: 100%;
         beforeSend: function (){
           $('.loading').css('display','block');
         },
-        success: function (res) {
+        success: function (data) {
 
-              /* CUENTA REGRESIVA TEST */
-            var now = new Date();
-            var day = now.getDate() + 2 ;
-            var month = now.getMonth() + 1;
-            var year = now.getFullYear();
+          $.each(data, function (i, val) { 
+              
+              /* CUENTA REGRESIVA */
 
-            var hora = "";
             var zona_horaria = "";
 
-            var proximaCita = month + '/' + day + '/' + year + ' 07:07:07';
+            /* var proximaCita = month + '/' + day + '/' + year + ' 07:07:07'; */
+            var proximaCita = val.fecha;
 
             $('#example').countdown({
-              date: proximaCita, // TODO Date format: 07/27/2017 17:00:00
-              offset: +2 // TODO Your Timezone Offset
+              date: proximaCita, // Date format: 07/27/2017 17:00:00
+              offset: -3 // Your Timezone Offset
             }, function () {
-              alert('Done!');
+              console.log('Done!');
             });
+
+            var sala = '';
+
+            sala = `<button onclick="IngresarASala('`+val.sala+`')" class="btn btn-success">
+                    <i class="fas fa-sign-in-alt fa-2x"></i>  <h5  class="pt-2">Entrar a la sala</h5 t>
+                    </button>`;
+
+                    $(sala).appendTo($('#mostrarLaSala'));  
+
+          });
+
           
         },complete: function (){
           $('.loading').css('display','none');
@@ -301,7 +321,7 @@ bottom: 0;position: fixed;width: 100%;
 
     new WOW().init();
 
-
+  cargarContenido();
 
   });
 

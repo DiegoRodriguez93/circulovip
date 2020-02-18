@@ -338,6 +338,14 @@ bottom: 0;position: fixed;width: 100%;
   <script src="js/cerrar_session.js"></script>
 
   <script>
+    function IngresarASala($sala){
+
+      localStorage.setItem('sala',$sala);
+
+      location.replace('ronda.html');
+
+    }
+
 function cancelarCita($id_cita){
       
       const swalWithBootstrapButtons = Swal.mixin({
