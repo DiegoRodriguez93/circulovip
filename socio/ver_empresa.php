@@ -456,6 +456,16 @@ $('#horasRodasSelect').removeClass('disabled');
     // Animations initialization
     new WOW().init();
 
+    checkLogIn();
+
+    $('#indexSidebar').removeClass('active');
+    $('#perfilSidebar').removeClass('active');
+    $('#empresasSidebar').addClass('active');
+    $('#horariosSidebar').removeClass('active');
+    $('#productosSidebar').removeClass('active');
+    $('#mensajesSidebar').removeClass('active');
+    $('#salaDeEspera').removeClass('active');
+
      listarEmpresa(); 
 
      $('#horasRodasSelect').addClass('disabled');

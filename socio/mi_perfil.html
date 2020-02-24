@@ -302,7 +302,11 @@ bottom: 0;position: fixed;width: 100%;
             $('#cargo').html(res.cargo);
             $('#acerca_de_mi').html(res.acerca_de_mi);
             $('#datosPersonales').modal('hide');
-            alert(res.message);
+            Swal.fire(
+            'Ok!',
+            res.message,
+            'success'
+            )
           }
         }
       });
@@ -339,7 +343,11 @@ bottom: 0;position: fixed;width: 100%;
             $('#descripcionEmpresa').html(res.descripcion);
             $('#paisEmpresa').html("("+res.pais+")");
             $('#datosEmpresa').modal('hide');
-            alert(res.message);
+            Swal.fire(
+            'Ok!',
+            res.message,
+            'success'
+            )
           }
         }
       });
@@ -417,6 +425,16 @@ $( "#sidebar" ).toggle("normal");
 
   new WOW().init();
 
+  checkLogIn();
+
+  $('#indexSidebar').removeClass('active');
+  $('#perfilSidebar').addClass('active');
+  $('#empresasSidebar').removeClass('active');
+  $('#horariosSidebar').removeClass('active');
+  $('#productosSidebar').removeClass('active');
+  $('#mensajesSidebar').removeClass('active');
+  $('#salaDeEspera').removeClass('active');
+
   /* PROFILE PICTURE */
 
   
@@ -457,10 +475,21 @@ $("#profilePicture").change(function() {
        var response = JSON.parse(res);
 
         if(response.result){
-            alert(response.message);
-            location.reload();
+          Swal.fire(
+            'Ok!',
+            response.message,
+            'success'
+            );
+            setTimeout(function(){
+              location.reload();
+            }, 2500)
+   
         }else{
-            alert(response.message);
+          Swal.fire(
+            'Error!',
+            response.message,
+            'error'
+            );
         }
 
     },
@@ -507,10 +536,20 @@ $("#enterprisePicture").change(function() {
        var response = JSON.parse(res);
 
         if(response.result){
-            alert(response.message);
-            location.reload();
+            Swal.fire(
+            'Ok!',
+            response.message,
+            'success'
+            );
+            setTimeout(function(){
+              location.reload();
+            }, 2500)
         }else{
-            alert(response.message);
+                        Swal.fire(
+            'Error!',
+            response.message,
+            'error'
+            );
         }
 
     },

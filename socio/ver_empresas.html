@@ -337,6 +337,14 @@ bottom: 0;position: fixed;width: 100%;
       el = document.getElementById("empresasContainer");
       $.each(data, function (key, val) {
 
+        if(val.id_user != localStorage.getItem('id_user')){
+          $button = `<button onclick="contactModal('`+val.id_empresa+`','`+val.nombre+`','`+val.pais+`')"
+           class="btn btn-indigo btn-sm">Contactar</button>
+           <a href="ver_empresa.php?id_empresa=`+val.id_empresa+`"><button class="btn btn-deep-purple btn-sm">Ver más</button></a>`
+        }else{
+          $button = `<small>No pudes contactar con tu propia empresa</small>`;
+        }
+
         html += `
               <div class="col-lg-4 sm-12 my-1">
                 <div class="card">
@@ -354,14 +362,10 @@ bottom: 0;position: fixed;width: 100%;
                     <p>`+val.descripcion+`</p>
                   </div>
                   <div class="col-12 text-center">
-                    <button onclick="contactModal('`+val.id_empresa+`','`+val.nombre+`','`+val.pais+`')" class="btn btn-indigo btn-sm">Contactar</button>
-                    <a href="ver_empresa.php?id_empresa=`+val.id_empresa+`"><button class="btn btn-deep-purple btn-sm">Ver más</button></a>
+                    `+$button+`
                   </div>
                 </div>
               </div></div>
-              
-            
-              
               `;
 
 
@@ -393,6 +397,16 @@ bottom: 0;position: fixed;width: 100%;
 
     // Animations initialization
     new WOW().init();
+
+    checkLogIn();
+
+  $('#indexSidebar').removeClass('active');
+  $('#perfilSidebar').removeClass('active');
+  $('#empresasSidebar').addClass('active');
+  $('#horariosSidebar').removeClass('active');
+  $('#productosSidebar').removeClass('active');
+  $('#mensajesSidebar').removeClass('active');
+  $('#salaDeEspera').removeClass('active');
 
     listarEmpresas();
     rellenarSelectPaises();

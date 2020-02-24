@@ -56,12 +56,13 @@
           <input type="text" class="form-control" id="nombreProductoEditar">
           <label for="descripcionProductoEditar">Descripción</label>
           <textarea id="descripcionProductoEditar" class="form-control"></textarea>
-          <input type="file" class="my-2" id="imagenProducto">
+          <label for="imagenProductoEditar">Imagen</label><br>
+          <input type="file" class="my-2" id="imagenProductoEditar">
           <!-- Default switch -->
-          <div class="custom-control custom-switch">
+   <!--        <div class="custom-control custom-switch">
             <input type="checkbox" class="custom-control-input" id="imagenOff">
             <label class="custom-control-label" for="imagenOff">Dejar producto sin imagen</label>
-          </div>
+          </div> -->
         </div>
         <div class="modal-footer"><div class="mx-auto">
           <button type="button" id="editarProductoBtn" onclick="editarProducto()" class="btn btn-deep-purple">Editar producto</button>
@@ -242,9 +243,63 @@ bottom: 0;position: fixed;width: 100%;
 
     function editarProducto(){
 
+      $id_producto  = $('#idProductoEditar').val();
       $nombre       = $('#nombreProductoEditar').val();
       $descripcion  = $('#descripcionProductoEditar').val();
-      $imagen       = $('#imagenProductoEditar').val();
+       $imagen       = $('#imagenProductoEditar').val(); 
+
+      var formData = new FormData();
+      formData.append('id_user', localStorage.getItem('id_user'));
+      formData.append('id_producto', $id_producto);
+      formData.append('nombreProducto', $nombre);
+      formData.append('descripcionProducto', $descripcion);
+
+      if($('#imagenProductoEditar').val() == ''){
+        formData.append('imagenProducto', '');
+      }else{
+        formData.append('imagenProducto', $('#imagenProductoEditar')[0].files[0]); 
+      }
+
+      $.ajax({
+        type: "POST",
+        url: "../ajax/socio/mis_productos/editarProducto.php",
+        data: formData,
+        processData: false,
+        contentType: false,
+        beforeSend: function () { 
+          $('.loading').css('display','block');
+          $('#editarProductoBtn').addClass('disabled');
+        },
+        success: function (res) {
+          var response = JSON.parse(res);
+
+          if(response.result){
+             /*  alert(response.message); */
+              Swal.fire('Ok!',
+              response.message,
+              'success');
+              rellenarProductos(1);
+              $('#editarProducto').modal('hide');
+              $nombre = $('#nombreProductoEditar').val('');
+              $descripcion = $('#descripcionProductoEditar').val('');
+              $imagen = $('#imagenProductoEditar').val('');
+          }else{
+            Swal.fire(
+              'Error!',
+              response.message,
+              'error'
+            );
+              /* alert(response.message); */
+          }
+
+        },complete: function () {
+          $('.loading').css('display','none');
+          $('#editarProductoBtn').removeClass('disabled');  
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+          console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+      });
 
     }
 
@@ -384,13 +439,21 @@ swalWithBootstrapButtons.fire({
 
         if(response.result){
             alert(response.message);
+            Swal.fire('Ok!',
+            response.message,
+            'success');
             rellenarProductos(1);
             $('#agregarProducto').modal('hide');
             $nombre = $('#nombreProducto').val('');
             $descripcion = $('#descripcionProducto').val('');
             $imagen = $('#imagenProducto').val('');
         }else{
-            alert(response.message);
+          Swal.fire(
+            'Error!',
+            response.message,
+            'error'
+          );
+            /* alert(response.message); */
         }
 
     },complete: function () {
@@ -488,6 +551,16 @@ swalWithBootstrapButtons.fire({
 
     new WOW().init();
 
+    checkLogIn();
+
+  $('#indexSidebar').removeClass('active');
+  $('#perfilSidebar').removeClass('active');
+  $('#empresasSidebar').removeClass('active');
+  $('#horariosSidebar').removeClass('active');
+  $('#productosSidebar').addClass('active');
+  $('#mensajesSidebar').removeClass('active');
+  $('#salaDeEspera').removeClass('active');
+
   /* COMPROBACIÓN DE LA IMAGEN DEL PODUCTO */
 
   $("#imagenProducto").change(function() {
@@ -509,6 +582,31 @@ swalWithBootstrapButtons.fire({
 
      
     if($("#imagenProducto").val() == ''){
+      alert("El archivo es esta vacio!");
+        return false;
+    }  
+    
+    });
+
+    $("#imagenProductoEditar").change(function() {
+    var file = this.files[0];
+    var imagefile = file.type;
+    var match= ["image/jpeg","image/png","image/jpg","image/webp","image/gif"];
+
+    if(!((imagefile==match[0]) || (imagefile==match[1]) || (imagefile==match[2]) || (imagefile==match[3]) || (imagefile==match[4]) )){
+        alert('Por favor seleccione un formato de imagen válido (JPEG/JPG/PNG/GIF/WEBP).');
+        $("#imagenProductoEditar").val('');
+        return false;
+    }
+
+    if(this.files[0].size > 614400){
+        alert("El archivo es demasiado grande!");
+        $("#imagenProductoEditar").val('');
+        return false;
+     };
+
+     
+    if($("#imagenProductoEditar").val() == ''){
       alert("El archivo es esta vacio!");
         return false;
     }  

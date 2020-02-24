@@ -182,10 +182,10 @@
         <!--Grid column-->
       </div>
 
-         <!--Grid column-->
+<!--        
          <div id="rightPart" class="col-md-6 mb-4">
 
-          <!--Card-->
+    
           <div class="card">
 
               <h4 id="conversacionTitulo" class="card-header">
@@ -234,13 +234,13 @@
 
 
 
-          <!--/.Card-->
+
           <div class="mb-5"></div>
 
-        <!--Grid column-->
+    
 
         
-      </div ir>
+      </div> -->
 
       </div>
       <!--Grid row-->
@@ -283,19 +283,19 @@ bottom: 0;position: fixed;width: 100%;
 <!--   <script src="js/index.js"></script> -->
   <script>
 
-    function sendMessage(){
+    function sendMessage($id_receptor){
 
-      $id_receptor = $('#id_emisor_hidden').val();
+/*       $id_receptor = $('#id_emisor_hidden').val(); */
       $id_emisor = localStorage.getItem('id_user');
-      $mensaje    = $('#textMessage').val();
+      $mensaje    = $('#textMessage'+$id_receptor).val();
 
       if($mensaje.length < 1 || $mensaje == null || $mensaje == '' ){
-        $('#textMessage').addClass('is-invalid');
-        $('#mensajeVacio').html('El mensaje no puede estar vacio');
+        $('#textMessage'+$id_receptor).addClass('is-invalid');
+        $('#mensajeVacio'+$id_receptor).html('El mensaje no puede estar vacio');
         return false;
       }else{
-        $('#textMessage').removeClass('is-invalid');
-        $('#mensajeVacio').html('');
+        $('#textMessage'+$id_receptor).removeClass('is-invalid');
+        $('#mensajeVacio'+$id_receptor).html('');
       }
 
       var date = new Date;
@@ -308,7 +308,9 @@ bottom: 0;position: fixed;width: 100%;
       // 01, 02, 03, ... 10, 11, 12
       var MM = ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1);
 
+      var HH = (date.getHours() < 10 ? '0' : '') + date.getHours();
 
+      var mi = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
 
       $.ajax({
         type: "POST",
@@ -320,11 +322,11 @@ bottom: 0;position: fixed;width: 100%;
         beforeSend: function(){
           var row = `<tr role='row' class='odd'>
           <td tabindex='0'>
-          <div style=" border-radius: 25px;float:left"><small><b>`+dd+`/`+MM+` `+hour+`:`+minutes+`</b>
+          <div style=" border-radius: 25px;float:left"><small><b>`+dd+`/`+MM+` `+HH+`:`+mi+`</b>
           </small> Tú: `+$mensaje+`</div>
           </td></tr>`;
-          $("#tableChat tbody").append(row);
-          $('#textMessage').val('');
+          $("#tableChat"+$id_receptor+" tbody").append(row);
+          $('#textMessage'+$id_receptor).val('');
           $( "div.dataTables_scrollBody" ).scrollTop( 99999 );
           if (typeof interval !== 'undefined') {
             clearInterval(interval);
@@ -353,27 +355,79 @@ bottom: 0;position: fixed;width: 100%;
 
     function cargarConversacion($id_emisor, $url_avatar, $nombre_emisor){
 
-      if (typeof interval !== 'undefined') {
-    clearInterval(interval);
-}
 
-      $('#rightPart').show();
-      $('#id_emisor_hidden').val($id_emisor);
-      $('#conversacionTitulo').html('Conversación con '+$nombre_emisor );
+        if(typeof interval == 'number'){
+          clearInterval(interval);
+          /* chat = ''; */
+        };
+      
 
-      $id_receptor = localStorage.getItem('id_user');
-      if ( ! $.fn.DataTable.isDataTable( '#tableChat' ) ) {
+      /* CREAMOS UN MODAL */
+
+     var modal = `<div class="modal fade" id="modal`+$id_emisor+`" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog " role="document" data-backdrop="static" data-keyboard="false">
+    <div class="modal-content bg-light">
+      <div class="modal-header">
+        <h5 class="modal-title">Conversación con `+$nombre_emisor+`</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row wow fadeIn">
+                <div class="col-md-12 py-2 px-5">
+                  <table id="tableChat`+$id_emisor+`" class="table responsive bg-white" style="width: 100%;">
+                    <thead>
+                      <tr style="display:none;" class="bg-light">
+                        <th></th>
+                      </tr>
+                    </thead>
+                  </table>
+                  <div class="row">
+                    <div class="col-9 mt-2">
+                      <textarea maxlength="250" id="textMessage`+$id_emisor+`" class="form-control" ></textarea>
+                      <small class="text-danger" id="mensajeVacio`+$id_emisor+`"></small>
+                    </div>
+                    <div class="col-3 my-auto mx-auto">
+                      <button style="
+                      border: none;
+                      color: white;
+                      padding: 15% 15%;
+                      border-radius: 12px;
+                      text-align: center;
+                      text-decoration: none;
+                      display: inline-block;
+                      font-size: 16px;" class="btn-cyan" onclick="sendMessage('`+$id_emisor+`')" >ENVIAR</button c>
+                    </div>
+                  </div>
+                  <div>
+                  </div>
+                </div>
+              </div>
+      </div>
+    </div>
+  </div>
+</div> `;
+
+$(modal).appendTo('body');
+$('#modal'+$id_emisor).modal('show');
+
+
+
+/*       $('#rightPart').show();
+      $('#id_emisor_hidden').val($id_emisor); */
+     /*  $('#conversacionTitulo').html('Conversación con '+$nombre_emisor ); */
+     $id_receptor = localStorage.getItem('id_user');
+      if ( ! $.fn.DataTable.isDataTable( '#tableChat'+$id_emisor ) ) {
                 //cargamos la tabla del chat
 
              var goToBottom = function(){
                 $( "div.dataTables_scrollBody" ).scrollTop( 99999 );
-                
-                $('div#dataTables_scrollHead').css({"background-color": "#dee2e6'", "height": "2px"});
               }
 
-              chat = $('#tableChat').DataTable({
+              chat = $('#tableChat'+$id_emisor).DataTable({
               ajax : {"url" : '../ajax/socio/mensajes/cargarConversacion.php?id_receptor='+$id_receptor+'&id_emisor='+$id_emisor+'&nombre_emisor='+$nombre_emisor,   
-            "complete" : goToBottom},
+              "complete" : goToBottom},
               "lengthChange": false,
               "info": false,
               "searching": false,
@@ -394,23 +448,25 @@ bottom: 0;position: fixed;width: 100%;
               chat.ajax.reload();
             }
 
-      interval = setInterval(function(){ 
+     interval = setInterval(function (){ 
 
-      $('#rightPart').show();
+/*       $('#rightPart').show();
       $('#id_emisor_hidden').val($id_emisor);
-      $('#conversacionTitulo').html('Conversación con '+$nombre_emisor );
+      $('#conversacionTitulo').html('Conversación con '+$nombre_emisor ); */
 
       $id_receptor = localStorage.getItem('id_user');
-      if ( ! $.fn.DataTable.isDataTable( '#tableChat' ) ) {
+      if ( ! $.fn.DataTable.isDataTable( '#tableChat'+$id_emisor ) ) {
                 //cargamos la tabla del chat
 
              var goToBottom = function(){
                 $( "div.dataTables_scrollBody" ).scrollTop( 99999 );
               }
 
-              chat = $('#tableChat').DataTable({
+              
+
+              chat = $('#tableChat'+$id_emisor).DataTable({
               ajax : {"url" : '../ajax/socio/mensajes/cargarConversacion.php?id_receptor='+$id_receptor+'&id_emisor='+$id_emisor+'&nombre_emisor='+$nombre_emisor,   
-            "complete" : goToBottom},
+              "complete" : goToBottom},
               "lengthChange": false,
               "info": false,
               "searching": false,
@@ -427,8 +483,8 @@ bottom: 0;position: fixed;width: 100%;
             
 
             }else{
-           /*    $( "div.dataTables_scrollBody" ).scrollTop( 99999 ); */
-              chat.ajax.reload();
+   
+           chat.ajax.reload();
             }
         
         }, 10000);
@@ -481,6 +537,16 @@ $( "#sidebar" ).toggle("normal");
 } );
 
   new WOW().init();
+
+  checkLogIn();
+
+  $('#indexSidebar').removeClass('active');
+  $('#perfilSidebar').removeClass('active');
+  $('#empresasSidebar').removeClass('active');
+  $('#horariosSidebar').removeClass('active');
+  $('#productosSidebar').removeClass('active');
+  $('#mensajesSidebar').addClass('active');
+  $('#salaDeEspera').removeClass('active');
 
   startTable();
 

@@ -65,4 +65,31 @@
         </div>
   
       </div>
-      <!-- Sidebar -->`
+      <!-- Sidebar -->`;
+
+      function checkLogIn(){
+        if(localStorage.getItem('id_user') == null || localStorage.getItem('token') == null){
+          Swal.fire('Inicia sesión',
+          'Primero debés iniciar sesión',
+          'error');
+          setTimeout(() => {location.replace('../index.html')},3000);
+        }
+        setInterval(() => {
+          $.ajax({
+            type: "POST",
+            url: "../ajax/socio/security/checkExpiration.php",
+            data: {id_user:localStorage.getItem('id_user'), token: localStorage.getItem('token')},
+            dataType: "JSON",
+            success: function (res) {
+              if(res.result){
+                console.log(res.message);
+              }else{
+                Swal.fire('Error!',res.message,'error');
+                localStorage.clear();
+                setTimeout(()=>{location.replace('../index.html')},3000);
+              }
+            }
+          });
+        }, 30000);
+
+      }

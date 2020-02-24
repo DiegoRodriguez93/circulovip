@@ -72,7 +72,7 @@ if($contar > 0){
         $url_avatar = $row['url_avatar'];
 
         if($row['url_avatar'] == null){
-            $url_avatar = 'http://localhost/circulovip2/images/profile.jpg';
+            $url_avatar = 'https://renoca.ml/work/circulovip2/images/profile.jpg';
         }
 
         if($row['url_avatar'] == null){

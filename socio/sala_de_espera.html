@@ -130,13 +130,13 @@
               </h4>
 
               <div class="row wow fadeIn">
-                <div class="col-lg-4"></div>
-                <div class="col-lg-4 md-6 sm-12 text-center" id="mostrarLaSala">
+                <div class="col-lg-2 md-0"></div>
+                <div class="col-lg-8 md-12 sm-12 text-center" id="mostrarLaSala">
 <!--                   <button onclick="entrar_a_la_sala()" class="btn btn-success">
                     <i class="fas fa-sign-in-alt fa-2x"></i>  <h5  class="pt-2">Entrar a la sala</h5 t>
                     </button> -->
                 </div>
-                <div class="col-lg-4"></div>
+                <div class="col-lg-2 md-0"></div>
               </div>
 
               
@@ -285,9 +285,17 @@ bottom: 0;position: fixed;width: 100%;
 
             var sala = '';
 
-            sala = `<button onclick="IngresarASala('`+val.sala+`')" class="btn btn-success">
-                    <i class="fas fa-sign-in-alt fa-2x"></i>  <h5  class="pt-2">Entrar a la sala</h5 t>
-                    </button>`;
+            sala = `
+            <div class="row">
+            <div class="col-6">
+              <h4>Cita con : <b class="deep-purple-text">`+val.nombre+`</b></h4><br>
+              <h4>Zona horaria : <b class="deep-purple-text">`+val.zona_horaria_otro+`</b></h4>
+            </div>
+            <div class="col-6">
+              <button onclick="IngresarASala('`+val.sala+`')" class="btn btn-success">
+                <i class="fas fa-sign-in-alt fa-2x"></i>  <h5  class="pt-2">Entrar a la sala</h5 t>
+              </button>
+              </div>`;
 
                     $(sala).appendTo($('#mostrarLaSala'));  
 
@@ -320,6 +328,16 @@ bottom: 0;position: fixed;width: 100%;
   } );
 
     new WOW().init();
+
+    checkLogIn();
+
+  $('#indexSidebar').removeClass('active');
+  $('#perfilSidebar').removeClass('active');
+  $('#empresasSidebar').removeClass('active');
+  $('#horariosSidebar').removeClass('active');
+  $('#productosSidebar').removeClass('active');
+  $('#mensajesSidebar').removeClass('active');
+  $('#salaDeEspera').addClass('active');
 
   cargarContenido();
 

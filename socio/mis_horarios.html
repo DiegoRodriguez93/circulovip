@@ -675,6 +675,16 @@ swalWithBootstrapButtons.fire({
     // Animations initialization
     new WOW().init();
 
+    checkLogIn();
+
+  $('#indexSidebar').removeClass('active');
+  $('#perfilSidebar').removeClass('active');
+  $('#empresasSidebar').removeClass('active');
+  $('#horariosSidebar').addClass('active');
+  $('#productosSidebar').removeClass('active');
+  $('#mensajesSidebar').removeClass('active');
+  $('#salaDeEspera').removeClass('active');
+
  /*    if($nombre != null && $nombre.length > 1 && $id_user != null && $id_user.length > 0 &&
     $token != null && $token.length == 32){
       location.replace('socio/index.html');
