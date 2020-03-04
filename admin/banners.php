@@ -70,23 +70,54 @@
             <div style="display:none" class="loading"></div>
 
               <?php include 'include/navbar.php'; ?>
-              <div class="row">
-              <div class="col-6">
-                Sponsor 1 ↑
-              </div>
-              
-              <div class="col-6">
-                Sponsor 2 ↑
-              </div>
+        
+              <table id="TableSponsors" class="display table" style="width: 100%">
+        <thead>
+            <tr>
+        <th>Id</th>
+        <th>Url de la imagén</th>
+        <th>Href</th>
+        <th>Tipo</th>
+        <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        </table>
+<br><br>
 
-              </div>
+</div>
 
 
-            </div>
+</div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-3 sm-0"></div>
+    <div class="col-lg-6 sm-12">
+      <h4>Sponsor</h4>
+    <form action="">
 
+    <input type="file" name="imagenSponsor" id="imagenSponsor"><br><br>
 
-        </div>
+    <label for="">Sponsor url</label>
+    <input type="text" name="href" id="href" placeholder="Ej: https://circulovip.com" class="form-control mb-2">
+
+    <label for="tipo">Tipo de sponsor</label>
+    <select name="tipo" id="tipo" class="form-control">
+      <option value="1">1</option>
+      <option value="2">2</option>
+    </select>
+
+    <div class="text-center">
+      <input type="submit" value="Subir" class="btn btn-primary my-2">
     </div>
+
+    </form>
+    </div>
+    <div class="col-lg-3 sm-0"></div>
+  </div>
+</div>
+
 
 
 
@@ -100,10 +131,10 @@
 <script>
 
 
-  function eliminarFecha($id){
+  function eliminarSponsor($id){
 
     Swal.fire({
-  title: '¿Estas seguro que deseas eliminar la fecha?',
+  title: '¿Estas seguro que deseas eliminar el sponsor con id '+$id+'?',
   text: "Decisión irreversible!",
   icon: 'warning',
   showCancelButton: true,
@@ -114,7 +145,7 @@
   if (result.value) {
 
     $.ajax({
-      url: "../ajax/admin/eliminar_fecha.php",
+      url: "../ajax/admin/eliminar_sponsor.php",
       method: "POST",
       dataType: "JSON",
       data:{id:$id},
@@ -126,7 +157,7 @@
           $('.loading').css('display','none');
           Swal.fire(
             'Eliminado!',
-            'La fecha ha sido eliminado correctamente.',
+            'El sponsor ha sido eliminado correctamente.',
             'success'
           )
         }else{
@@ -146,17 +177,10 @@
 
   }
 
-  function ingresarFecha(){
+  function SubirSponsor(){
 
-    $fecha = $('#fecha').val();
+    $href1 = $('#href').val();
 
-    if($fecha == ''){
-      alert('Fencha de vencimiento');
-      $('#fecha').addClass('is-invalid');
-      return false
-    }else{
-      $('#fecha').addClass('is-valid');
-    }
 
     $.ajax({
       url: "../ajax/admin/ingresar_fecha.php",
@@ -184,10 +208,10 @@
 
   function startTable(){
 
-    if ( ! $.fn.DataTable.isDataTable( '#TableFechas' ) ) {
+    if ( ! $.fn.DataTable.isDataTable( '#TableSponsors' ) ) {
               //cargamos la tabla
-               table = $('#TableFechas').DataTable({
-                  ajax : '../ajax/admin/listar_fechas_ronda.php',   
+               table = $('#TableSponsors').DataTable({
+                  ajax : '../ajax/admin/listar_sponsors.php',   
                   lengthChange: false,
                   order: [0,'desc'],
                   oLanguage: {

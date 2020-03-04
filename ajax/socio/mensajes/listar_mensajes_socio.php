@@ -72,7 +72,7 @@ if($contar > 0){
         $url_avatar = $row['url_avatar'];
 
         if($row['url_avatar'] == null){
-            $url_avatar = 'https://renoca.ml/work/circulovip2/images/profile.jpg';
+            $url_avatar = 'https://renoca.ml/work/circulovip/images/profile.jpg';
         }
 
         if($row['url_avatar'] == null){
@@ -81,7 +81,7 @@ if($contar > 0){
             rounded-circle'
             width='40'
             height='40'
-            src='http://localhost/circulovip2/images/profile.jpg' >"; 
+            src='https://renoca.ml/work/circulovip/images/profile.jpg' >"; 
 
             $img_avatar_fn = "<img
             onclick='cargarConversacion(`".$id_emisor."`,`".$url_avatar."`,`".$row['nombre']."`)'
@@ -89,7 +89,7 @@ if($contar > 0){
             rounded-circle pointer'
             width='40'
             height='40'
-            src='http://localhost/circulovip2/images/profile.jpg' >"; 
+            src='https://renoca.ml/work/circulovip/images/profile.jpg' >"; 
         }else{
             $img_avatar = "<img
             class='img-fluild rounded-circle'

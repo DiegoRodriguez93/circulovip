@@ -12,10 +12,8 @@ if(mysqli_num_rows($select) < 1){
     $res = array('result'=>false,'message'=>'Cuenta inválida vuelva a iniciar sesión');
 
 }else{
-
-    $fecha = Date('now');
-    $fecha = date_create($fecha);
-    $fecha_hoy = date_format($fecha, 'Y-m-d');
+    $dt = new DateTime();
+    $fecha_hoy = $dt->format('Y-m-d');
 
     $row = mysqli_fetch_assoc($select);
     $fecha_vencimiento = $row['fecha_vencimiento'];

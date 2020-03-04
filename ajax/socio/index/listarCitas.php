@@ -117,7 +117,7 @@ if(mysqli_num_rows($select) > 0){
       rounded-circle pointer'
       width='40'
       height='40'
-      src='https://renoca.ml/work/circulovip2/images/profile.jpg' >"; 
+      src='https://renoca.ml/work/circulovip/images/profile.jpg' >"; 
     }else{
       $img_avatar = "<img
       class='img-fluild

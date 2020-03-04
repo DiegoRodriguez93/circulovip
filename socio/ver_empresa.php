@@ -228,7 +228,7 @@ bottom: 0;position: fixed;width: 100%;
         $id_emisor = localStorage.getItem('id_user');
         $id_receptor = $('#idUserHidden').val();
         $dia = $("#diasRondasSelect option:selected" ).text();
-        $hora = $("#horasRodasSelect option:selected" ).val();
+        $hora = $("#horasRodasSelect").val();
         $zona_horaria = localStorage.getItem('zona_horaria');
 
         $.ajax({
@@ -307,7 +307,7 @@ $.ajax({
   $.each(data, function (key, val) {
 
     el = document.getElementById("horasRodasSelect");
-    html += `<option value="`+val.hora+`">`+val.hora+` (`+val.zona_horaria+`) ⇒ Mi horario `+val.hora_mia+` (`+val.zona_horaria_mia+`)</option>`;
+    html += `<option value="`+val.hora+`">`+val.hora+` ⇒ Mi horario `+val.hora_mia+`</option>`;
   
     el.innerHTML = html;
     
@@ -489,7 +489,7 @@ $('#horasRodasSelect').removeClass('disabled');
           $.each(data, function (key, val) {
 
            el = document.getElementById("horasRodasSelect");
-           html += `<option val="`+val.hora+`">`+val.hora+` (`+val.zona_horaria+`) ⇒ Mi horario `+val.hora_mia+` (`+val.zona_horaria_mia+`)</option>`;
+           html += `<option val="`+val.hora+`">`+val.hora+` ⇒ Mi horario `+val.hora_mia+` </option>`;
           
             el.innerHTML = html;
             
