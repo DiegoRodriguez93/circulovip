@@ -78,6 +78,7 @@ if(mysqli_num_rows($select) > 0){
     
         }
     }
+
     
     $res[] = array('fecha'=>$fecha,
     'fecha_format'=>$fecha_format,

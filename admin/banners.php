@@ -285,15 +285,21 @@ $(document).ready( function () {
     formData.append('href', $('#href').val());
     formData.append('imagenSponsor', $('#imagenSponsor')[0].files[0]); 
 
-    console.log(formData);
-    return false;
-
     $.ajax({
     url: "../ajax/admin/cargarSponsor.php",
     type: "POST",
     data : formData, 
     processData: false,
     contentType: false,
+    beforeSend: () => {
+          Swal.fire({
+            title: 'Subiendo...',
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            onOpen: () => {
+              Swal.showLoading();
+            }
+          })},
     success: function(res){
 
        var response = JSON.parse(res);
@@ -304,9 +310,10 @@ $(document).ready( function () {
             response.message,
             'success'
             );
-            setTimeout(function(){
-              location.reload();
-            }, 2500)
+            startTable();
+
+            $('#href').val('');
+            $('#imagenSponsor').val('');
    
         }else{
           Swal.fire(

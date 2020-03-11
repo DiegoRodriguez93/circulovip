@@ -167,13 +167,9 @@
 
                     <!-- START SPONSOR 1 HERE -->
             
-                    <div id="row" class="row wow fadeIn my-3"> 
+                    <div class="row wow fadeIn my-3"> 
                       <div class="col-12 my-1">
-                        <div class="card text-center"> 
-                          <h3>
-                            SPONSOR 1
-                          </h3>
-        
+                        <div class="col-12 my-1 text-center" id="sponsor1">
                         </div></div>
             
                 </div>  <!-- END SPONSOR 1 HERE -->
@@ -181,16 +177,11 @@
                 
                     <!-- START SPONSOR 2 HERE -->
             
-                    <div id="row" class="row wow fadeIn my-3"> 
-                      <div class="col-12 my-1">
-                        <div class="card text-center"> 
-                          <h3>
-                            SPONSOR 2
-                          </h3>
-        
+                    <div class="row wow fadeIn my-3"> 
+                      <div class="col-12 my-1 text-center" id="sponsor2">
                         </div></div>
             
-                </div>  <!-- END SPONSOR 2 HERE -->
+                  <!-- END SPONSOR 2 HERE -->
         
 
       
@@ -243,6 +234,38 @@ bottom: 0;position: fixed;width: 100%;
   <script src="include/sidebar.js"></script>
   <script src="../lib/countdown/countdown.min.js"></script>
   <script>
+
+    function cargarSponsors(){
+
+      $.ajax({
+        type: "GET",
+        url: "../ajax/socio/sala_de_espera/cargarSponsors.php",
+        dataType: "JSON",
+        success: function (data) {
+          
+          $.each(data, function (i, val) { 
+
+            if(val.tipo == 1){
+              let sponsor1 = '';
+              sponsor1 = `<a href="`+val.href+`" target="_blank"><img class="img-fluid w-100 d-block" src="`+val.url_image+`" /></a>`;
+
+              $(sponsor1).appendTo($('#sponsor1')); 
+            }
+            
+            if(val.tipo == 2){
+              let sponsor2 = '';
+              sponsor2 = `<a href="`+val.href+`" target="_blank"><img class="img-fluid w-100 d-block" style="max-height: 250px!important;" src="`+val.url_image+`" /></a>`;
+
+              $(sponsor2).appendTo($('#sponsor2')); 
+            }
+         
+             
+          });
+
+        }
+      });
+
+    }
 
     function IngresarASala($sala){
 
@@ -340,6 +363,7 @@ bottom: 0;position: fixed;width: 100%;
   $('#salaDeEspera').addClass('active');
 
   cargarContenido();
+  cargarSponsors();
 
   });
 
