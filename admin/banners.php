@@ -95,7 +95,7 @@
     <div class="col-lg-3 sm-0"></div>
     <div class="col-lg-6 sm-12">
       <h4>Sponsor</h4>
-    <form action="">
+    <form id="form_sponsor">
 
     <input type="file" name="imagenSponsor" id="imagenSponsor"><br><br>
 
@@ -177,32 +177,9 @@
 
   }
 
-  function SubirSponsor(){
+  function subirSponsor(){
 
-    $href1 = $('#href').val();
-
-
-    $.ajax({
-      url: "../ajax/admin/ingresar_fecha.php",
-      method: "POST",
-      data: {fecha: $fecha},
-      dataType: "JSON",
-      beforeSend: function(){ 
-      $('.loading').css('display','block');},
-      success: function(res){
-        if(res.result){
-          $('.loading').css('display','none');
-          alert(res.message);
-          $("#fecha").val('');
-          $("#fecha").attr('class', 'form-control');
-          startTable();
-        }else{
-          alert(res.message);
-        }
-      },complete: function () { 
-        $('.loading').css('display','none');
-       }
-    })
+   
 
   }
 
@@ -276,6 +253,78 @@ $(document).ready( function () {
     logIn(); // disparamos el logIn
   }
 
+  $('#form_sponsor').on('submit',function(e){
+    e.preventDefault();
+
+    if($("#imagenSponsor").val() == ''){
+      alert("El archivo es esta vacio!");
+        return false;
+    }
+
+    var file = $('#imagenSponsor')[0].files[0];
+    var imagefile = file.type;
+    var match= ["image/jpeg","image/png","image/jpg","image/webp","image/gif"];
+
+    if(!((imagefile==match[0]) || (imagefile==match[1]) || (imagefile==match[2]) || (imagefile==match[3]) || (imagefile==match[4]) )){
+        alert('Por favor seleccione un formato de imagen válido (JPEG/JPG/PNG/GIF/WEBP).');
+        $("#imagenSponsor").val('');
+        return false;
+    }
+
+    if($('#imagenSponsor')[0].files[0].size > 614400){
+        alert("El archivo es demasiado grande! Tamaño máximo 586 KB");
+        $("#imagenSponsor").val('');
+        return false;
+     };
+
+     
+   
+    var formData = new FormData();
+
+    formData.append('tipo', $('#tipo').val());
+    formData.append('href', $('#href').val());
+    formData.append('imagenSponsor', $('#imagenSponsor')[0].files[0]); 
+
+    console.log(formData);
+    return false;
+
+    $.ajax({
+    url: "../ajax/admin/cargarSponsor.php",
+    type: "POST",
+    data : formData, 
+    processData: false,
+    contentType: false,
+    success: function(res){
+
+       var response = JSON.parse(res);
+
+        if(response.result){
+          Swal.fire(
+            'Ok!',
+            response.message,
+            'success'
+            );
+            setTimeout(function(){
+              location.reload();
+            }, 2500)
+   
+        }else{
+          Swal.fire(
+            'Error!',
+            response.message,
+            'error'
+            );
+        }
+
+    },
+    error: function(xhr, ajaxOptions, thrownError) {
+       console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+    }
+
+});
+
+
+  });
 
 
  
