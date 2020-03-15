@@ -163,25 +163,28 @@ if(!isset($id_empresa) OR $id_empresa == null OR $id_empresa == ''){
    <!--        <div class="card my-3"> -->
 
     <div class="col-md-12 mb-4">
-
+    <h5>Integrantes de la empresa:</h5>
             <div id="empresaContainer" class="row wow fadeIn my-3">
 
-              <div style="display:none" class="loading"></div>
-              
+              <div style="display:none" class="loading"></div>          
     
         </div>
-   <!--      </div> -->
-      
-
-
-
-          <!--/.Card-->
-          <div class="mb-5"></div>
-
-        <!--Grid column-->
-
         
-      </div>
+        </div>
+
+        <div class="col-md-12 mb-4">
+          <h5>Productos:</h5>
+
+<div id="productosContainer" class="row wow fadeIn my-3">
+
+  <div style="display:none" class="loading"></div>          
+
+</div>
+
+</div>
+
+
+        <div class="mb-5"></div>
       </div>
       <!--Grid row-->
 
@@ -228,7 +231,7 @@ bottom: 0;position: fixed;width: 100%;
         $id_emisor = localStorage.getItem('id_user');
         $id_receptor = $('#idUserHidden').val();
         $dia = $("#diasRondasSelect option:selected" ).text();
-        $hora = $("#horasRodasSelect").val();
+        $hora = $("#horasRodasSelect option:selected").val();
         $zona_horaria = localStorage.getItem('zona_horaria');
 
         $.ajax({
@@ -242,9 +245,15 @@ bottom: 0;position: fixed;width: 100%;
         },
         url: "../ajax/socio/ver_empresa/insertarCita.php",
         dataType: "JSON",
-        beforeSend: function (){
-          $('#solicitarRondaBtn').addClass('disabled');
-        },  
+        beforeSend: () => {
+          Swal.fire({
+            title: 'Solicitando...',
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            onOpen: () => {
+              Swal.showLoading();
+            }
+          })},  
         success: function (res) {
           if(res.result){
             Swal.fire(
@@ -292,22 +301,32 @@ bottom: 0;position: fixed;width: 100%;
 
       $diaSeleccionado = $("#diasRondasSelect option:selected" ).val();
 
+      $dia_seleccionado_text = $("#diasRondasSelect option:selected" ).text();
+
+
 $.ajax({
   type: "POST",
   url: "../ajax/socio/ver_empresa/rellenarHorasSelect.php",
   data: {id_emisor: localStorage.getItem('id_user'),
   id_receptor: $('#idUserHidden').val(),
   zona_horaria_emisor:localStorage.getItem('zona_horaria'),
-  dia_seleccionado : $diaSeleccionado
+  dia_seleccionado : $diaSeleccionado,
+  dia_seleccionado_text : $dia_seleccionado_text
   },
   dataType: "JSON",
   success: function (data) {
     var html = '';
     
   $.each(data, function (key, val) {
-
+    
     el = document.getElementById("horasRodasSelect");
-    html += `<option value="`+val.hora+`">`+val.hora+` ⇒ Mi horario `+val.hora_mia+`</option>`;
+           
+          
+           if(val.estado == 1){
+             html += '';
+            }else{
+              html += `<option val="`+val.hora+`">`+val.hora+` ⇒ Mi horario `+val.hora_mia+`</p></option>`;
+            }
   
     el.innerHTML = html;
     
@@ -390,8 +409,9 @@ $('#horasRodasSelect').removeClass('disabled');
         },
         success: function (data) {
           var html = '',
-      el = document.getElementById("empresaContainer");
-      $.each(data, function (key, val) {
+      empresa = document.getElementById("empresaContainer");
+
+      $.each(data[0][0], function (key, val) {
 
         html += `
               <div class="col-lg-4 sm-12 my-1">
@@ -427,9 +447,37 @@ $('#horasRodasSelect').removeClass('disabled');
 
       });
 
-   
+      var html2 = '';
+      productos = document.getElementById('productosContainer');
 
-      el.innerHTML = html;
+      $.each(data[0][1], function (ii, vall) { 
+
+        html2 += `<div class="col-lg-4 sm-12 my-1">
+                <div class="card">
+                <div class="row">
+
+                  <div class="col-12 pt-2 text-center">
+                    <img 
+                    src="https://`+vall.img_url+`"
+                     class="img-fluid" 
+                     style="max-height: 140px;"
+                     alt="">
+                  </div>
+                  <div class="col-12 text-center my-auto">
+                    <b style="font-size: 1.3em;">`+vall.nombre+`</b>
+                    </div>
+                    <div class="col-12 text-center">
+                    <p>`+vall.descripcion+`</p>
+                  </div>
+                </div>
+              </div></div>
+              `;
+         
+      });
+   
+      empresa.innerHTML = html;
+      productos.innerHTML = html2;
+
         },complete: function () {
           $('.loading').css('display','none');
         }
@@ -474,13 +522,16 @@ $('#horasRodasSelect').removeClass('disabled');
 
       $diaSeleccionado = $("#diasRondasSelect option:selected" ).val();
 
+      $dia_seleccionado_text = $("#diasRondasSelect option:selected" ).text();
+
        $.ajax({
          type: "POST",
          url: "../ajax/socio/ver_empresa/rellenarHorasSelect.php",
          data: {id_emisor: localStorage.getItem('id_user'),
          id_receptor: $('#idUserHidden').val(),
          zona_horaria_emisor:localStorage.getItem('zona_horaria'),
-         dia_seleccionado : $diaSeleccionado
+         dia_seleccionado : $diaSeleccionado,
+         dia_seleccionado_text : $dia_seleccionado_text
          },
          dataType: "JSON",
          success: function (data) {
@@ -489,8 +540,13 @@ $('#horasRodasSelect').removeClass('disabled');
           $.each(data, function (key, val) {
 
            el = document.getElementById("horasRodasSelect");
-           html += `<option val="`+val.hora+`">`+val.hora+` ⇒ Mi horario `+val.hora_mia+` </option>`;
-          
+
+           if(val.estado == 1){
+             html += '';
+            }else{
+              html += `<option val="`+val.hora+`">`+val.hora+` ⇒ Mi horario `+val.hora_mia+`</p></option>`;
+            }
+
             el.innerHTML = html;
             
           });

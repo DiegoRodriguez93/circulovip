@@ -337,10 +337,12 @@ bottom: 0;position: fixed;width: 100%;
       el = document.getElementById("empresasContainer");
       $.each(data, function (key, val) {
 
+        /* <button onclick="contactModal('`+val.id_empresa+`','`+val.nombre+`','`+val.pais+`')"
+           class="btn btn-indigo btn-sm">Contactar</button> */
+
         if(val.id_user != localStorage.getItem('id_user')){
-          $button = `<button onclick="contactModal('`+val.id_empresa+`','`+val.nombre+`','`+val.pais+`')"
-           class="btn btn-indigo btn-sm">Contactar</button>
-           <a href="ver_empresa.php?id_empresa=`+val.id_empresa+`"><button class="btn btn-deep-purple btn-sm">Ver más</button></a>`
+          $button = `<a href="ver_empresa.php?id_empresa=`+val.id_empresa+`">
+            <button class="btn btn-deep-purple btn-sm">Ver empresa</button></a>`
         }else{
           $button = `<small>No pudes contactar con tu propia empresa</small>`;
         }

@@ -355,11 +355,17 @@ bottom: 0;position: fixed;width: 100%;
 
     function cargarConversacion($id_emisor, $url_avatar, $nombre_emisor){
 
+      interval = 9999;
+      for(var i = 0; i <= interval; i++){
+        window.clearInterval(i);
+      }
 
+      checkLogIn();
+/* 
         if(typeof interval == 'number'){
           clearInterval(interval);
-          /* chat = ''; */
-        };
+          // chat = ''; 
+        }; */
       
 
       /* CREAMOS UN MODAL */
@@ -386,7 +392,8 @@ bottom: 0;position: fixed;width: 100%;
                   <div class="row">
                     <div class="col-9 mt-2">
                       <textarea maxlength="250" id="textMessage`+$id_emisor+`" class="form-control" ></textarea>
-                      <small class="text-danger" id="mensajeVacio`+$id_emisor+`"></small>
+                      <small class="text-danger" id="mensajeVacio`+$id_emisor+`"></small><br>
+                      <small class="text-info" >Máximo 250 caracteres</small>
                     </div>
                     <div class="col-3 my-auto mx-auto">
                       <button style="
@@ -444,6 +451,9 @@ $('#modal'+$id_emisor).modal('show');
             
 
             }else{
+              // LA VAR CHAT SEGUIA DEFINIDA Y NO CARGABA EL AJAX NUEVO POR ESO HAY QUE FORZAR LA URL EN EL OBJETO ANTES DEL RELOAD
+              var urll = '../ajax/socio/mensajes/cargarConversacion.php?id_receptor='+$id_receptor+'&id_emisor='+$id_emisor+'&nombre_emisor='+$nombre_emisor;
+              chat.context[0].ajax.url = urll;
            /*    $( "div.dataTables_scrollBody" ).scrollTop( 99999 ); */
               chat.ajax.reload();
             }

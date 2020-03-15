@@ -290,15 +290,18 @@ bottom: 0;position: fixed;width: 100%;
         cargo: $cargo,
         acerca_de_mi:$acerca_de_mi
         },        
-        beforeSend: function(){
-        $('.loading').css('display','block');
-        $('#ActualizarDatosPersonalesBtn').addClass('disabled');
-      },
+        beforeSend: () => {
+          Swal.fire({
+            title: 'Actualizando...',
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            onOpen: () => {
+              Swal.showLoading();
+            }
+          })}, 
         dataType: "JSON",
         success: function (res) {
           if(res.result){
-            $('#ActualizarDatosPersonalesBtn').removeClass('disabled');
-            $('.loading').css('display','none');
             $('#cargo').html(res.cargo);
             $('#acerca_de_mi').html(res.acerca_de_mi);
             $('#datosPersonales').modal('hide');
@@ -331,14 +334,17 @@ bottom: 0;position: fixed;width: 100%;
         pais:$pais
         },
         dataType: "JSON",     
-         beforeSend: function(){
-        $('.loading').css('display','block');
-        $('#ActualizarDatosEmpresaBtn').addClass('disabled');
-      },
+        beforeSend: () => {
+          Swal.fire({
+            title: 'Actualizando...',
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            onOpen: () => {
+              Swal.showLoading();
+            }
+          })}, 
         success: function (res) {
           if(res.result){
-            $('#ActualizarDatosEmpresaBtn').removeClass('disabled');
-            $('.loading').css('display','none');
             $('#nombreEmpresa').html(res.nombre);
             $('#descripcionEmpresa').html(res.descripcion);
             $('#paisEmpresa').html("("+res.pais+")");

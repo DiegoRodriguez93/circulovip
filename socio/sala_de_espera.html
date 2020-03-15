@@ -165,28 +165,27 @@
     
         </div>  <!-- END CUENTA REGRESIVA HERE -->
 
+                    
+            
+                    <div class="row wow fadeIn my-3"> 
                     <!-- START SPONSOR 1 HERE -->
-            
-                    <div class="row wow fadeIn my-3"> 
-                      <div class="col-12 my-1">
-                        <div class="col-12 my-1 text-center" id="sponsor1">
-                        </div></div>
-            
-                </div>  <!-- END SPONSOR 1 HERE -->
+                      <div class="col-lg-6 md-6 sm-12 my-1 text-center" id="sponsor1"></div>
+                    <!-- END SPONSOR 1 HERE -->
         
-                
                     <!-- START SPONSOR 2 HERE -->
+                      <div class="col-lg-6 md-6 sm-12 my-1 text-center" id="sponsor2"></div>
+                    <!-- END SPONSOR 2 HERE -->
+                      </div>
+
+                      <div class="row wow fadeIn my-3"> 
+                        <!-- START SPONSOR 3 HERE -->
+                          <div class="col-lg-6 md-6 sm-12 my-1 text-center" id="sponsor3"></div>
+                        <!-- END SPONSOR 3 HERE -->
             
-                    <div class="row wow fadeIn my-3"> 
-                      <div class="col-12 my-1 text-center" id="sponsor2">
-                        </div></div>
-            
-                  <!-- END SPONSOR 2 HERE -->
-        
-
-      
-
-
+                        <!-- START SPONSOR 4 HERE -->
+                          <div class="col-lg-6 md-6 sm-12 my-1 text-center" id="sponsor4"></div>
+                        <!-- END SPONSOR 4 HERE -->
+                          </div>
 
           <!--/.Card-->
           <div class="mb-5"></div>
@@ -245,21 +244,10 @@ bottom: 0;position: fixed;width: 100%;
           
           $.each(data, function (i, val) { 
 
-            if(val.tipo == 1){
-              let sponsor1 = '';
-              sponsor1 = `<a href="`+val.href+`" target="_blank"><img class="img-fluid w-100 d-block" src="`+val.url_image+`" /></a>`;
-
-              $(sponsor1).appendTo($('#sponsor1')); 
-            }
+              let sponsor = '';
+              sponsor = `<a href="`+val.href+`" target="_blank"><img class="img-fluid w-100 d-block" src="`+val.url_image+`" /></a>`;
+              $(sponsor).appendTo($('#sponsor'+val.tipo)); 
             
-            if(val.tipo == 2){
-              let sponsor2 = '';
-              sponsor2 = `<a href="`+val.href+`" target="_blank"><img class="img-fluid w-100 d-block" style="max-height: 250px!important;" src="`+val.url_image+`" /></a>`;
-
-              $(sponsor2).appendTo($('#sponsor2')); 
-            }
-         
-             
           });
 
         }

@@ -6,6 +6,7 @@ $id_emisor = mysqli_real_escape_string($mysqli, $_POST['id_emisor']);
 $id_receptor = mysqli_real_escape_string($mysqli, $_POST['id_receptor']);
 $zona_horaria_emisor = mysqli_real_escape_string($mysqli, $_POST['zona_horaria_emisor']);
 $dia_seleccionado = mysqli_real_escape_string($mysqli, $_POST['dia_seleccionado']);
+$dia_seleccionado_text = mysqli_real_escape_string($mysqli, $_POST['dia_seleccionado_text']);
 
 // EXTRAEMOS LA ZONA HORARIA RECEPTOR
 $select = mysqli_query($mysqli, "SELECT zona_horaria FROM usuarios WHERE id = '$id_receptor' ");
@@ -30,6 +31,17 @@ if($row2['id'] == null){
 
     $date = DateTime::createFromFormat( 'H:i:s', $row2['hora'] );
     $horaFormat = $date->format( 'H:i');
+
+    // CHEQUEMOS QUE NO ESTE SOLICITADA LA FECHA
+
+    $d = strtotime($dia_seleccionado_text);
+    $horaFormat2 = date("Y-m-d", $d);
+
+    $fecha_a_chequear = $horaFormat2 . ' ' . $horaFormat . ':00';
+
+    $select3 = mysqli_query($mysqli,"SELECT dia_hora, id_receptor, estado 
+    FROM citas WHERE (id_receptor = '$id_receptor' OR id_emisor = '$id_receptor')
+     AND dia_hora = '$fecha_a_chequear' AND (estado = 2 OR estado = 1) ");
 
    /*  if(intval($zona_horaria_receptor) >= 0){ */
 
@@ -56,12 +68,26 @@ if($row2['id'] == null){
 
     }
 
+    $fecha_a_chequear2 = $horaFormat2 . ' ' . $hora_mia . ':00';
+
+    $select4 = mysqli_query($mysqli,"SELECT dia_hora, id_receptor, estado 
+    FROM citas WHERE (id_receptor = '$id_emisor' OR id_emisor = '$id_emisor')
+     AND dia_hora = '$fecha_a_chequear2' AND (estado = 2 OR estado = 1)");
+
+    if(mysqli_num_rows($select3) > 0 OR mysqli_num_rows($select4) > 0){
+        // CITA YA SOLICITADA EN ESE HORARIO
+        $estado = 1;
+    }else{  $estado = 0;
+    
+    }
+
 
     $res[] = array(
         'hora'=>$horaFormat,
         'zona_horaria'=>'GMT'.$zona_horaria_receptor,
         'hora_mia'=>$hora_mia,
-        'zona_horaria_mia'=>'GMT'.$zona_horaria_emisor
+        'zona_horaria_mia'=>'GMT'.$zona_horaria_emisor,
+        'estado'=>$estado
     );
 
     

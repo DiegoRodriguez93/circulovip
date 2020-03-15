@@ -634,6 +634,228 @@ if ( ! $.fn.DataTable.isDataTable( '#tableCitas' ) ) {
  
 } }
 
+function cargarConversacion($id_emisor, $url_avatar, $nombre_emisor){
+
+interval = 9999;
+for(var i = 0; i <= interval; i++){
+  window.clearInterval(i);
+}
+
+checkLogIn();
+startTable();
+startTable2();
+/* 
+  if(typeof interval == 'number'){
+    clearInterval(interval);
+    // chat = ''; 
+  }; */
+
+
+/* CREAMOS UN MODAL */
+
+var modal = `<div class="modal fade" id="modal`+$id_emisor+`" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog " role="document" data-backdrop="static" data-keyboard="false">
+<div class="modal-content bg-light">
+<div class="modal-header">
+  <h5 class="modal-title">Conversación con `+$nombre_emisor+`</h5>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row wow fadeIn">
+          <div class="col-md-12 py-2 px-5">
+            <table id="tableChat`+$id_emisor+`" class="table responsive bg-white" style="width: 100%;">
+              <thead>
+                <tr style="display:none;" class="bg-light">
+                  <th></th>
+                </tr>
+              </thead>
+            </table>
+            <div class="row">
+              <div class="col-9 mt-2">
+                <textarea maxlength="250" id="textMessage`+$id_emisor+`" class="form-control" ></textarea>
+                <small class="text-danger" id="mensajeVacio`+$id_emisor+`"></small><br>
+                <small class="text-info" >Máximo 250 caracteres</small>
+              </div>
+              <div class="col-3 my-auto mx-auto">
+                <button style="
+                border: none;
+                color: white;
+                padding: 15% 15%;
+                border-radius: 12px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;" class="btn-cyan" onclick="sendMessage('`+$id_emisor+`')" >ENVIAR</button c>
+              </div>
+            </div>
+            <div>
+            </div>
+          </div>
+        </div>
+</div>
+</div>
+</div>
+</div> `;
+
+$(modal).appendTo('body');
+$('#modal'+$id_emisor).modal('show');
+
+
+
+/*       $('#rightPart').show();
+$('#id_emisor_hidden').val($id_emisor); */
+/*  $('#conversacionTitulo').html('Conversación con '+$nombre_emisor ); */
+$id_receptor = localStorage.getItem('id_user');
+if ( ! $.fn.DataTable.isDataTable( '#tableChat'+$id_emisor ) ) {
+          //cargamos la tabla del chat
+
+       var goToBottom = function(){
+          $( "div.dataTables_scrollBody" ).scrollTop( 99999 );
+        }
+
+        chat = $('#tableChat'+$id_emisor).DataTable({
+        ajax : {"url" : '../ajax/socio/mensajes/cargarConversacion.php?id_receptor='+$id_receptor+'&id_emisor='+$id_emisor+'&nombre_emisor='+$nombre_emisor,   
+        "complete" : goToBottom},
+        "lengthChange": false,
+        "info": false,
+        "searching": false,
+        "ordering": false,
+        "scrollY":        "250px",
+        "scrollX": false,
+        "scrollCollapse": false,
+        "paging":         false,
+        oLanguage: {
+            "sUrl": "../json/traducciontabla.json"
+        }
+        });
+
+      
+
+      }else{
+        // LA VAR CHAT SEGUIA DEFINIDA Y NO CARGABA EL AJAX NUEVO POR ESO HAY QUE FORZAR LA URL EN EL OBJETO ANTES DEL RELOAD
+        var urll = '../ajax/socio/mensajes/cargarConversacion.php?id_receptor='+$id_receptor+'&id_emisor='+$id_emisor+'&nombre_emisor='+$nombre_emisor;
+        chat.context[0].ajax.url = urll;
+     /*    $( "div.dataTables_scrollBody" ).scrollTop( 99999 ); */
+        chat.ajax.reload();
+      }
+
+interval = setInterval(function (){ 
+
+/*       $('#rightPart').show();
+$('#id_emisor_hidden').val($id_emisor);
+$('#conversacionTitulo').html('Conversación con '+$nombre_emisor ); */
+
+$id_receptor = localStorage.getItem('id_user');
+if ( ! $.fn.DataTable.isDataTable( '#tableChat'+$id_emisor ) ) {
+          //cargamos la tabla del chat
+
+       var goToBottom = function(){
+          $( "div.dataTables_scrollBody" ).scrollTop( 99999 );
+        }
+
+        
+
+        chat = $('#tableChat'+$id_emisor).DataTable({
+        ajax : {"url" : '../ajax/socio/mensajes/cargarConversacion.php?id_receptor='+$id_receptor+'&id_emisor='+$id_emisor+'&nombre_emisor='+$nombre_emisor,   
+        "complete" : goToBottom},
+        "lengthChange": false,
+        "info": false,
+        "searching": false,
+        "ordering": false,
+        "scrollY":        "250px",
+        "scrollX": false,
+        "scrollCollapse": false,
+        "paging":         false,
+        oLanguage: {
+            "sUrl": "../json/traducciontabla.json"
+        }
+        });
+
+      
+
+      }else{
+
+     chat.ajax.reload();
+      }
+  
+  }, 10000);
+
+
+
+}
+
+function sendMessage($id_receptor){
+
+/*       $id_receptor = $('#id_emisor_hidden').val(); */
+      $id_emisor = localStorage.getItem('id_user');
+      $mensaje    = $('#textMessage'+$id_receptor).val();
+
+      if($mensaje.length < 1 || $mensaje == null || $mensaje == '' ){
+        $('#textMessage'+$id_receptor).addClass('is-invalid');
+        $('#mensajeVacio'+$id_receptor).html('El mensaje no puede estar vacio');
+        return false;
+      }else{
+        $('#textMessage'+$id_receptor).removeClass('is-invalid');
+        $('#mensajeVacio'+$id_receptor).html('');
+      }
+
+      var date = new Date;
+
+      var seconds = date.getSeconds();
+      var minutes = date.getMinutes();
+      var hour = date.getHours();
+
+      var dd = (date.getDate() < 10 ? '0' : '') + date.getDate();
+      // 01, 02, 03, ... 10, 11, 12
+      var MM = ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1);
+
+      var HH = (date.getHours() < 10 ? '0' : '') + date.getHours();
+
+      var mi = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
+
+      $.ajax({
+        type: "POST",
+        url: "../ajax/socio/mensajes/enviarMensaje.php",
+        data: {id_emisor: $id_emisor,
+        id_receptor: $id_receptor,
+        mensaje: $mensaje},
+        dataType: "JSON",
+        beforeSend: function(){
+          var row = `<tr role='row' class='odd'>
+          <td tabindex='0'>
+          <div style=" border-radius: 25px;float:left"><small><b>`+dd+`/`+MM+` `+HH+`:`+mi+`</b>
+          </small> Tú: `+$mensaje+`</div>
+          </td></tr>`;
+          $("#tableChat"+$id_receptor+" tbody").append(row);
+          $('#textMessage'+$id_receptor).val('');
+          $( "div.dataTables_scrollBody" ).scrollTop( 99999 );
+          if (typeof interval !== 'undefined') {
+            clearInterval(interval);
+        }
+        if (typeof intervall !== 'undefined') {
+            clearInterval(interval);
+        }
+          chat.context[0].jqXHR.abort();
+        },
+        success: function (res) {
+            if(res.result){
+              chat.ajax.reload();
+              intervall = setInterval(function(){
+                chat.ajax.reload();
+              },10000);
+              console.log('Mensaje enviado correctamente');
+            }else{
+              alert('Ha ocurrido un error al enviar su mensaje');
+            }
+        }, error: function(error){
+          alert('Ha ocurrido un error al enviar su mensaje');
+          console.log(error);
+        }
+      });
+    }
+
   $(document).ready(function(){ 
 
 /* INCLUDES */
