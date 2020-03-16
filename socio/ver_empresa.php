@@ -452,6 +452,8 @@ $('#horasRodasSelect').removeClass('disabled');
 
       $.each(data[0][1], function (ii, vall) { 
 
+        if(vall.nombre != undefined){
+          
         html2 += `<div class="col-lg-4 sm-12 my-1">
                 <div class="card">
                 <div class="row">
@@ -472,6 +474,12 @@ $('#horasRodasSelect').removeClass('disabled');
                 </div>
               </div></div>
               `;
+
+            }else{
+
+              html2 += '<h6>La empresa por el momento no tiene productos disponibles.</h6>';
+
+            }
          
       });
    

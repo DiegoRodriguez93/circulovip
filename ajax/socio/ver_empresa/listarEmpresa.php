@@ -72,6 +72,10 @@ if(mysqli_num_rows($select) > 0){
 
         }
 
+    }else{
+
+        $array_producto = array();
+        
     }
 
     $res[] = array(array('empresa'=>$array_empresa),array('productos'=>$array_producto));
