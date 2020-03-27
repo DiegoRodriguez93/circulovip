@@ -142,3 +142,12 @@ a:hover
 {
   transform: none;
 }
+
+.badgeZabuto{
+  background-color: purple;
+  color: white;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  cursor: pointer;
+}

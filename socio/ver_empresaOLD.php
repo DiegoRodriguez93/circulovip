@@ -89,14 +89,16 @@ if(!isset($id_empresa) OR $id_empresa == null OR $id_empresa == ''){
         </button>
       </div>
       <div class="modal-body">
-        <div class="row">
-          <div class="col-12">
+        <div class="row p-2">
 
         <input type="hidden" id="idUserHidden">
-        <div id="rondasCalendar"></div>
+        <label for="diasRondasSelect">Días de ronda:</label>
+        <select class="form-control" name="diasRondasSelect" id="diasRondasSelect"></select>
+        <label for="diasRondasSelect">Horario disponible:</label>
+        <select class="form-control" name="horasRodasSelect" id="horasRodasSelect"></select>
 
         </div>
-        </div>
+
       </div>
       <div class="modal-footer text-center">
       <button type="button" onclick="insertarRonda()" id="solicitarRondaBtn" class="btn btn-indigo">Solicitar Ronda</button>
@@ -228,7 +230,6 @@ bottom: 0;position: fixed;width: 100%;
   <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
   <script src="https://cdn.datatables.net/colreorder/1.5.2/js/dataTables.colReorder.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/zabuto_calendar/1.6.4/zabuto_calendar.min.js"></script>
   <script src="../lib/helper.js"></script>
   <script src="js/cerrar_session.js"></script>
   <script src="include/sidebar.js"></script>
@@ -534,15 +535,6 @@ $('#horasRodasSelect').removeClass('disabled');
      listarEmpresa(); 
 
      $('#horasRodasSelect').addClass('disabled');
-
-     /* rellenar zabuto calendar */
-     $("#rondasCalendar").zabuto_calendar({
-      language: "es",
-    ajax: {
-      url: "../ajax/socio/ver_empresa/rellenarCalendario.php",
-      modal: true
-    }
-  });
 /* 
      $('#diasRondasSelect').change(function () { 
 
