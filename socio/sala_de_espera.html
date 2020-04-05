@@ -167,33 +167,15 @@
 
                     
             
-                    <div class="row wow fadeIn my-3"> 
-                    <!-- START SPONSOR 1 HERE -->
-                      <div class="col-lg-6 md-6 sm-12 my-1 text-center" id="sponsor1"></div>
-                    <!-- END SPONSOR 1 HERE -->
-        
-                    <!-- START SPONSOR 2 HERE -->
-                      <div class="col-lg-6 md-6 sm-12 my-1 text-center" id="sponsor2"></div>
-                    <!-- END SPONSOR 2 HERE -->
-                      </div>
+                    <div class="row wow fadeIn my-3" id="carouselContainer"> 
+           
 
-                      <div class="row wow fadeIn my-3"> 
-                        <!-- START SPONSOR 3 HERE -->
-                          <div class="col-lg-6 md-6 sm-12 my-1 text-center" id="sponsor3"></div>
-                        <!-- END SPONSOR 3 HERE -->
-            
-                        <!-- START SPONSOR 4 HERE -->
-                          <div class="col-lg-6 md-6 sm-12 my-1 text-center" id="sponsor4"></div>
-                        <!-- END SPONSOR 4 HERE -->
-                          </div>
 
-          <!--/.Card-->
-          <div class="mb-5"></div>
+        </div>
 
-        <!--Grid column-->
 
-        
-      </div>
+        <div class="mb-5"></div>
+
       </div>
       <!--Grid row-->
 
@@ -236,22 +218,63 @@ bottom: 0;position: fixed;width: 100%;
 
     function cargarSponsors(){
 
+      let carousel = '';
+      let indicator = '';
+      let sponsor = '';
+
       $.ajax({
         type: "GET",
         url: "../ajax/socio/sala_de_espera/cargarSponsors.php",
         dataType: "JSON",
+        async: false,
         success: function (data) {
+
+          carousel += `<div id="carousel-example-1z" class="carousel slide carousel-fade" data-ride="carousel" data-interval="500">
+
+          <ol class="carousel-indicators"></ol>
+
+          <div class="carousel-inner" role="listbox"></div>`;
           
           $.each(data, function (i, val) { 
 
-              let sponsor = '';
-              sponsor = `<a href="`+val.href+`" target="_blank"><img class="img-fluid w-100 d-block" src="`+val.url_image+`" /></a>`;
-              $(sponsor).appendTo($('#sponsor'+val.tipo)); 
+            let active = '';
+
+            if(i == 0){
+              active = 'active';
+            }
+
+              indicator += `<li data-target="#carousel-example-1z" data-slide-to="`+i+`" class="`+active+`"></li>`;
+
+
+              sponsor += `<div class="carousel-item `+active+`">
+                <a href="`+val.href+`" target="_blank">
+                <img class="d-block w-100" src="`+val.url_image+`" />
+                </a>  
+                </div>`;
             
           });
 
         }
       });
+
+      carousel += `<a class="carousel-control-prev" href="#carousel-example-1z" role="button" data-slide="prev">
+  <span class="carousel-control-prev-icon" style="width: 80px;height:80px;" aria-hidden="true"></span>
+  <span class="sr-only">Anterior</span>
+</a>
+<a class="carousel-control-next" href="#carousel-example-1z" role="button" data-slide="next">
+  <span class="carousel-control-next-icon" style="width: 80px;height:80px;" aria-hidden="true"></span>
+  <span class="sr-only">Siguiente</span>
+</a>
+
+</div>`;
+
+    $('#carouselContainer').append(carousel);
+    $(sponsor).appendTo($('.carousel-inner')); 
+    $(indicator).appendTo($('.carousel-indicators')); 
+
+/*     $('.carousel').carousel({
+  interval: timeCarousel
+  }); */
 
     }
 
@@ -323,7 +346,7 @@ bottom: 0;position: fixed;width: 100%;
     }
 
   
-  $(document).ready(function(){
+  $(document).ready(function(){ 
 
   /* INCLUDES */
 

@@ -78,6 +78,7 @@
         <th>Url de la imagén</th>
         <th>Href</th>
         <th>Tipo</th>
+        <th>Tiempo</th>
         <th>Eliminar</th>
             </tr>
         </thead>
@@ -108,6 +109,12 @@
       <option value="2">2</option>
       <option value="3">3</option>
       <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
     </select>
 
     <div class="text-center">
@@ -115,9 +122,18 @@
     </div>
 
     </form>
+    <hr>
     </div>
     <div class="col-lg-3 sm-0"></div>
   </div>
+  <div class="row">
+  <div class="col-lg-3 sm-0"></div>
+      <div class="col-lg-6 sm-12 mt-5">
+        <label for="">Tiempo en segundos</label>
+          <input type="number" id="timeInterval" />
+          <button class="btn btn-primary" onclick="actualizarTimeIntervalCarousel()">Actualizar</button>
+      </div>
+    <div class="col-lg-3 sm-0"></div>
 </div>
 
 
@@ -132,6 +148,59 @@
 
 <script>
 
+  function actualizarTimeIntervalCarousel(){
+    $time = $('#timeInterval').val();
+
+    if($time == ''){
+
+      Swal.fire(
+            'Error!',
+            'Ingrese un tiempo valido!',
+            'error'
+          );
+          return false;
+      
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "../ajax/admin/actualizarTimeCarousel.php",
+      data: {time:$time},
+      dataType: "JSON",
+      beforeSend: () => {
+          Swal.fire({
+            title: 'Actualizando...',
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            onOpen: () => {
+              Swal.showLoading();
+            }
+          })},
+      success: function (res) {
+
+        startTable();
+
+        if(res.result){
+          Swal.fire(
+            'Ok!',
+            res.message,
+            'success'
+            );
+
+            $('#timeInterval').val('');
+   
+        }else{
+          Swal.fire(
+            'Error!',
+            res.message,
+            'error'
+            );
+        }
+        
+      }
+    });
+
+  }
 
   function eliminarSponsor($id){
 

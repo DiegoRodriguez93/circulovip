@@ -5,7 +5,8 @@ require '../../_conexion.php';
 $id_user = mysqli_real_escape_string($mysqli, $_GET['id_user']);
 $zona_horaria = mysqli_real_escape_string($mysqli, $_GET['zona_horaria']);
 
-$select = mysqli_query($mysqli, "SELECT * FROM citas WHERE id_emisor = '$id_user' OR id_receptor = '$id_user' ");
+$select = mysqli_query($mysqli, "SELECT * FROM citas 
+WHERE (id_emisor = '$id_user' OR id_receptor = '$id_user') AND dia_hora >= current_date() ORDER BY id_cita DESC ");
 
 if(mysqli_num_rows($select) > 0){
 

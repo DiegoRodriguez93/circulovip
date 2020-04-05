@@ -99,8 +99,8 @@ if(!isset($id_empresa) OR $id_empresa == null OR $id_empresa == ''){
         </div>
       </div>
       <div class="modal-footer text-center">
-      <button type="button" onclick="insertarRonda()" id="solicitarRondaBtn" class="btn btn-indigo">Solicitar Ronda</button>
-        <button type="button" class="btn btn-blue-grey" data-dismiss="modal">Cerrar</button>
+      <!-- <button type="button" onclick="insertarRonda()" id="solicitarRondaBtn" class="btn btn-indigo">Solicitar Ronda</button> -->
+        <button type="button" class="btn btn-blue-grey btn-sm" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>
@@ -228,7 +228,8 @@ bottom: 0;position: fixed;width: 100%;
   <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
   <script src="https://cdn.datatables.net/colreorder/1.5.2/js/dataTables.colReorder.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/zabuto_calendar/1.6.4/zabuto_calendar.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/zabuto_calendar/1.6.4/zabuto_calendar.min.js"></script> -->
+  <script src="js/zabuto.js"></script>
   <script src="../lib/helper.js"></script>
   <script src="js/cerrar_session.js"></script>
   <script src="include/sidebar.js"></script>
@@ -236,12 +237,13 @@ bottom: 0;position: fixed;width: 100%;
 
   <script>
 
-      function insertarRonda(){
+      function insertarRonda($dia, $id_receptor, $hora){
         $id_emisor = localStorage.getItem('id_user');
-        $id_receptor = $('#idUserHidden').val();
-        $dia = $("#diasRondasSelect option:selected" ).text();
-        $hora = $("#horasRodasSelect option:selected").val();
         $zona_horaria = localStorage.getItem('zona_horaria');
+
+ /*        $id_receptor = $('#idUserHidden').val();
+        $dia = $("#diasRondasSelect option:selected" ).text();
+        $hora = $("#horasRodasSelect option:selected").val(); */
 
         $.ajax({
         type: "POST",
@@ -290,73 +292,56 @@ bottom: 0;position: fixed;width: 100%;
 
     function solicitarRonda($id_user){
 
-      $.ajax({
-        type: "GET",
-        url: "../ajax/socio/ver_empresa/rellenarSelectRondas.php",
-        dataType: "JSON",
-        success: function (data) {
-          var html = '';
+     
 
-          el = document.getElementById("diasRondasSelect");
-          $.each(data, function (key, val) {
+     $userEmisor = localStorage.getItem('id_user');
+     $zona_horaria = localStorage.getItem('zona_horaria');
+     $userReceptor = $id_user;
 
-        html += `<option value="`+val.dia+`" >`+val.fecha+`</option>`;
-
-      });
-
-      el.innerHTML = html;
-
-      /* DESPUÈS QUE CARGA EL DÌA YA RELLENA CON LOS HORARIOS DEL DÍA MÁS ARRIBA */
-
-      $diaSeleccionado = $("#diasRondasSelect option:selected" ).val();
-
-      $dia_seleccionado_text = $("#diasRondasSelect option:selected" ).text();
+       function beSend() {
+        $('.loading').css('display','block');
+      };
 
 
-$.ajax({
-  type: "POST",
-  url: "../ajax/socio/ver_empresa/rellenarHorasSelect.php",
-  data: {id_emisor: localStorage.getItem('id_user'),
-  id_receptor: $('#idUserHidden').val(),
-  zona_horaria_emisor:localStorage.getItem('zona_horaria'),
-  dia_seleccionado : $diaSeleccionado,
-  dia_seleccionado_text : $dia_seleccionado_text
-  },
-  dataType: "JSON",
-  success: function (data) {
-    var html = '';
-    
-  $.each(data, function (key, val) {
-    
-    el = document.getElementById("horasRodasSelect");
-           
-          
-           if(val.estado == 1){
-             html += '';
-            }else{
-              html += `<option val="`+val.hora+`">`+val.hora+` ⇒ Mi horario `+val.hora_mia+`</p></option>`;
-            }
+/*  
+        $.ajax({
+          type: "GET",
+          url: "../ajax/socio/ver_empresa/rellenarCalendario.php?emisor="+$userEmisor+"&receptor="+$userReceptor+"&zona_horaria="+$zona_horaria,
+          dataType: "JSON",
+          beforeSend: ()=>{
+            beSend();
+          },
+          success: function (res) {
+            $("#rondasCalendar").zabuto_calendar({ 
+              data: res,
+              ajax: {modal: true } 
+              });
+          },
+          complete: () => {
+            completeYA();
+          }
+          });  */
+
+          $('.loading').css('display','block')
   
-    el.innerHTML = html;
-    
+
+      // rellenar zabuto calendar 
+     $("#rondasCalendar").zabuto_calendar({
+      language: "es",
+    ajax: {
+      url: "../ajax/socio/ver_empresa/rellenarCalendario.php?emisor="+$userEmisor+"&receptor="+$userReceptor+"&zona_horaria="+$zona_horaria,
+      modal: true
+    } 
   });
+ 
 
-  }
-
-});
-
-$('#horasRodasSelect').removeClass('disabled');
-
-        }
-      });
-
-      $('#idUserHidden').val($id_user);
-
-
-
-      $('#rondaModal').modal('show');
 
     }
+
+    function completeYA(){
+         $('.loading').css('display','none');
+        $('#rondaModal').modal('show');
+      }
 
     function abrirModalMensaje($id_user_receptor, $nombre, $pais){
 
@@ -535,15 +520,8 @@ $('#horasRodasSelect').removeClass('disabled');
 
      $('#horasRodasSelect').addClass('disabled');
 
-     /* rellenar zabuto calendar */
-     $("#rondasCalendar").zabuto_calendar({
-      language: "es",
-    ajax: {
-      url: "../ajax/socio/ver_empresa/rellenarCalendario.php",
-      modal: true
-    }
-  });
-/* 
+
+/*
      $('#diasRondasSelect').change(function () { 
 
       $diaSeleccionado = $("#diasRondasSelect option:selected" ).val();
@@ -584,16 +562,9 @@ $('#horasRodasSelect').removeClass('disabled');
       $('#horasRodasSelect').removeClass('disabled');
 
 
-      }); */
+      }); 
+*/
 
-      
-
- /*    if($nombre != null && $nombre.length > 1 && $id_user != null && $id_user.length > 0 &&
-    $token != null && $token.length == 32){
-      location.replace('socio/index.html');
-    }else{
-      console.log('usuario no logeado');
-    } */
     });
 
   

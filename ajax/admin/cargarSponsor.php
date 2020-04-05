@@ -69,7 +69,7 @@ if ($uploadOk != 0) {
 
 $href  = mysqli_real_escape_string($mysqli,$_POST['href']);
 $tipo  = mysqli_real_escape_string($mysqli,$_POST['tipo']);
-$logo_url = $_SERVER['SERVER_NAME'].$imagePath;
+$logo_url = 'https://renoca.ml/work/circulovip/uploads/'.$fileName;
 
 // i check if the image with this type has been uploaded before
 
