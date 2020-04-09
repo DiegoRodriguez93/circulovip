@@ -42,7 +42,7 @@
 <!-- Modal CAMBIAR PASSWORD END -->
 
 <!-- MODAL CONFIRM TRANSACCIÓN-->
-<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div class="modal fade" id="mostrarDatosUsuario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true" data-backdrop="static" data-keyboard="false">
 
   <!-- Change class .modal-sm to change the size of the modal -->
@@ -339,6 +339,32 @@ bottom: 0;position: fixed;width: 100%;
   <script src="js/cerrar_session.js"></script>
 
   <script>
+
+function mostrarDatosUsuario($id_usuario){
+
+  $.ajax({
+    type: "POST",
+    url: "../ajax/socio/index/mostrarDatosUsuario.php",
+    data: {id_usuario:$id_usuario},
+    dataType: "JSON",
+    beforeSend: function () {
+          $('.loading').css('display','block');
+        },
+    success: function (res) {
+
+      console.log(res);
+      
+    },complete: function () {
+          $('.loading').css('display','none');
+        },
+  });
+
+
+
+
+}
+
+
     function IngresarASala($sala){
 
       localStorage.setItem('sala',$sala);
