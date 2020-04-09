@@ -221,13 +221,17 @@ bottom: 0;position: fixed;width: 100%;
       let carousel = '';
       let indicator = '';
       let sponsor = '';
+      let timeCarousel = '';
 
       $.ajax({
         type: "GET",
         url: "../ajax/socio/sala_de_espera/cargarSponsors.php",
         dataType: "JSON",
         async: false,
+        beforeSend:()=>{$('.loading').css('display','block');},
         success: function (data) {
+
+          timeCarousel = parseInt(data[0].time) * 1000;
 
           carousel += `<div id="carousel-example-1z" class="carousel slide carousel-fade" data-ride="carousel" data-interval="500">
 
@@ -254,7 +258,7 @@ bottom: 0;position: fixed;width: 100%;
             
           });
 
-        }
+        },complete: ()=>{$('.loading').css('display','none');}
       });
 
       carousel += `<a class="carousel-control-prev" href="#carousel-example-1z" role="button" data-slide="prev">
@@ -272,9 +276,9 @@ bottom: 0;position: fixed;width: 100%;
     $(sponsor).appendTo($('.carousel-inner')); 
     $(indicator).appendTo($('.carousel-indicators')); 
 
-/*     $('.carousel').carousel({
+   $('.carousel').carousel({
   interval: timeCarousel
-  }); */
+  }); 
 
     }
 
