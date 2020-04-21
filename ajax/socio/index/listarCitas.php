@@ -118,6 +118,7 @@ if(mysqli_num_rows($select) > 0){
       rounded-circle pointer'
       width='40'
       height='40'
+      onclick='mostrarDatosUsuario(`".$id_destinatario."`)'
       src='https://renoca.ml/work/circulovip/images/profile.jpg' >"; 
     }else{
       $img_avatar = "<img
@@ -125,16 +126,17 @@ if(mysqli_num_rows($select) > 0){
       rounded-circle pointer'
       width='40'
       height='40'
+      onclick='mostrarDatosUsuario(`".$id_destinatario."`)'
       src='".$avatar."' >"; 
     }
     /* AVATAR END */
 
 
     
-
+    $newName = "<p style='cursor:pointer' onclick='mostrarDatosUsuario(`".$id_destinatario."`)'>".$nombre."</p>";
     
 
-    $res[] = array($img_avatar, $nombre, $tipo, $opciones, $estado);
+    $res[] = array($img_avatar, $newName, $tipo, $opciones, $estado);
 
     }
 

@@ -350,9 +350,70 @@ function mostrarDatosUsuario($id_usuario){
     beforeSend: function () {
           $('.loading').css('display','block');
         },
-    success: function (res) {
+    success: function (data) {
 
-      console.log(res);
+      console.log(data);
+         
+        let modal = `<div class="modal fade" id="mostrarDatosUsuario`+data.id+`" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" data-backdrop="static" data-keyboard="false">
+
+  <!-- Change class .modal-sm to change the size of the modal -->
+  <div class="modal-dialog  modal-top" role="document">
+
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title w-100" id="modalTitle">Perfil de `+data.nombre+`</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card testimonial-card">
+
+          <!-- Background color -->
+          <div class="card-up indigo lighten-1"></div>
+
+          <!-- Avatar -->
+          <div class="avatar text-center white">
+            <img src="`+data.url_avatar+`" class="rounded-circle img-fluid w-25"
+              alt="Foto de perfil de `+data.nombre+`">
+          </div>
+
+          <!-- Content -->
+          <div class="card-body">
+            <!-- Name -->
+            <div class="text-center">
+            <h4 class="card-title">`+data.nombre+`</h4>
+            <h6>`+data.cargo+`</h6>
+          </div>
+            <hr>
+            <!-- Quotation -->
+            <p>`+data.acerca_de_mi+`
+            </p>
+          </div>
+
+        </div>
+
+<div class="card testimonial-card mt-3">
+<div class="card-up indigo lighten-1"></div>
+<!-- Content -->
+<div class="card-body">
+  <img src="`+data.url_image+`" class="img-fluid w-50" />
+                <h5> `+data.nombreEmpresa+` (`+data.pais+`)</h5>
+                <h6>`+data.descripcion+`</h6>
+</div>
+</div>
+</div>
+    </div>
+  </div>
+</div>
+</div> `;
+
+$('body').append(modal);
+$('#mostrarDatosUsuario'+data.id).modal('show');
+
+
       
     },complete: function () {
           $('.loading').css('display','none');

@@ -273,6 +273,7 @@ bottom: 0;position: fixed;width: 100%;
             'success'
           );
           $('#rondaModal').modal('hide');
+          $('.modal').modal('hide');
           }else{
 
             Swal.fire(
