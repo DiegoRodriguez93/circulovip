@@ -22,27 +22,32 @@
   </style>
   </head><body>
  
-  <!-- Modal CAMBIAR PASSWORD START -->
-<div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <!-- Modal EDITAR HORARIO START -->
+<div class="modal fade" id="modalEditarHorario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document" data-backdrop="static" data-keyboard="false">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Cambiar Contraseña</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Proximas Citas</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       <div class="modal-body">
-        <label for="pass1">Nueva contraseña</label>
-        <input type="password" class="form-control" id="pass1">
-        <label for="pass2">Repetir contraseña</label>
-        <input type="password" class="form-control" id="pass2">
+
+        <label for="listadoCitas">Seleccione el día de la cita a editar:</label>
+        <select name="" id="listadoCitas" class="form-control">
+          <option value="">No hay proximas citas disponibles</option>
+        </select>
+
       </div>
       <div class="modal-footer"><div class="mx-auto">
-        <button type="button" onclick="changePassword()" class="btn btn-indigo">Cambiar contraseña</button>
+        <button type="button" onclick="editarHorarioDeCita()" class="btn btn-indigo">Editar Horarios</button>
       </div>
       </div>
     </div>
   </div>
 </div> 
-<!-- Modal CAMBIAR PASSWORD END -->
+<!-- Modal EDITAR HORARIO END -->
 
 <!-- MODAL CONFIRM TRANSACCIÓN-->
 <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -184,16 +189,24 @@
               </h4>
 
               <div class="row wow fadeIn">
-                <div class="col-lg-4"></div>
+                <div class="col-lg-2 sm-0"></div>
                 <div class="col-lg-4 md-6 sm-12 text-center">
                   <button 
                   onclick="$('#agregarHorarioMdl').modal('show');"
                   class="btn btn-success d-inline-block pt-3">
                      <i class="fa fa-clock fa-2x d-inline-block"></i>
-                      <h5 class="d-inline-block" style="transform: translateY(-2px);">Agregar Horario</h5>
+                      <h5 class="d-inline-block" style="transform: translateY(-2px);"><br>Agregar Horarioㅤㅤㅤ</h5>
                     </button>
                 </div>
-                <div class="col-lg-4"></div>
+                <div class="col-lg-4 md-6 sm-12 text-center">
+                  <button 
+                  onclick="rellenarListadoDeCitasYabrirModal();"
+                  class="btn btn-success d-inline-block pt-3">
+                     <i class="fa fa-clock fa-2x d-inline-block"></i>
+                      <h5 class="d-inline-block" style="transform: translateY(-2px);"><br>Editar Horarios de Citas</h5>
+                    </button>
+                </div>
+                <div class="col-lg-2 sm-0"></div>
               </div>
 
               
@@ -255,6 +268,56 @@ bottom: 0;position: fixed;width: 100%;
 
 
   <script>
+
+    function editarHorarioDeCita(){
+
+      let id_user     = localStorage.getItem('id_user');
+      let fechaCitas  = $('#listadoCitas option:selected').val();
+
+      $.ajax({
+        type: "POST",
+        url: "../ajax/socio/mis_horarios/listarEditarHorarios.php",
+        data: {id_user: id_user, fechaCitas: fechaCitas},
+        dataType: "JSON",
+        success: function (res) {
+          
+        }
+      });
+
+
+    }
+
+    function rellenarListadoDeCitasYabrirModal(){
+
+      $.ajax({
+        type: "GET",
+        url: "../ajax/socio/mis_horarios/listarProximasCitas.php",
+        dataType: "JSON",
+        beforeSend:()=>{  $('.loading').css('display','block'); },
+        success: function (data) {
+
+          if(data.arrfechas.length > 0){
+
+            $('#listadoCitas').empty(); 
+
+            $.each(data.arrfechas, function (i, val) {
+
+              let opt = `<option value='`+val.fecha+`'>`+val.fecha+`</option>`;
+
+              $(opt).appendTo($('#listadoCitas'));
+              
+            });
+
+          }
+
+          $('#modalEditarHorario').modal('show');
+          
+        },complete: ()=>{
+          $('.loading').css('display','none');
+        }
+      });
+
+    }
 
     function agregarHorario(){
 

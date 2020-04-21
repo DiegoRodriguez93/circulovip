@@ -31778,6 +31778,17 @@ function JitsiMeetComponent() {
       var options = {
         roomName: localStorage.getItem('sala') != null ? localStorage.getItem('sala') : 'Circulo Vip',
         height: '100vh',
+        resolution: 720,
+          constraints: {
+              video: {
+                  aspectRatio: 16 / 9,
+                  height: {
+                      ideal: 720,
+                      max: 720,
+                      min: 480
+                  }
+              }
+          },
         parentNode: document.getElementById('jitsi-container'),
         interfaceConfigOverwrite: {
           filmStripOnly: false,
@@ -31785,8 +31796,8 @@ function JitsiMeetComponent() {
           SHOW_BRAND_WATERMARK: false,
           SHOW_WATERMARK_FOR_GUESTS: false,
           defaultLanguage: 'es',
-          TOOLBAR_BUTTONS: ["microphone", "camera", "desktop", "chat", "filmstrip", "settings", 'etherpad', 'titleview', 'hangup'],
-          MAIN_TOOLBAR_BUTTONS: ['microphone', 'camera', 'desktop']
+          TOOLBAR_BUTTONS: ["microphone", "camera", , "chat", "filmstrip"  , 'titleview', 'hangup'],
+          MAIN_TOOLBAR_BUTTONS: []
         },
         configOverwrite: {
           disableSimulcast: false,
@@ -31818,9 +31829,10 @@ function JitsiMeetComponent() {
     // verify the JitsiMeetExternalAPI constructor is added to the global..
     if (window.JitsiMeetExternalAPI) {
       startConference();
+      console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
     } else {
       alert('Ha ocurrido un error por favor intenté más tarde o pruebe en otro navegador');
-      location.replace('../index.html');
+      location.replace('index.html');
     }
   }, []);
   return _react.default.createElement("div", {
