@@ -22,27 +22,32 @@
   </style>
   </head><body>
  
-  <!-- Modal CAMBIAR PASSWORD START -->
-<div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <!-- Modal EDITAR HORARIO START -->
+<div class="modal fade" id="modalEditarHorario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document" data-backdrop="static" data-keyboard="false">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Cambiar Contraseña</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Proximas Rondas</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       <div class="modal-body">
-        <label for="pass1">Nueva contraseña</label>
-        <input type="password" class="form-control" id="pass1">
-        <label for="pass2">Repetir contraseña</label>
-        <input type="password" class="form-control" id="pass2">
+
+        <label for="listadoCitas">Seleccione el día de la ronda a editar:</label>
+        <select name="" id="listadoCitas" class="form-control">
+          <option value="">No hay proximas rondas disponibles</option>
+        </select>
+
       </div>
       <div class="modal-footer"><div class="mx-auto">
-        <button type="button" onclick="changePassword()" class="btn btn-indigo">Cambiar contraseña</button>
+        <button type="button" onclick="editarHorarioDeCita()" class="btn btn-deep-purple">Editar Horarios</button>
       </div>
       </div>
     </div>
   </div>
 </div> 
-<!-- Modal CAMBIAR PASSWORD END -->
+<!-- Modal EDITAR HORARIO END -->
 
 <!-- MODAL CONFIRM TRANSACCIÓN-->
 <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -183,17 +188,25 @@
 
               </h4>
 
-              <div class="row wow fadeIn">
-                <div class="col-lg-4"></div>
-                <div class="col-lg-4 md-6 sm-12 text-center">
+              <div class="row wow fadeIn text-center mx-auto">
+
+                <div class="col-6">
                   <button 
                   onclick="$('#agregarHorarioMdl').modal('show');"
-                  class="btn btn-success d-inline-block pt-3">
-                     <i class="fa fa-clock fa-2x d-inline-block"></i>
-                      <h5 class="d-inline-block" style="transform: translateY(-2px);">Agregar Horario</h5>
+                  class="btn btn-success d-inline-block">
+                     <i class="fa fa-clock fa-2x d-inline-block"></i><br>
+                      <h5 class="d-inline-block" style="transform: translateY(-2px);"><br>Agregar Horario</h5><br><br>
                     </button>
                 </div>
-                <div class="col-lg-4"></div>
+                <div class="col-6">
+                  <button 
+                  onclick="rellenarListadoDeCitasYabrirModal();"
+                  class="btn btn-deep-purple d-inline-block">
+                     <i class="fa fa-clock fa-2x"></i>
+                      <h5 class="d-inline-block" style="transform: translateY(-2px);"><br>Editar Horarios en fechas de Rondas</h5>
+                    </button>
+                </div>
+
               </div>
 
               
@@ -255,6 +268,296 @@ bottom: 0;position: fixed;width: 100%;
 
 
   <script>
+    
+    function agregarEsteHorario(horario, dia){
+
+const swalWithBootstrapButtons = Swal.mixin({
+customClass: {
+confirmButton: 'btn btn-success',
+cancelButton: 'btn btn-danger'
+},
+buttonsStyling: false
+})
+
+swalWithBootstrapButtons.fire({
+title: '¿Estas seguro?',
+text: "Se va a agregar el horario "+horario+" al día "+dia+"!",
+icon: 'warning',
+showCancelButton: true,
+confirmButtonText: 'Si, agregar!',
+cancelButtonText: 'No, cancelar!'
+}).then((result) => {
+if (result.value) {
+
+$.ajax({
+type: "POST",
+url: "../ajax/socio/mis_horarios/agregarHorarioAlDia.php",
+data: {dia: dia, horario: horario, id_user:localStorage.getItem('id_user')},
+dataType: "JSON",        
+beforeSend: function () {
+    $('.loading').css('display','block');
+  },
+success: function (res) {
+  if(res.result){
+
+  editarHorarioDeCita('reload','El día se ha agregado correctamente');
+
+  }else{
+    swalWithBootstrapButtons.fire(
+      'Ha ocurrido un error',
+      res.message,
+      'error'
+    )
+  }
+},complete: function () {
+    $('.loading').css('display','none');
+  }
+});
+
+
+}else{
+swalWithBootstrapButtons.fire(
+'Cancelado',
+'Acción cancelada',
+'error'
+)
+}
+})
+
+    }
+
+    function quitarHorario(horario, dia){
+
+const swalWithBootstrapButtons = Swal.mixin({
+customClass: {
+confirmButton: 'btn btn-success',
+cancelButton: 'btn btn-danger'
+},
+buttonsStyling: false
+})
+
+swalWithBootstrapButtons.fire({
+title: '¿Estas seguro?',
+text: "Se va a quitar el horario "+horario+" al día "+dia+"!",
+icon: 'warning',
+showCancelButton: true,
+confirmButtonText: 'Si, quitar!',
+cancelButtonText: 'No, cancelar!'
+}).then((result) => {
+if (result.value) {
+
+$.ajax({
+type: "POST",
+url: "../ajax/socio/mis_horarios/quitarHorarioAlDia.php",
+data: {dia: dia, horario: horario, id_user:localStorage.getItem('id_user')},
+dataType: "JSON",        
+beforeSend: function () {
+    $('.loading').css('display','block');
+  },
+success: function (res) {
+  if(res.result){
+
+  editarHorarioDeCita('reload','El día se ha quitado correctamente');
+
+  }else{
+    swalWithBootstrapButtons.fire(
+      'Ha ocurrido un error',
+      res.message,
+      'error'
+    )
+  }
+},complete: function () {
+    $('.loading').css('display','none');
+  }
+});
+
+
+}else{
+swalWithBootstrapButtons.fire(
+'Cancelado',
+'Acción cancelada',
+'error'
+)
+}
+})
+
+    }
+
+    function editarHorarioDeCita(tipoDeEdicion = '',messageSwal = ''){
+
+
+
+      if(tipoDeEdicion == 'reload'){
+        title = '"El día se ha quitado correctamente! Actualizando...."'+','+'icon:'+'"success"';
+
+      }
+
+      let id_user     = localStorage.getItem('id_user');
+      let fechaCitas  = $('#listadoCitas option:selected').val();
+
+      $.ajax({
+        type: "POST",
+        url: "../ajax/socio/mis_horarios/listarEditarHorarios.php",
+        data: {id_user: id_user, fechaCitas: fechaCitas},
+        dataType: "JSON",
+         beforeSend: () => {
+
+          $('#modalEditarHorario').modal('hide');
+
+          if(tipoDeEdicion == 'reload'){
+            Swal.fire({
+            icon: 'success',
+            title: messageSwal+'<br><br> Actualizando....',
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            onOpen: () => {
+              Swal.showLoading();
+            }
+          });
+          }else{
+            Swal.fire({
+            title: 'Cargando...',
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            onOpen: () => {
+              Swal.showLoading();
+            }
+          });
+          }
+
+
+    
+        },
+        success: function (data) {
+          Swal.close();
+          console.log(data);
+          if(data.horarios.length > 0){
+
+            let html = `<div class="col-md-4 sm-12">
+                <div class="card p-2" style="border: 2px solid grey;">
+
+                <h5>Fecha `+fechaCitas+`</h5>
+                     <button 
+                     onclick="agregarHorarioDia('`+fechaCitas+`')"
+                     class="btn btn-cyan btn-sm">
+                     Agregar horario para este día
+                     </button>
+                </div>
+                </div><div class="col-md-8 sm-0"></div>`;
+            el = document.getElementById("dateContainer");
+
+            $.each(data.horarios, function (i, val) { 
+
+              let tipo = val.tipo;
+              let boton = '';
+
+              if(tipo == null || tipo == 1){
+                tipo = 'Activo';
+                boton = `<button 
+                     onclick="quitarHorario('`+val.horario+`','`+fechaCitas+`')"
+                     class="btn btn-grey btn-sm">
+                     Quitar horario para este día
+                     </button>`;
+              }else if(tipo == 0){
+                tipo = 'Bloqueado';
+                boton = `<button 
+                     onclick="agregarEsteHorario('`+val.horario+`','`+fechaCitas+`')"
+                     class="btn btn-success btn-sm">
+                     Agregar horario para este día
+                     </button>`;
+              }
+               
+              html += `<div class="col-md-4 sm-12 my-1">
+                <div class="card">
+                <div class="row">
+
+                  <div class="col-7">
+                  <div class="green-text">
+                    <i class="fa p-2 fa-calendar-check fa-3x"></i>
+                  </div><b class="text-nowrap"> 
+                  `+tipo+`</b>
+                  </div>
+                  <div class="col-5 text-nowrap my-auto">
+                    <b  style="font-size: 1.3em;">`+val.horario+`</b>
+                  </div>
+                  <div class="col-12 text-center">
+                    `+boton+`
+                  </div>
+                </div>
+              </div></div>`;
+
+            });
+
+            el.innerHTML = html;
+           
+          }else{
+
+            el = document.getElementById("dateContainer");
+            
+            let html = `<div class="col-md-4 sm-12">
+                <div class="card p-2" style="border: 2px solid grey;">
+
+                <h5>Fecha `+fechaCitas+`</h5>
+
+                </div>
+                </div><div class="col-md-8 sm-0"></div>`;
+               
+               html += `<div class="col-md-12 sm-12 my-1">
+                <div class="card">
+                <div class="row">
+
+                  <div class="col-3">
+                  <div class="grey-text">
+                    <i class="fa p-2 fa-calendar-check fa-3x"></i>
+                  </div><b class="text-nowrap"> 
+                  </b>
+                  </div>
+                  <div class="col-9 my-auto">
+                    <b  style="font-size: 1.3em;">Sin horarios disponibles para este día.</b>
+                  </div>
+                </div>
+              </div></div>`;
+
+            el.innerHTML = html;
+
+          }
+        }
+      });
+
+
+    }
+
+    function rellenarListadoDeCitasYabrirModal(){
+
+      $.ajax({
+        type: "GET",
+        url: "../ajax/socio/mis_horarios/listarProximasCitas.php",
+        dataType: "JSON",
+        beforeSend:()=>{  $('.loading').css('display','block'); },
+        success: function (data) {
+
+          if(data.arrfechas.length > 0){
+
+            $('#listadoCitas').empty(); 
+
+            $.each(data.arrfechas, function (i, val) {
+
+              let opt = `<option value='`+val.fecha+`'>`+val.fecha+`</option>`;
+
+              $(opt).appendTo($('#listadoCitas'));
+              
+            });
+
+          }
+
+          $('#modalEditarHorario').modal('show');
+          
+        },complete: ()=>{
+          $('.loading').css('display','none');
+        }
+      });
+
+    }
 
     function agregarHorario(){
 

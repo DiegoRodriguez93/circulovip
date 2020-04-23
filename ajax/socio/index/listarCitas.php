@@ -133,7 +133,7 @@ if(mysqli_num_rows($select) > 0){
 
 
     
-    $newName = "<p style='cursor:pointer' onclick='mostrarDatosUsuario(`".$id_destinatario."`)'>".$nombre."</p>";
+    $newName = "<p style='cursor:pointerw' onclick='mostrarDatosUsuario(`".$id_destinatario."`)'>".$nombre."</p>";
     
 
     $res[] = array($img_avatar, $newName, $tipo, $opciones, $estado);
