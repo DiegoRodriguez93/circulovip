@@ -22,6 +22,8 @@ AND  h.id_user = '$id_user' GROUP BY h.hora ORDER BY h.hora ASC");
 
 if(mysqli_num_rows($select) > 0){
 
+    $arrDeHorarios = '(';
+
     while( $row = mysqli_fetch_assoc($select) ){
 
         $horario = $row['horario'];
@@ -31,9 +33,35 @@ if(mysqli_num_rows($select) > 0){
             $horario = $row['hora'];
         }
 
+        $arrDeHorarios .=  "'".$horario . "',";
+
         $horario = date('H:i',strtotime($horario));
 
         $res[] = array('horario'=>$horario,'tipo'=>$tipo);
+
+    }
+
+    $arrDeHorarios = substr($arrDeHorarios, 0, -1); // delete last comma
+
+    $arrDeHorarios .= ')'; 
+
+    $select2 = mysqli_query($mysqli,"SELECT horario, tipo FROM horarios_personalizados 
+    WHERE id_user = '$id_user' 
+    AND dia_de_cita = '$fechaCitas'
+    AND horario NOT IN $arrDeHorarios ");
+
+    if(mysqli_num_rows($select2) > 0){
+
+        while($row2 = mysqli_fetch_array($select2)){
+
+            $horario2 = $row2['horario'];
+            $tipo2 = $row2['tipo'];
+    
+            $horario2 = date('H:i',strtotime($horario2));
+    
+            $res[] = array('horario'=>$horario2,'tipo'=>$tipo2);
+    
+        }
 
     }
 

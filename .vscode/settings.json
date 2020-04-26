@@ -1,10 +1,5 @@
 {
     "editor.fontWeight": "500",
-    "files.associations": {
-
-
-    
-    },
     "editor.fontSize": 13,
     "editor.tabSize": 4,
     "editor.fontFamily": "'Hack', 'DejaVu Sans','Menlo', Consolas, 'Courier New', monospace"

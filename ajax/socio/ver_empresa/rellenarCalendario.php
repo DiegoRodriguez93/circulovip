@@ -1,6 +1,5 @@
 <?php 
-/* ini_set('max_execution_time', 300); //300 seconds = 5 minutes
-set_time_limit(300); */
+
 require '../../_conexion.php';
 
 $emisor = mysqli_real_escape_string($mysqli,$_GET['emisor']);
@@ -43,11 +42,10 @@ if(mysqli_num_rows($select) == 0){
         $select3 = mysqli_query($mysqli, "SELECT * FROM horarios 
         WHERE id_user = '$receptor'
         AND id_dia REGEXP '$day' ORDER BY hora ASC ");
+
         if(mysqli_num_rows($select3) == 0 ){
             $horarios = 'El usuario no tiene citas disponibles este día';
         }else{
-
-   
 
         while($row2 = mysqli_fetch_array($select3)){
 
@@ -61,8 +59,6 @@ if(mysqli_num_rows($select) == 0){
         
         }else{
 
-
- 
             $date = DateTime::createFromFormat( 'H:i:s', $row2['hora'] );
             $horaFormat = $date->format( 'H:i'); 
         
@@ -110,34 +106,27 @@ if(mysqli_num_rows($select) == 0){
             if(mysqli_num_rows($select4) > 0 OR mysqli_num_rows($select5) > 0){
                 // CITA YA SOLICITADA EN ESE HORARIO
                 $estado = 1;
-            }else{  $estado = 0;
+                $onClick =  'disabled >Solicitar</button>';
+            }else{  
+                $onClick =  'onclick="insertarRonda(`'.$fechas_ronda.'`,`'.$receptor.'`,`'.$hora_mia.'`)">Solicitar</button>';
+                $estado = 0;
             
             }
 
-
-        
-/*         
-         $horarios[] = array(
-                'hora'=>$horaFormat,
-                'zona_horaria'=>'GMT'.$zona_horaria_receptor,
-                'hora_mia'=>$hora_mia,
-                'zona_horaria_mia'=>'GMT'.$zona_horaria_emisor,
-                'estado'=>$estado
-            ); 
-         */
-
-         $horarios .= '<div class="col-4 text-center" style="background-color: #fff"><b>
+         $horarios .= '<div class="col-4 text-center" style="background-color: #fff;border:1px solid #a3a3a3"><b>
          '.$horaFormat.' hs<br></b>
          <small>Mi horario '.$hora_mia.'</small>
-         <button class="btn btn-sm btn-success" 
-         onclick="insertarRonda(`'.$fechas_ronda.'`,`'.$receptor.'`,`'.$hora_mia.'`)">Solicitar</button>
+         <button class="btn btn-sm btn-deep-purple" 
+         '.$onClick.'
          </div>' ;
             
       
     
     }
     
-}
+} // fin del while de horarios
+
+
 
 }
 
@@ -145,9 +134,13 @@ $horarios .= '</div>';
 
        /*  $res[] = array('fecha'=>$fecha_formateada,'dia'=>$day); */
 
+       $fecha4 = date('d-m-Y',strtotime($row['fecha']));
+
+       $title = '<h6 id="titlePuto">Día de Ronda  '.$fecha4.'</h6>';
+
         $res[] = array("date"=>$row['fecha'],
         "badge"=>false,
-        "title"=>"Día de Ronda".$row['fecha'],
+        "title"=>$title,
         "body"=>$horarios,
         "footer"=>"Circulo Vip Empresarial",
         "classname"=>"badgeZabuto");

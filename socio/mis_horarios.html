@@ -50,7 +50,7 @@
 <!-- Modal EDITAR HORARIO END -->
 
 <!-- MODAL CONFIRM TRANSACCIÓN-->
-<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div class="modal fade" id="timeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true" data-backdrop="static" data-keyboard="false">
 
   <!-- Change class .modal-sm to change the size of the modal -->
@@ -65,18 +65,15 @@
         </button>
       </div>
       <div class="modal-body">
-        <input type="hidden" id="hidden_id_cupon">
-        <h3>Datos del comercio:</h3>
-        <h4 id="commerce_name"></h4>
-        <h4 id="commerce_address"></h4>
-        <h4 id="commerce_phone"></h4>
-        <hr>
-        <h4 id="fecha_vencimiento"></h4>
-        <h4 id="descuento"></h4>
+
+        <h3>Horario a agregar:</h3>
+        <input type="time" id="timeAagregar">
+        <input type="hidden" id="fechaDeCita">
+
       </div>
       <div class="modal-footer text-center mx-auto">
-        <button type="button" id="confirmarTransaccionBtn" class="btn btn-indigo">Confirmar</button>
-        <button type="button" id="cancelarTransaccionBtn" class="btn btn-blue-grey" data-dismiss="modal">Cancelar</button>
+        <button type="button" onclick="agregarHorarioAlDia()" class="btn btn-deep-purple">Agregar Horario</button>
+        <button type="button" class="btn btn-blue-grey" data-dismiss="modal">Cancelar</button>
       </div>
     </div>
   </div>
@@ -262,12 +259,55 @@ bottom: 0;position: fixed;width: 100%;
   <script type="text/javascript" src="js/popper.min.js"></script>
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
   <script type="text/javascript" src="js/mdb.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+  <script src="../lib/sweetalert2.js"></script>
+  <script src="../lib/helper.js"></script>
   <script src="js/cerrar_session.js"></script>
   <script src="include/sidebar.js"></script>
 
 
   <script>
+
+    function agregarHorarioAlDia(){
+
+    let horario = $('#timeAagregar').val();
+    let dia = $('#fechaDeCita').val();
+
+     if(horario == '' || dia == ''){
+       return false;
+       Swal.fire('Error!','Ingrese un horario a agregar!','error');
+     }
+
+     $('#timeModal').modal('hide');
+
+      $.ajax({
+      type: "POST",
+      url: "../ajax/socio/mis_horarios/agregarHorarioAlDia.php",
+      data: {dia: dia, horario: horario, id_user:localStorage.getItem('id_user')},
+      dataType: "JSON",        
+      beforeSend: function () {
+          $('.loading').css('display','block');
+        },
+      success: function (res) {
+        if(res.result){
+          $('#timeAagregar').val('');
+          $('#fechaDeCita').val('');
+
+        editarHorarioDeCita('reload','El día se ha agregado correctamente');
+
+        }else{
+          swalWithBootstrapButtons.fire(
+            'Ha ocurrido un error',
+            res.message,
+            'error'
+          )
+        }
+      },complete: function () {
+          $('.loading').css('display','none');
+        }
+      });
+
+
+    }
     
     function agregarEsteHorario(horario, dia){
 
@@ -433,12 +473,15 @@ swalWithBootstrapButtons.fire(
           console.log(data);
           if(data.horarios.length > 0){
 
+            let arrArecorrer = data.horarios.sort(compare);
+            console.log(arrArecorrer);
             let html = `<div class="col-md-4 sm-12">
                 <div class="card p-2" style="border: 2px solid grey;">
 
                 <h5>Fecha `+fechaCitas+`</h5>
                      <button 
-                     onclick="agregarHorarioDia('`+fechaCitas+`')"
+                     onclick="$('#fechaDeCita').val('`+fechaCitas+`');
+                     $('#timeModal').modal('show');"
                      class="btn btn-cyan btn-sm">
                      Agregar horario para este día
                      </button>
@@ -446,7 +489,7 @@ swalWithBootstrapButtons.fire(
                 </div><div class="col-md-8 sm-0"></div>`;
             el = document.getElementById("dateContainer");
 
-            $.each(data.horarios, function (i, val) { 
+            $.each(arrArecorrer, function (i, val) { 
 
               let tipo = val.tipo;
               let boton = '';
