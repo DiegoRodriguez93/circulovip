@@ -180,14 +180,14 @@
           <!--Card-->
           <div class="card">
 
-              <h4 class="card-header">
+                <!-- <h4 class="card-header">
                     Horarios disponibles
 
               </h4>
 
               <div class="row wow fadeIn text-center mx-auto">
 
-                <div class="col-6">
+             <div class="col-6">
                   <button 
                   onclick="$('#agregarHorarioMdl').modal('show');"
                   class="btn btn-success d-inline-block">
@@ -195,7 +195,7 @@
                       <h5 class="d-inline-block" style="transform: translateY(-2px);"><br>Agregar Horario</h5><br><br>
                     </button>
                 </div>
-                <div class="col-6">
+                <div class="col">
                   <button 
                   onclick="rellenarListadoDeCitasYabrirModal();"
                   class="btn btn-deep-purple d-inline-block">
@@ -204,7 +204,7 @@
                     </button>
                 </div>
 
-              </div>
+              </div>-->
 
               
           </div>        
@@ -434,6 +434,11 @@ swalWithBootstrapButtons.fire(
 
       let id_user     = localStorage.getItem('id_user');
       let fechaCitas  = $('#listadoCitas option:selected').val();
+
+      if($('#listadoCitas option:selected').val() == ''){
+        Swal.fire('Error','No has seleccionado ninguna fecha de ronda','error');
+        return false;
+      }
 
       $.ajax({
         type: "POST",
@@ -994,7 +999,7 @@ swalWithBootstrapButtons.fire({
 
       });
 
-      el.innerHTML = html;
+     // el.innerHTML = html;
         },complete: function () {
           $('.loading').css('display','none');
         }
@@ -1005,6 +1010,7 @@ swalWithBootstrapButtons.fire({
 
     $(document).ready(function(){
       listarHorarios();
+      rellenarListadoDeCitasYabrirModal();
             /* INCLUDES */
 
   $('#sidebar_aqui').html(sidebar);

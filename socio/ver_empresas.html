@@ -167,10 +167,13 @@
                 </div>
                 <div class="col-lg-8 md-6 sm-12 text-center d-inline-block mx-auto">
 
-                  <form style="align-items: center;" class="form-inline md-form form-sm mx-auto text-center">
+                  <form style="align-items: center;" class="form-inline md-form form-sm mx-auto text-center ">
                     <i class="fas fa-search" aria-hidden="true"></i>
-                    <input class="form-control form-control-sm ml-3" style="width: 85%;" type="text" placeholder="Buscar Empresa"
+                    <input class="form-control form-control-sm ml-3 active-purple-2" style="width: 80%;" type="text" placeholder="Buscar Empresa"
                       aria-label="Buscar Empresa" id="buscardorDeEmpresas">
+                      <div class="spinner-border" style="color:#4d048c" id="spinnerSerch"  role="status">
+                        <span class="sr-only">Cargando...</span>
+                      </div>
                   </form>
                   
                   </div>
@@ -323,14 +326,19 @@ bottom: 0;position: fixed;width: 100%;
 
     }
 
-    function listarEmpresas($pais, $nombre){
+    function listarEmpresas($pais, $nombre, $animation){
+
 
       $.ajax({
         type: "POST",
         url: "../ajax/socio/ver_empresas/listarEmpresas.php?pais="+$pais+"&nombre="+$nombre,
         data: {id_user : localStorage.getItem('id_user')},
         dataType: "JSON ",beforeSend: function(){
-          $('.loading').css('display','block');
+          if($animation == 1){
+            $('.loading').css('display','block');
+          }else{
+            $('#spinnerSerch').show();
+          }
         },
         success: function (data) {
           var html = '',
@@ -375,7 +383,11 @@ bottom: 0;position: fixed;width: 100%;
 
       el.innerHTML = html;
         },complete: function () {
-          $('.loading').css('display','none');
+          if($animation){
+            $('.loading').css('display','none');
+          }else{
+            $('#spinnerSerch').hide();
+          }
         }
       });
 
@@ -384,6 +396,7 @@ bottom: 0;position: fixed;width: 100%;
 
     $(document).ready(function(){
 
+      $('#spinnerSerch').hide();
             /* INCLUDES */
 
   $('#sidebar_aqui').html(sidebar);
@@ -410,7 +423,7 @@ bottom: 0;position: fixed;width: 100%;
   $('#mensajesSidebar').removeClass('active');
   $('#salaDeEspera').removeClass('active');
 
-    listarEmpresas();
+    listarEmpresas('','',1);
     rellenarSelectPaises();
 
 
@@ -421,7 +434,7 @@ bottom: 0;position: fixed;width: 100%;
   $pais = $('#selectPaises').val();
   $nombre = $('#buscardorDeEmpresas').val();
 
-  listarEmpresas($pais,$nombre);
+  listarEmpresas($pais,$nombre,0);
 
   });
 
@@ -430,7 +443,7 @@ $('#buscardorDeEmpresas').on('keyup',function(){
   $pais = $('#selectPaises').val();
   $nombre = $('#buscardorDeEmpresas').val();
 
-  listarEmpresas($pais,$nombre);
+  listarEmpresas($pais,$nombre,0);
 
 });
 

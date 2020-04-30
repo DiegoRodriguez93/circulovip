@@ -96,3 +96,17 @@
       transform: rotate(90deg);
     }
     .pointer {cursor: pointer;}
+
+    .newName{
+      font-weight: 400;
+      cursor: pointer;
+    }
+
+    .newName:hover {
+      color: #520085!important;
+    }
+
+    .active-purple-2:focus {
+      border-bottom: 1px solid #520085!important;
+      box-shadow: 0 1px 0 0 #520085!important;
+    }

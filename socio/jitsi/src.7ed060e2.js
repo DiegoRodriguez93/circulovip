@@ -31796,8 +31796,11 @@ function JitsiMeetComponent() {
           SHOW_BRAND_WATERMARK: false,
           SHOW_WATERMARK_FOR_GUESTS: false,
           defaultLanguage: 'es',
-          TOOLBAR_BUTTONS: ["microphone", "camera", , "chat", "filmstrip"  , 'titleview', 'hangup'],
-          MAIN_TOOLBAR_BUTTONS: []
+          TOOLBAR_BUTTONS: [
+            "microphone", "camera", "desktop",
+            "chat", "filmstrip",'hangup','etherpad'
+          ],
+          MAIN_TOOLBAR_BUTTONS: ['microphone', 'camera',"filmstrip",'etherpad'],
         },
         configOverwrite: {
           disableSimulcast: false,
@@ -31808,6 +31811,7 @@ function JitsiMeetComponent() {
       api.addEventListener('videoConferenceJoined', function () {
         console.log('Local User Joined');
         setLoading(false);
+        setTimeout( () => {document.querySelector('.loading').style.display = 'none'; },2000 )
 
         if (localStorage.getItem('nombre') != null) {
           var $nombre = localStorage.getItem('nombre');
@@ -31829,10 +31833,11 @@ function JitsiMeetComponent() {
     // verify the JitsiMeetExternalAPI constructor is added to the global..
     if (window.JitsiMeetExternalAPI) {
       startConference();
-      console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
     } else {
-      alert('Ha ocurrido un error por favor intenté más tarde o pruebe en otro navegador');
-      location.replace('index.html');
+      location.reload();
+      document.querySelector('.loading').style.display = 'block';
+      console.log('Ha ocurrido un error por favor vuelva a intenté más tarde o pruebe en otro navegador');
+     /* location.replace('index.html');*/
     }
   }, []);
   return _react.default.createElement("div", {

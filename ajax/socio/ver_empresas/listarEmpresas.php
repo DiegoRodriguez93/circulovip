@@ -2,7 +2,8 @@
 
 require '../../_conexion.php';
 
-if(isset($_GET['pais']) AND $_GET['pais'] != null AND $_GET['pais'] != '' AND $_GET['pais'] != 'undefined' AND $_GET['pais'] != 'Todos'){
+if(isset($_GET['pais']) AND $_GET['pais'] != null AND $_GET['pais'] != '' 
+AND $_GET['pais'] != 'undefined' AND $_GET['pais'] != 'Todos'){
 
     $pais = " AND pais = " . "'" . $_GET['pais'] . "'";
 
@@ -12,7 +13,8 @@ if(isset($_GET['pais']) AND $_GET['pais'] != null AND $_GET['pais'] != '' AND $_
 
 }
 
-if(isset($_GET['nombre']) AND $_GET['nombre'] != null AND $_GET['nombre'] != '' AND $_GET['nombre'] != 'undefined' AND $_GET['nombre'] != 'Todos'){
+if(isset($_GET['nombre']) AND $_GET['nombre'] != null 
+AND $_GET['nombre'] != '' AND $_GET['nombre'] != 'undefined' AND $_GET['nombre'] != 'Todos'){
 
     $nombre = " AND nombre LIKE " . "'%" . $_GET['nombre'] . "%'";
 
@@ -22,7 +24,12 @@ if(isset($_GET['nombre']) AND $_GET['nombre'] != null AND $_GET['nombre'] != '' 
 
 }
 
-$select = mysqli_query($mysqli,"SELECT * FROM datos_empresa WHERE nombre IS NOT NULL AND pais IS NOT NULL $pais $nombre ");
+$select = mysqli_query($mysqli,"SELECT * FROM datos_empresa 
+WHERE nombre IS NOT NULL AND pais IS NOT NULL 
+AND id_user NOT IN 
+(SELECT id FROM usuarios 
+WHERE activo = 2 OR activo = 0 )
+ $pais $nombre ");
 
 if(mysqli_num_rows($select) > 0){
 

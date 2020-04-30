@@ -720,7 +720,7 @@ if ( ! $.fn.DataTable.isDataTable( '#tableCitas' ) ) {
 
   table.ajax.reload();
  
-} }
+}}
 
 function cargarConversacion($id_emisor, $url_avatar, $nombre_emisor){
 
@@ -961,6 +961,8 @@ $( "#sidebar" ).toggle("normal");
 
   startTable();
   startTable2();
+  setInterval(()=>{ startTable2();},22000)
+
    rellenarBadges();
 /*    listarCitas(); */
 

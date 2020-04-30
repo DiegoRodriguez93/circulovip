@@ -85,6 +85,28 @@
 <!-- MODAL ACTUALIZAR DATOS PERSONALES END -->
 
 
+<!-- MODAL ACTUALIZAR ZONA HORARIA -->
+<div class="modal fade" id="modalZonaHoraria" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document" data-backdrop="static" data-keyboard="false">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Actualizar Zona Horaria</h5>
+      </div>
+      <div class="modal-body">
+        <label>Zona Horaria</label>
+        <select class="form-control" id="zonaHoraria"></select>
+        </div>
+      <div class="modal-footer"><div class="mx-auto">
+        <button type="button" onclick="actualizarZonaHoraria()" class="btn btn-deep-purple">Actualizar</button>
+        <button type="button" class="btn btn-blue-grey" data-dismiss="modal">Cancelar</button>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MODAL ACTUALIZAR ZONA HORARIA END -->
+
+
 
   <header>
 
@@ -147,6 +169,7 @@
 
         </div>
         </div>
+        <div class="col-md-5 sm-0"></div>
         <!--Grid column-->
 
 
@@ -190,7 +213,7 @@
       <div class="row wow fadeIn">
 
         <!--Grid column-->
-        <div class="col-md-8 mb-4">
+        <div class="col-md-8 my-4">
           <div style="display:none" class="loading"></div>
           <!--Card-->
           <div class="card">
@@ -201,6 +224,7 @@
               <div id="card-body p-2"><h5>
                 <div id="emailPersonal" class="my-2 mx-2"></div>
                 <div id="vencimientoPersonal" class="my-2 mx-2"></div></h5>
+                <button class="btn btn-deep-purple" onclick="rellenarZonaHoraria()">Editar Zona horaria</button>
               </div>
           </div>
           <!--/.Card-->
@@ -278,6 +302,57 @@ bottom: 0;position: fixed;width: 100%;
   <script src="js/cerrar_session.js"></script>
   <script src="include/sidebar.js"></script>
   <script>
+    function actualizarZonaHoraria(){
+
+      $.ajax({
+        type: "POST",
+        url: "../ajax/socio/mi_perfil/actualizarZonaHoraria.php",
+        data: {zonaHoraria:$('#zonaHoraria option:selected').val(),
+        id_user:localStorage.getItem('id_user')},
+        dataType: "JSON",
+        success: function (res) {
+          if(res.result){
+            $('#modalZonaHoraria').modal('hide');
+            Swal.fire('Correcto!','Se ha actualizado su zona horaria correctamente','success');
+
+          }else{
+            Swal.fire('Error!',res.message,'error');
+          }
+        }
+      });
+
+    }
+
+    function rellenarZonaHoraria(){
+
+      $.ajax({
+        type: "POST",
+        url: "../ajax/socio/mi_perfil/rellenarZonaHoraria.php",
+        data: {id_user:localStorage.getItem('id_user')},
+        dataType: "JSON",
+        beforeSend: function(){
+        $('.loading').css('display','block');
+        },
+        success: function (data) {
+
+          $('#zonaHoraria').empty();
+
+          let option = '';
+          
+          $.each(data.zonas, function (i, val) { 
+             
+             option += `<option value="`+val+`">GMT `+val+`</option>`;
+
+          });
+
+          $('#zonaHoraria').append(option);
+          $('#zonaHoraria option[value="'+data.result.zonaHorariaActual+'"]').prop('selected', true);
+          $('#modalZonaHoraria').modal('show');
+
+        },complete:()=>{$('.loading').css('display','none');}
+      });
+
+    }
 
     function ActualizarDatosPersonales(){
       $cargo = $('#cargoPersona').val();

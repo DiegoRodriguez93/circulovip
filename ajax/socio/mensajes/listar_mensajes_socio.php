@@ -84,7 +84,7 @@ if($contar > 0){
             src='https://renoca.ml/work/circulovip/images/profile.jpg' >"; 
 
             $img_avatar_fn = "<img
-            onclick='cargarConversacion(`".$id_emisor."`,`".$url_avatar."`,`".$row['nombre']."`)'
+            onclick='mostrarDatosUsuario(`".$id_emisor."`)'
             class='img-fluild
             rounded-circle pointer'
             width='40'
@@ -98,7 +98,7 @@ if($contar > 0){
             src='".$url_avatar."' >";
 
             $img_avatar_fn = "<img
-            onclick='cargarConversacion(`".$id_emisor."`,`".$url_avatar."`,`".$row['nombre']."`)'
+            onclick='mostrarDatosUsuario(`".$id_emisor."`)'
             class='img-fluild rounded-circle pointer'
             width='40'
             height='40'
@@ -131,8 +131,8 @@ if($contar > 0){
         $id_otro = $id_emisor;
        }
 
-        $nombre_emisor_fn   = "<p class='pointer'
-        onclick='cargarConversacion(`".$id_otro."`,`". $url_avatar."`,`". $nombre."`)'>". $nombre."</p>";
+        $nombre_emisor_fn   = "<p class='newName'
+        onclick='mostrarDatosUsuario(`".$id_otro."`)'>". $nombre."</p>";
 
         $fecha_formateada_fn   = "<p class='pointer'
         onclick='cargarConversacion(`".$id_otro."`,`". $url_avatar."`,`".$nombre."`)'>".$fecha_formateada."</p>";
