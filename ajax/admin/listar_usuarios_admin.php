@@ -31,7 +31,7 @@ if($contar > 0){
 
         $eliminar = '<button class="btn btn-danger" onclick="eliminarUsuario('.$id_user.')"><i class="fas fa-trash"></i></button>';
 
-        $zona_horaria_btn = '<button class="btn btn-primary" onclick="cambiarZonaHoraria(`'.$id_user.'`)"><i class="fas fa-exchange-alt"></i></button>';
+        $zona_horaria_btn = '<button class="btn btn-primary" onclick="rellenarZonaHoraria(`'.$id_user.'`)"><i class="fas fa-exchange-alt"></i></button>';
     
         $zona_horaria = 'GMT'.$row['zona_horaria'] . $zona_horaria_btn ;
 

@@ -12,6 +12,30 @@
 </head>
 
 <body>
+
+
+<!-- MODAL ACTUALIZAR ZONA HORARIA -->
+<div class="modal fade" id="modalZonaHoraria" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document" data-backdrop="static" data-keyboard="false">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Actualizar Zona Horaria</h5>
+      </div>
+      <div class="modal-body">
+        <label>Zona Horaria</label>
+        <select class="form-control" id="zonaHoraria"></select>
+        <input type="hidden" id="id_user">
+        </div>
+      <div class="modal-footer"><div class="mx-auto">
+        <button type="button" onclick="actualizarZonaHoraria()" class="btn btn-primary">Actualizar</button>
+        <button type="button" class="btn btn-blue-grey" data-dismiss="modal">Cancelar</button>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MODAL ACTUALIZAR ZONA HORARIA END -->
+
   <!-- MODAL CAMBIAR PASSWORD START -->
 <div class="modal" id="mdlPassword" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
@@ -145,6 +169,67 @@
 <script src="../lib/helper.js"></script>
 
 <script>
+
+function actualizarZonaHoraria(){
+
+$.ajax({
+  type: "POST",
+  url: "../ajax/socio/mi_perfil/actualizarZonaHoraria.php",
+  data: {zonaHoraria:$('#zonaHoraria option:selected').val(),
+  id_user:$('#id_user').val()},
+  dataType: "JSON",
+  success: function (res) {
+    if(res.result){
+      $('#modalZonaHoraria').modal('hide');
+      Swal.fire('Correcto!','Se ha actualizado su zona horaria correctamente','success');
+      startTable();
+    }else{
+      Swal.fire('Error!',res.message,'error');
+    }
+  }
+});
+
+}
+
+function rellenarZonaHoraria($id_user){
+
+  $('#id_user').val($id_user);
+
+$.ajax({
+  type: "POST",
+  url: "../ajax/socio/mi_perfil/rellenarZonaHoraria.php",
+  data: {id_user:$id_user},
+  dataType: "JSON",
+  beforeSend: function(){
+  $('.loading').css('display','block');
+  },
+  success: function (data) {
+
+    $('#zonaHoraria').empty();
+
+    let option = '';
+    
+    $.each(data.zonas, function (i, val) { 
+
+      let valor = val;
+
+      if(val > 0){
+        valor = '+'+val;
+      } 
+       
+       option += `<option value="`+val+`">GMT `+valor+`</option>`;
+
+    });
+
+    $('#zonaHoraria').append(option);
+    $('#zonaHoraria option[value="'+data.result.zonaHorariaActual+'"]').prop('selected', true);
+    $('#modalZonaHoraria').modal('show');
+
+  },complete:()=>{$('.loading').css('display','none');}
+});
+
+}
+
     function editarVencimiento($id){
 
 $('#id_user_date').val($id);
@@ -303,6 +388,7 @@ $.ajax({
         if(res.result){
           startTable();
           $('.loading').css('display','none');
+          startTable();
           Swal.fire(
             'Eliminado!',
             'El usuario ha sido eliminado correctamente.',

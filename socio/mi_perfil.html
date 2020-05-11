@@ -168,32 +168,63 @@
                 </div>
 
         </div>
+
+        
+        <div class="card mt-3">
+
+          <div class="card-body">
+            <div class="row">
+              <div class="col-10">
+                <h4 id="nombreEmpresa" class="d-inline"></h4 class="d-inline">
+                <h5 id="paisEmpresa" class="d-inline"></h5>
+                <h6 id="descripcionEmpresa">
+                </h6>
+              </div>
+              <div class="col-2 my-auto">
+                <h8 onclick="$('#datosEmpresa').modal('show');" class="text-success">
+                  <i class="fas fa-pen fa-2x"></i></h8>
+              </div>
+            </div>
+          </div>
+
+  </div>
+
         </div>
-        <div class="col-md-5 sm-0"></div>
+        <div class="col-md-5 sm-0">         
+           <!--Card Perfil personal-->
+          <div class="card">
+            <div class="text-center">
+              <img src="../images/profile.jpg" style="transform: translateY(-52px);"
+               alt="foto_carita" height="140" width="140" id="foto_carita" class="img-fluid rounded-circle">
+               <input type="file" id="profilePicture" style="display:none;"/>
+               <label for="profilePicture"><h8 class="text-success"><i class="fas fa-upload fa-2x"></i></h8></label>
+            </div>
+            <div class="row  text-center">
+              <div class="col-10">
+                <div class="p-2">
+                  <div id="nombre_completo" class="mb-2" style="font-size: 1.4em;"></div>
+                <b><label for="cargo">Cargo</label></b>
+                  <div id="cargo" class="mb-2" style="font-size: 1.4em;"></div>
+                <b><label for="acerca_de_mi">Acerca de mi</label></b>
+                <blockquote class="blockquote">
+                  <footer id="acerca_de_mi" class="blockquote-footer"></footer>
+                </blockquote>
+                </div>
+              </div>
+              <div class="col-2 my-auto">
+                <h8 onclick="$('#datosPersonales').modal('show');" class="text-success"> <i class="fas fa-pen"></i> </h8>
+              </div>
+            </div>
+
+
+          </div>
+          <!--/.Card--></div>
         <!--Grid column-->
 
 
       <!--Grid column-->
       <div class="col-md-5 sm-12 mb-4 my-auto">
 
-        <div class="card">
-
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-10">
-                    <h4 id="nombreEmpresa" class="d-inline"></h4 class="d-inline"> <h5 id="paisEmpresa" class="d-inline"></h5>
-                    <h6 id="descripcionEmpresa">
-                    </h6>
-                  </div>
-                  <div class="col-2 my-auto">
-                    <h8 onclick="$('#datosEmpresa').modal('show');" class="text-success"><i class="fas fa-pen fa-2x"></i></h8>
-                  </div>
-                </div>
-
-
-              </div>
-
-      </div>
       </div>
       <!--Grid column-->
 
@@ -224,7 +255,7 @@
               <div id="card-body p-2"><h5>
                 <div id="emailPersonal" class="my-2 mx-2"></div>
                 <div id="vencimientoPersonal" class="my-2 mx-2"></div></h5>
-                <button class="btn btn-deep-purple" onclick="rellenarZonaHoraria()">Editar Zona horaria</button>
+                <button class="btn btn-deep-purple" onclick="rellenarZonaHoraria()"><i class="fas fa-globe-americas"></i> Editar Zona horaria</button>
               </div>
           </div>
           <!--/.Card-->
@@ -236,34 +267,7 @@
         <!--Grid column-->
         <div class="col-md-4 mb-4">
 
-          <!--Card-->
-          <div class="card">
-            <div class="text-center">
-              <img src="../images/profile.jpg" style="transform: translateY(-52px);"
-               alt="foto_carita" height="140" width="140" id="foto_carita" class="img-fluid rounded-circle">
-               <input type="file" id="profilePicture" style="display:none;"/>
-               <label for="profilePicture"><h8 class="text-success"><i class="fas fa-upload fa-2x"></i></h8></label>
-            </div>
-            <div class="row  text-center">
-              <div class="col-10">
-                <div class="p-2">
-                  <div id="nombre_completo" class="mb-2" style="font-size: 1.4em;"></div>
-                <b><label for="cargo">Cargo</label></b>
-                  <div id="cargo" class="mb-2" style="font-size: 1.4em;"></div>
-                <b><label for="acerca_de_mi">Acerca de mi</label></b>
-                <blockquote class="blockquote">
-                  <footer id="acerca_de_mi" class="blockquote-footer"></footer>
-                </blockquote>
-                </div>
-              </div>
-              <div class="col-2 my-auto">
-                <h8 onclick="$('#datosPersonales').modal('show');" class="text-success"> <i class="fas fa-pen"></i> </h8>
-              </div>
-            </div>
 
-
-          </div>
-          <!--/.Card-->
           <div class="mb-5"></div>
         </div>
         <!--Grid column-->
@@ -339,9 +343,15 @@ bottom: 0;position: fixed;width: 100%;
 
           let option = '';
           
-          $.each(data.zonas, function (i, val) { 
+          $.each(data.zonas, function (i, val) {
+
+            let valor = val;
+
+            if(val > 0){
+              valor = '+'+val;
+            } 
              
-             option += `<option value="`+val+`">GMT `+val+`</option>`;
+             option += `<option value="`+val+`">GMT `+valor+`</option>`;
 
           });
 
