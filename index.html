@@ -5,12 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="icon" href="favicon.ico"> 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.9/css/mdb.min.css" rel="stylesheet">
   <link rel="stylesheet" href="socio/css/loader.css">
   <link rel="stylesheet" href="css/login.css">
-  <title>Login</title>
+  <title>Circulo Vip</title>
 </head>
 
 <body>
@@ -63,14 +64,14 @@
               </div>
                       <hr class="hr-light mb-3 mt-4">
                       <div class="inline-ul text-center">
-                        <a class="p-2 m-2 tw-ic">
-                          <i class="fab fa-twitter white-text"></i>
+                        <a class="p-2 m-2 tw-ic" href="https://www.facebook.com/circulovipempresarial" target="_blank"> 
+                          <i class="fab fa-facebook white-text"></i>
                         </a>
-                        <a class="p-2 m-2 li-ic">
+                        <a class="p-2 m-2 li-ic" href="https://www.linkedin.com/company/circulovip/" target="_blank">
                           <i class="fab fa-linkedin-in white-text"> </i>
                         </a>
-                        <a class="p-2 m-2 ins-ic">
-                          <i class="fas fa-instagram white-text"> </i>
+                        <a class="p-2 m-2 ins-ic" href="https://circulovip.com" target="_blank">
+                          <i class="fas fa-globe-americas white-text"> </i>
                         </a>
                       </div>
                     </div>
@@ -156,8 +157,7 @@ function logIn(){
       Swal.fire({
       icon: 'error',
       title: 'Oops...',
-      text: res.message,
-      footer: '<a href>¿Contactar administrador?</a>'
+      text: res.message
     });
     }
    }
@@ -186,12 +186,12 @@ $(document).ready(function(){
 
 /*   if(localStorage.getItem('a')) */
 
-$(document).keypress(function(event){
+/* $(document).keypress(function(event){
     var keycode = (event.keyCode ? event.keyCode : event.which);
     if(keycode == '13'){
         logIn();
     }
-});
+}); */
 
 });
 

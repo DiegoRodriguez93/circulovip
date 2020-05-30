@@ -224,7 +224,7 @@ $body = '<html>
                                   '.$nombreEmisor.'! Le ha enviado un nuevo mensaje!<br><br>
         
                                   Ingrese a la<a href="https://plataformacirculovip.com/socio/mensajes.html"
-                                   target="_blank">Bandeja de mensajes</a> 
+                                   target="_blank"> Bandeja de mensajes</a> 
                                    para ver el nuevo mensaje<br><br>
                           
                                   Mensaje recibido el  '.$diaDelMensaje.' a las '.$horaDelMensaje.'

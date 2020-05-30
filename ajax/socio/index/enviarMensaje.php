@@ -16,7 +16,7 @@ if($insert){
     $res = array('result'=>true,'message'=>'Mensaje enviado correctamente');
 
     $select = mysqli_query($mysqli,"SELECT id FROM mensajes 
-    WHERE id_emisor = '$id_emisor' AND id_receptor = '$id_receptor' ");
+    WHERE id_emisor = '$id_user_emisor' AND id_receptor = '$id_user_receptor' ");
 
     if(mysqli_num_rows($select) == 1){
 
@@ -30,8 +30,8 @@ if($insert){
         FROM mensajes as m
         LEFT JOIN usuarios as ue ON m.id_emisor = ue.id
         LEFT JOIN usuarios as ur ON m.id_receptor = ur.id
-        WHERE m.id_emisor = '$id_emisor' 
-        AND m.id_receptor = '$id_receptor' 
+        WHERE m.id_emisor = '$id_user_emisor' 
+        AND m.id_receptor = '$id_user_receptor' 
         LIMIT 1");
 
         if(mysqli_num_rows($select2) == 1){
