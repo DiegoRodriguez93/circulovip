@@ -32,8 +32,6 @@ if(mysqli_num_rows($select) > 0){
 
          $nombre = $row2['nombre'];
          $avatar = $row2['url_avatar'];
-
-         
          
          $fecha = strtotime($row['dia_hora']);
          $fecha_formateada = date("d/m/y H:i", $fecha);
