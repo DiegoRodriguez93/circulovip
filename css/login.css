@@ -51,3 +51,10 @@ header,
 h6 {
   line-height: 1.7;
 }
+
+body.swal2-height-auto{
+
+  z-index: -9999;
+  height: inherit!important;
+
+}

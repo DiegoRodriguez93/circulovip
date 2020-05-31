@@ -31819,6 +31819,10 @@ function JitsiMeetComponent() {
           var _$nombre = 'Anonimo';
         }
 
+        // Sumamos 30 minutos
+        add30Minutes();
+
+
         api.executeCommand('displayName', localStorage.getItem('nombre') != null ? localStorage.getItem('nombre') : 'Anonimo');
       });
       api.on('readyToClose', function () {

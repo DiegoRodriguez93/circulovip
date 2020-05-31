@@ -226,7 +226,7 @@ $body = '<html>
                                     font-weight:bold; color:#222222;">
                                   Se ha aceptado correcmente la cita con '.$nombreEmisor.'!<br><br>
         
-                                  Ingrese a la<a href="https://plataformacirculovip.com/socio/sala_de_espera.php"
+                                  Ingrese a la<a href="https://plataformacirculovip.com/socio/sala_de_espera.html"
                                   target="_blank">Sala de espera</a> 
                                   y 3 minutos antes de la cita<br> sera redireccionado automaticamente<br><br>
                                   

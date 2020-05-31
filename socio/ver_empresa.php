@@ -445,7 +445,7 @@ bottom: 0;position: fixed;width: 100%;
       var html2 = '';
       productos = document.getElementById('productosContainer');
 
-      $.each(data[0][1], function (ii, vall) { 
+      $.each(data[0][1].productos, function (ii, vall) { 
 
         if(vall.nombre != undefined){
           
@@ -455,7 +455,7 @@ bottom: 0;position: fixed;width: 100%;
 
                   <div class="col-12 pt-2 text-center">
                     <img 
-                    src="https://`+vall.img_url+`"
+                    src="`+vall.img_url+`"
                      class="img-fluid" 
                      style="max-height: 140px;"
                      alt="">

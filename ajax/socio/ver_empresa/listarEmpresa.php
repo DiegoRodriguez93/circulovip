@@ -62,11 +62,11 @@ if(mysqli_num_rows($select) > 0){
     $select3 = mysqli_query($mysqli,"SELECT `nombre`,`descripcion`,`img_url` 
     FROM `productos` WHERE `id_empresa` = '$id_empresa'");
 
-    if(mysqli_num_rows($select3)>0){
+    if( mysqli_num_rows($select3) > 0 ){
 
         while($row3 = mysqli_fetch_array($select3)){
 
-            $array_producto = array('nombre'=>$row3['nombre'],
+            $array_producto[] = array('nombre'=>$row3['nombre'],
             'descripcion'=>$row3['descripcion'],
             'img_url'=>$row3['img_url']);
 

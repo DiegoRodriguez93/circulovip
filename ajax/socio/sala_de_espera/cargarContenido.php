@@ -58,11 +58,11 @@ if(mysqli_num_rows($select) > 0){
 
          $date = DateTime::createFromFormat( 'Y-m-d H:i:s', $row['dia_hora'] );
     
-         $dia = $date->format('d/m/Y');
-         $dia_format = $date->format('Y-m-d');
-         $hora = $date->format('H');
-         $minutos = $date->format('i');
-         $segundos = $date->format('s');
+         $dia           = $date->format('d/m/Y');
+         $dia_format    = $date->format('Y-m-d');
+         $hora          = $date->format('H');
+         $minutos       = $date->format('i');
+         $segundos      = $date->format('s');
     
          if(intval($zona_horaria) > intval($zona_horaria_emisor)){
     

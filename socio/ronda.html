@@ -13,17 +13,53 @@
         overflow: hidden;
     }body, html, #app{
         overflow: hidden;
-    }</style>
+    }
+    #TiempoDeExpiracionDeCita
+{
+     -moz-border-radius: 6px;
+     -webkit-border-radius: 6px;
+     background-color: #f0f7fb;
+     border: solid 1px #6b0cca;
+     border-radius: 6px;
+     line-height: 18px;
+     overflow: hidden;
+     padding: 12px;
+     font-size: larger;
+     margin-top: 20px;
+    }.btnExp{
+    background-color: rgb(76, 5, 138); /* violet */
+    border: none;
+    border-radius:6px;
+    color: white;
+    padding: 12px 18px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    }
+    
+    </style>
 </head>
 <body style="height: 100vh!important; width: 100%; margin: 0; padding: 0;">
     
     <div style="display:block" class="loading"></div>
+
+    <div id="TiempoDeExpiracionDeCita" style="display:none;position: absolute;z-index: 99999999;"></div>
                 
     <div style="height: 100vh!important; width: 100%;margin: 0; padding: 0;" id="app">
     </div>
 
+    <script>
+        /* DEFINIMOS DISTANCE, MINUTES E INTERVAL COMO VARIABLES GLOBALES */
+        var distance;
+        var minutes;
+        var interval;
+        var countDownDateInit;
+
+    </script>
+
     <script src="https://meet.jit.si/external_api.js"></script>
-    
-    <script src="jitsi/src.7ed060e2.js?ver=0.4"></script>
+    <script src="js/countDownRonda.js"></script>
+    <script src="jitsi/src.7ed060e2.js?ver=1.1"></script>
 </body>
 </html>

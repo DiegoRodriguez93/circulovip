@@ -5,7 +5,11 @@ require '../../_conexion.php';
 $id_user = mysqli_real_escape_string($mysqli, $_POST['id_user']);
 $token = mysqli_real_escape_string($mysqli, $_POST['token']);
 
-$select = mysqli_query($mysqli, "SELECT id, token, fecha_vencimiento FROM usuarios WHERE id = '$id_user' AND token = '$token' ");
+$select = mysqli_query($mysqli, "SELECT id, token, fecha_vencimiento 
+FROM usuarios 
+WHERE id = '$id_user' 
+AND token = '$token' 
+AND activo = 1 ");
 
 if(mysqli_num_rows($select) < 1){
 
