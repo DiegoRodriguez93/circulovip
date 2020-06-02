@@ -416,11 +416,12 @@ $.ajax({
     $pass2 = $('#pass2').val();
     $nombre = $('#nombre').val();
     $fecha_vencimiento = $('#fecha_vencimiento').val();
+    $zona_horaria = $('#zona_horaria').val();
 
     if(!validateEmail($email)){
 
       $('#email').addClass('is-invalid');
-      alert('Contraseña inválida!');
+      alert('Email invalido!');
       return false;
 
     }else{
@@ -462,7 +463,8 @@ $.ajax({
       data: { email: $email,
               pass: $pass2,
               nombre: $nombre,
-              fecha_vencimiento: $fecha_vencimiento},
+              fecha_vencimiento: $fecha_vencimiento,
+              zona_horaria: $zona_horaria },
       dataType: "JSON",
       beforeSend: function(){ 
       $('.loading').css('display','block');},

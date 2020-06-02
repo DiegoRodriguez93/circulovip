@@ -546,7 +546,12 @@ swalWithBootstrapButtons.fire(
                 <div class="card p-2" style="border: 2px solid grey;">
 
                 <h5>Fecha `+fechaCitas+`</h5>
-
+                <button 
+                     onclick="$('#fechaDeCita').val('`+fechaCitas+`');
+                     $('#timeModal').modal('show');"
+                     class="btn btn-cyan btn-sm">
+                     Agregar horario para este día
+                     </button>
                 </div>
                 </div><div class="col-md-8 sm-0"></div>`;
                

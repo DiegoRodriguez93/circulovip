@@ -30,6 +30,9 @@ if(mysqli_num_rows($select) < 1){
 
         $res = array('result'=>true,'message'=>'Cuenta correcta');
 
+        // SI TIENE UNA CITA EN MENOS DE 5 MIN, IR A LA SALA DE ESPERA,
+        // SINO PREGUNTAR SI QUIERE ENTRAR A LA SALA
+
     }
 
 }

@@ -24,24 +24,26 @@ function registerUser(){
     }
 
     $fecha_vencimiento = $mysqli->escape_string($_POST['fecha_vencimiento']);
-    $fecha_registro = Date('Y/m/d H:i:s');
+    $fechaParaComparar = Date('Y-m-d');
 
-    if($fecha_vencimiento < $fecha_registro){
-
+    if($fecha_vencimiento < $fechaParaComparar){
+        
         $res = array('result'=>false,'message'=>'No pudes crear un usuario vencido!','vencidoerror'=>true);
         die(json_encode($res));
 
     }
 
     $nombre         = $mysqli->escape_string($_POST['nombre']);
+    $zona_horaria   = $mysqli->escape_string($_POST['zona_horaria']);
     $hash           = $mysqli->escape_string( md5( rand(0,1000) ) );
     $token          = $mysqli->escape_string( md5( rand(0,1000) ) );      
     $pass           = $_POST['pass'];      
     $passCifrado    = $mysqli->escape_string(password_hash($_POST['pass'], PASSWORD_BCRYPT));
-      
+    $fecha_registro = Date('Y/m/d H:i:s');
+    
 
-    $insert = mysqli_query($mysqli, "INSERT INTO usuarios ( email,  hash,  pass, activo, token, fecha_registro, fecha_vencimiento, nombre) 
-    VALUES ( '$email', '$hash',  '$passCifrado', '1', '$token', '$fecha_registro', '$fecha_vencimiento', '$nombre')");
+    $insert = mysqli_query($mysqli, "INSERT INTO usuarios ( email,  hash,  pass, activo, token, fecha_registro, fecha_vencimiento, nombre, zona_horaria) 
+    VALUES ( '$email', '$hash',  '$passCifrado', '1', '$token', '$fecha_registro', '$fecha_vencimiento', '$nombre', '$zona_horaria')");
 
     if($insert){
 
@@ -61,10 +63,6 @@ function registerUser(){
 
 
     }
-
-
-
-
         die(json_encode($res));
 
         mysqli_close($mysqli);

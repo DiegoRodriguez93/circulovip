@@ -225,7 +225,7 @@ $horarios .= '</div>';
 
        $fecha4 = date('d-m-Y',strtotime($row['fecha']));
 
-       $title = '<h6 id="titlePuto">Día de Ronda  '.$fecha4.'</h6>';
+       $title = '<h6>Día de Ronda  '.$fecha4.'</h6>';
 
         $res[] = array("date"=>$row['fecha'],
         "badge"=>false,
